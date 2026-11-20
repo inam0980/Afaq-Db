@@ -1,0 +1,27 @@
+{% load i18n %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>{% translate "Employee no." %}</th>
+      <th>{% translate "Name" %}</th>
+      <th>{% translate "Department" %}</th>
+      <th>{% translate "Job title" %}</th>
+      <th>{% translate "Nationality" %}</th>
+      <th>{% translate "Status" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for emp in employees %}
+    <tr>
+      <td><a href="{{ emp.get_absolute_url }}">{{ emp.employee_no }}</a></td>
+      <td>{{ emp.full_name }}{% if emp.name_ar %}<div class="muted" dir="rtl">{{ emp.name_ar }}</div>{% endif %}</td>
+      <td>{{ emp.department|default:"—" }}</td>
+      <td>{{ emp.job_title }}</td>
+      <td>{{ emp.get_nationality_display }}</td>
+      <td><span class="badge badge-{{ emp.status }}">{{ emp.get_status_display }}</span></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6" class="muted">{% translate "No employees found." %}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Log in" %} · Afaq ERP{% endblock %}
+{% block content %}
+<section class="card narrow">
+  <h1>{% translate "Log in" %}</h1>
+  {% if form.errors %}
+    <div class="alert alert-error">{% translate "Wrong username or password." %}</div>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <label class="field">
+        <span>{{ field.label }}</span>
+        {{ field }}
+      </label>
+    {% endfor %}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button type="submit" class="btn">{% translate "Log in" %}</button>
+  </form>
+</section>
+{% endblock %}

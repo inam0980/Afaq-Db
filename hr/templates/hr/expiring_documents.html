@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Expiring documents" %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{% translate "Expiring documents" %}</h1>
+  <form method="get" class="inline">
+    <label>{% translate "Within" %}
+      <select name="days" onchange="this.form.submit()">
+        {% for d in day_options %}
+        <option value="{{ d }}" {% if days == d %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+      </select>
+      {% translate "days" %}
+    </label>
+  </form>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>{% translate "Employee no." %}</th>
+      <th>{% translate "Name" %}</th>
+      <th>{% translate "ID / iqama expiry" %}</th>
+      <th>{% translate "Passport expiry" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% now "Y-m-d" as today %}
+    {% for emp in employees %}
+    <tr>
+      <td><a href="{{ emp.get_absolute_url }}">{{ emp.employee_no }}</a></td>
+      <td>{{ emp.full_name }}</td>
+      <td class="{% if emp.id_expiry|date:'Y-m-d' < today %}expired{% endif %}">{{ emp.id_expiry }}</td>
+      <td class="{% if emp.passport_expiry and emp.passport_expiry|date:'Y-m-d' < today %}expired{% endif %}">{{ emp.passport_expiry|default:"—" }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4" class="muted">{% translate "Nothing expires in this period." %}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

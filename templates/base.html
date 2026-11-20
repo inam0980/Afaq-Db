@@ -1,0 +1,45 @@
+{% load i18n static %}{% get_current_language as LANG %}{% get_current_language_bidi as BIDI %}<!doctype html>
+<html lang="{{ LANG }}" dir="{% if BIDI %}rtl{% else %}ltr{% endif %}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Afaq ERP{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <script src="{% static 'vendor/htmx-2.0.4.min.js' %}" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{% url 'home' %}">Afaq ERP</a>
+    {% if user.is_authenticated %}
+    <nav class="nav">
+      <a href="{% url 'hr:employee_list' %}">{% translate "Employees" %}</a>
+      <a href="{% url 'hr:expiring_documents' %}">{% translate "Expiring documents" %}</a>
+      {% if user.is_staff %}<a href="{% url 'admin:index' %}">{% translate "Admin" %}</a>{% endif %}
+    </nav>
+    {% endif %}
+    <div class="topbar-end">
+      <form action="{% url 'set_language' %}" method="post" class="inline">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <button type="submit" name="language" value="{% if BIDI %}en{% else %}ar{% endif %}" class="link">
+          {% if BIDI %}English{% else %}العربية{% endif %}
+        </button>
+      </form>
+      {% if user.is_authenticated %}
+      <span class="muted">{{ user.get_username }}</span>
+      <form action="{% url 'logout' %}" method="post" class="inline">
+        {% csrf_token %}
+        <button type="submit" class="link">{% translate "Log out" %}</button>
+      </form>
+      {% endif %}
+    </div>
+  </header>
+
+  <main class="container">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

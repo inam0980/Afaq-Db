@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Employees" %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{% translate "Employees" %}</h1>
+  {% if perms.hr.add_employee %}
+    <a class="btn" href="{% url 'hr:employee_create' %}">{% translate "Add employee" %}</a>
+  {% endif %}
+</div>
+
+<input type="search" name="q" value="{{ q }}" class="search"
+       placeholder="{% translate 'Search by name, employee no., iqama or job title' %}"
+       hx-get="{% url 'hr:employee_list' %}"
+       hx-trigger="input changed delay:300ms, search"
+       hx-target="#employee-table"
+       hx-push-url="true">
+
+<div id="employee-table">
+  {% include "hr/partials/employee_table.html" %}
+</div>
+{% endblock %}
