@@ -110,4 +110,6 @@ def asset(path: str) -> str:
     stale stylesheet after an update. Re-hashes only when the file changes."""
     url = static(path)
     full_path = finders.find(path)
+    if not full_path:
+        return url
     return f"{url}?v={_file_version(full_path, os.path.getmtime(full_path))}"
