@@ -10,20 +10,17 @@ Rules (Saudi Labour Law / GOSI) — see payroll/tests/test_calculations.py:
 
 import datetime as dt
 from dataclasses import dataclass
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import Decimal
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-CENT = Decimal("0.01")
+from core.money import money
+
 DAYS_PER_MONTH = Decimal(30)
 HOURS_PER_DAY = Decimal(8)
 DAYS_PER_YEAR = Decimal(365)
 ZERO = Decimal(0)
-
-
-def money(value) -> Decimal:
-    return Decimal(str(value)).quantize(CENT, rounding=ROUND_HALF_UP)
 
 
 def daily_rate(monthly: Decimal) -> Decimal:

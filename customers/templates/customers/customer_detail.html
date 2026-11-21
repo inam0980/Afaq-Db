@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{{ customer.name }} · Afaq ERP{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'customers:list' %}">{% icon "arrow-left" 16 %}{% translate "All customers" %}</a>
+
+<section class="card profile">
+  <span class="avatar avatar-lg">{{ customer.name|initials }}</span>
+  <div class="profile-main">
+    <h1>{{ customer.name }} <span class="badge {% if customer.kind == 'business' %}badge-approved{% else %}badge-terminated{% endif %}">{{ customer.get_kind_display }}</span></h1>
+    {% if customer.name_ar %}<div class="muted" dir="rtl">{{ customer.name_ar }}</div>{% endif %}
+    <div class="profile-meta">
+      <span>{% icon "phone" 16 %}{{ customer.mobile }}</span>
+      {% if customer.address_line %}<span>{% icon "map-pin" 16 %}{{ customer.address_line }}</span>{% endif %}
+      {% if customer.vat_number %}<span class="mono">VAT {{ customer.vat_number }}</span>{% endif %}
+    </div>
+  </div>
+  <div class="actions">
+    {% if perms.jobs.add_job %}<a class="btn btn-secondary" href="{% url 'jobs:create' %}?customer={{ customer.pk }}">{% icon "wrench" %}{% translate "New job" %}</a>{% endif %}
+    {% if perms.customers.change_customer %}<a class="btn" href="{% url 'customers:update' customer.pk %}">{% icon "pencil" %}{% translate "Edit" %}</a>{% endif %}
+  </div>
+</section>
+
+{% if perms.jobs.view_job %}
+<section class="card card-flush">
+  <div class="card-head" style="padding:16px 20px 0"><h2>{% icon "wrench" %} {% translate "Jobs" %}</h2></div>
+  {% if jobs %}
+  <table class="table">
+    <thead><tr><th>{% translate "Job" %}</th><th>{% translate "Service" %}</th><th>{% translate "Created" %}</th><th>{% translate "Status" %}</th></tr></thead>
+    <tbody>
+    {% for job in jobs %}
+      <tr>
+        <td><a class="person-name" href="{{ job.get_absolute_url }}">{{ job.title }}</a><div class="muted">{{ job.number }}</div></td>
+        <td>{{ job.get_service_type_display }}</td>
+        <td>{{ job.created_at|date:"Y-m-d" }}</td>
+        <td><span class="badge badge-{{ job.status }}">{{ job.get_status_display }}</span></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted" style="padding:0 20px 20px">{% translate "No jobs yet for this customer." %}</p>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

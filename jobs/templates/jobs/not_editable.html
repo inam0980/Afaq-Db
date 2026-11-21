@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{{ job.number }} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="card empty-state">
+  <div class="empty-icon tone-amber">{% icon "file-warning" 28 %}</div>
+  <h2>{% blocktranslate with no=job.number status=job.get_status_display %}{{ no }} is {{ status }} and can't be edited{% endblocktranslate %}</h2>
+  <a class="btn btn-secondary" href="{{ job.get_absolute_url }}">{% icon "arrow-left" %}{% translate "Back to job" %}</a>
+</div>
+{% endblock %}

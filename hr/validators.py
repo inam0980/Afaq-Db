@@ -16,6 +16,14 @@ def normalize_iban(value: str) -> str:
     return (value or "").replace(" ", "").upper()
 
 
+def build_saudi_iban(bank: str, account: str) -> str:
+    """Saudi IBAN with a correct ISO 13616 mod-97 check number
+    (2-digit bank code + 18-character account)."""
+    bban = bank + account
+    digits = "".join(str(int(ch, 36)) for ch in bban + "SA00")
+    return f"SA{98 - int(digits) % 97:02d}{bban}"
+
+
 def _iban_checksum_ok(iban: str) -> bool:
     rearranged = iban[4:] + iban[:4]
     digits = "".join(str(int(ch, 36)) for ch in rearranged)

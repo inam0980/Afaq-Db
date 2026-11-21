@@ -10,6 +10,12 @@ def _fast_password_hashing(settings):
     settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 
 
+@pytest.fixture(autouse=True)
+def _isolated_media_root(settings, tmp_path):
+    # Uploaded files (receipts) go to a throw-away folder per test.
+    settings.MEDIA_ROOT = tmp_path / "media"
+
+
 def _user_with_perms(django_user_model, username, codenames):
     user = django_user_model.objects.create_user(username=username, password="Test-pass-123")
     perms = Permission.objects.filter(codename__in=codenames)

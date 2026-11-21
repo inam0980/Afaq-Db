@@ -73,3 +73,11 @@ def test_valid_id_number_passes(good):
 def test_invalid_id_number_is_rejected(bad):
     with pytest.raises(ValidationError):
         validate_id_number(bad)
+
+
+def test_build_saudi_iban_produces_valid_ibans():
+    from hr.validators import build_saudi_iban
+
+    iban = build_saudi_iban(bank="80", account="000000608010167519")
+    assert iban == VALID_IBAN
+    validate_saudi_iban(build_saudi_iban(bank="10", account="ABC123456789012345"))

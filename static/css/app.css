@@ -376,3 +376,36 @@ td.expired { color: var(--red); font-weight: 600; }
   .content { padding: 0; max-width: none; }
   .card { border: 0; box-shadow: none; }
 }
+
+/* ---------- Expenses ---------- */
+.filters { flex-wrap: wrap; align-items: center; }
+.filter-input {
+  height: 40px; padding: 0 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text); font: inherit; font-size: 14px;
+}
+.filter-input:focus { outline: 0; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(20, 184, 166, .18); }
+.grow { flex: 1; min-width: 200px; }
+.table th.num, .table td.num { text-align: end; font-variant-numeric: tabular-nums; }
+.bar-row { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 2px 0; border-block-end: 1px dashed var(--border); }
+.text-warn { color: var(--amber); font-weight: 500; }
+.badge-submitted { background: var(--blue-50); color: var(--blue); }
+.badge-rejected { background: var(--red-50); color: var(--red); }
+.btn-danger { background: var(--red); box-shadow: none; }
+.btn-danger:hover { background: #b91c1c; }
+.reject-form { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* ---------- Jobs & customers ---------- */
+.badge-new { background: var(--blue-50); color: var(--blue); }
+.badge-scheduled { background: var(--violet-50); color: var(--violet); }
+.badge-in_progress { background: var(--amber-50); color: var(--amber); }
+.badge-completed { background: var(--green-50); color: var(--green); }
+.badge-cancelled { background: var(--slate-50); color: var(--muted); }
+.avatar-stack { display: flex; }
+.avatar-stack .avatar { border: 2px solid var(--surface); margin-inline-start: -6px; }
+.avatar-stack .avatar:first-child { margin-inline-start: 0; }
+.field-wide { grid-column: 1 / -1; }
+.field textarea { min-height: 84px; padding: 10px 12px; height: auto; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font: inherit; }
+.field ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; }
+.field ul label { display: flex; gap: 8px; align-items: center; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; }
+.field ul label:hover { border-color: var(--brand); }
+.status-bar h2 { margin-block-end: 10px; }

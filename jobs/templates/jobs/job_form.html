@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% if job %}{% translate "Edit job" %}{% else %}{% translate "New job" %}{% endif %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <a class="back-link" href="{% if job %}{{ job.get_absolute_url }}{% else %}{% url 'jobs:list' %}{% endif %}">{% icon "arrow-left" 16 %}{% translate "Back" %}</a>
+    <h1>{% if job %}{% translate "Edit" %} {{ job.number }}{% else %}{% translate "New job" %}{% endif %}</h1>
+  </div>
+</div>
+<form method="post" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="alert alert-error">{{ form.non_field_errors }}</div>{% endif %}
+  {% for title, icon_name, fields in form.sections %}
+  <section class="card form-section">
+    <h2>{% icon icon_name %} {{ title }}</h2>
+    <div class="form-grid">
+      {% for field in fields %}
+        <label class="field{% if field.errors %} has-error{% endif %}{% if field.name == 'technicians' or field.name == 'description' %} field-wide{% endif %}">
+          <span>{{ field.label }}{% if field.field.required %} <em class="req">*</em>{% endif %}</span>
+          {{ field }}
+          {% if field.help_text %}<small class="muted">{{ field.help_text }}</small>{% endif %}
+          {% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}
+        </label>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+  <div class="form-actions">
+    <a href="{% if job %}{{ job.get_absolute_url }}{% else %}{% url 'jobs:list' %}{% endif %}" class="btn btn-ghost">{% translate "Cancel" %}</a>
+    <button type="submit" class="btn">{% icon "check-circle" %}{% translate "Save job" %}</button>
+  </div>
+</form>
+{% endblock %}

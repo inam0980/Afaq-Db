@@ -92,3 +92,35 @@ MUTATIONS += [
     ("login: stylesheet not cache-busted", "templates/auth_base.html",
      "{% asset 'css/app.css' %}", "{% static 'css/app.css' %}"),
 ]
+
+SEED = "core/management/commands/seed_demo.py"
+
+MUTATIONS += [
+    ("money: half-even rounding", "core/money.py",
+     "quantize(CENT, rounding=ROUND_HALF_UP)", "quantize(CENT, rounding='ROUND_HALF_EVEN')"),
+    ("seed_demo: runs in production", SEED,
+     "        if not settings.DEBUG and not force:", "        if False:"),
+    ("seed_demo: duplicates expenses on rerun", SEED,
+     "            if Expense.objects.filter(invoice_number=inv).exists():\n                continue\n", ""),
+    ("seed_demo: creator approves own expense", SEED,
+     "                expense_services.approve(expense, manager)", "                expense_services.approve(expense, accountant)"),
+    ("seed_demo: crashes when this month's payroll is locked", SEED,
+     "        if current.is_locked:\n            return\n", ""),
+    ("seed_demo: no overtime inputs", SEED,
+     "            if inputs:", "            if False:"),
+    ("seed_demo: HR role can see expenses", SEED,
+     '    "view_salarystructure", "add_salarystructure", "change_salarystructure",\n]',
+     '    "view_salarystructure", "add_salarystructure", "change_salarystructure", "view_expense",\n]'),
+]
+
+MUTATIONS += [
+    ("seed_demo: coordinator can see expenses", SEED,
+     '    "view_customer", "add_customer", "change_customer",\n    "view_employee",\n]',
+     '    "view_customer", "add_customer", "change_customer",\n    "view_employee", "view_expense",\n]'),
+    ("seed_demo: completed jobs left in progress", SEED,
+     "                    change_status(job, S.COMPLETED)\n", "                    pass\n"),
+    ("seed_demo: duplicates jobs on rerun", SEED,
+     "            if Job.objects.filter(customer=customer, title=title).exists():\n                continue\n", ""),
+    ("seed_demo: technicians not assigned", SEED,
+     '            job.technicians.set(Employee.objects.filter(id_number__in=tech_ids))\n', ""),
+]

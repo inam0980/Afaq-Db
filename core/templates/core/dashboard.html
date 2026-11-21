@@ -8,6 +8,9 @@
     <p class="muted">{% now "l, j F Y" %}</p>
   </div>
   <div class="actions">
+    {% if perms.jobs.add_job %}
+      <a class="btn btn-secondary" href="{% url 'jobs:create' %}">{% icon "wrench" %}{% translate "New job" %}</a>
+    {% endif %}
     {% if perms.hr.add_employee %}
       <a class="btn btn-secondary" href="{% url 'hr:employee_create' %}">{% icon "user-plus" %}{% translate "Add employee" %}</a>
     {% endif %}
@@ -17,7 +20,7 @@
   </div>
 </div>
 
-{% if not show_employees and not show_payroll %}
+{% if not show_employees and not show_payroll and not show_expenses and not show_jobs %}
   <div class="empty-state card">
     <div class="empty-icon">{% icon "dashboard" 28 %}</div>
     <h2>{% translate "Nothing to show yet" %}</h2>
@@ -26,6 +29,18 @@
 {% endif %}
 
 <div class="kpi-grid">
+  {% if show_jobs %}
+  <a class="kpi" href="{% url 'jobs:list' %}">
+    <span class="kpi-icon tone-blue">{% icon "wrench" 20 %}</span>
+    <span class="kpi-label">{% translate "Open jobs" %}</span>
+    <span class="kpi-value">{{ open_jobs }}</span>
+    <span class="kpi-note">
+      {% if urgent_jobs %}<span class="badge badge-expired">{% blocktranslate count n=urgent_jobs %}{{ n }} urgent{% plural %}{{ n }} urgent{% endblocktranslate %}</span>{% endif %}
+      <span class="muted">{% blocktranslate count n=completed_this_month %}{{ n }} completed this month{% plural %}{{ n }} completed this month{% endblocktranslate %}</span>
+    </span>
+  </a>
+  {% endif %}
+
   {% if show_employees %}
   <a class="kpi" href="{% url 'hr:employee_list' %}">
     <span class="kpi-icon tone-blue">{% icon "users" 20 %}</span>
@@ -48,6 +63,17 @@
       <span class="badge badge-{{ current_run.status }}">{{ current_run.get_status_display }}</span>
     {% else %}
       <span class="kpi-note">{% translate "This month's payroll has not been created yet." %}</span>
+    {% endif %}
+  </a>
+  {% endif %}
+
+  {% if show_expenses %}
+  <a class="kpi" href="{% url 'expenses:list' %}?month={{ current_period|date:'Y-m' }}&amp;status=approved">
+    <span class="kpi-icon tone-amber">{% icon "receipt" 20 %}</span>
+    <span class="kpi-label">{% translate "Approved expenses" %} {{ current_period|date:"F Y" }}</span>
+    <span class="kpi-value">{{ month_expenses }} <small>SAR</small></span>
+    {% if pending_expenses %}
+      <span class="badge badge-draft">{% blocktranslate count n=pending_expenses %}{{ n }} waiting for approval{% plural %}{{ n }} waiting for approval{% endblocktranslate %}</span>
     {% endif %}
   </a>
   {% endif %}

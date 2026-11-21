@@ -4,14 +4,11 @@ import factory
 from django.utils import timezone
 
 from hr.models import Department, Employee
+from hr.validators import build_saudi_iban
 
 
 def make_saudi_iban(bank: str = "80", account: str = "000000608010167519") -> str:
-    """Build a Saudi IBAN with a correct ISO 13616 mod-97 check number."""
-    bban = bank + account
-    digits = "".join(str(int(ch, 36)) for ch in bban + "SA00")
-    check = 98 - int(digits) % 97
-    return f"SA{check:02d}{bban}"
+    return build_saudi_iban(bank, account)
 
 
 class DepartmentFactory(factory.django.DjangoModelFactory):
