@@ -1,22 +1,31 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n ui %}
 {% block title %}{% translate "Employees" %} · Afaq ERP{% endblock %}
 {% block content %}
 <div class="page-head">
-  <h1>{% translate "Employees" %}</h1>
+  <div>
+    <h1>{% translate "Employees" %}</h1>
+    <p class="muted">{% translate "Everyone on your team, with their documents and status." %}</p>
+  </div>
   {% if perms.hr.add_employee %}
-    <a class="btn" href="{% url 'hr:employee_create' %}">{% translate "Add employee" %}</a>
+    <a class="btn" href="{% url 'hr:employee_create' %}">{% icon "plus" %}{% translate "Add employee" %}</a>
   {% endif %}
 </div>
 
-<input type="search" name="q" value="{{ q }}" class="search"
-       placeholder="{% translate 'Search by name, employee no., iqama or job title' %}"
-       hx-get="{% url 'hr:employee_list' %}"
-       hx-trigger="input changed delay:300ms, search"
-       hx-target="#employee-table"
-       hx-push-url="true">
-
-<div id="employee-table">
-  {% include "hr/partials/employee_table.html" %}
+<div class="card card-flush">
+  <div class="toolbar">
+    <label class="search">
+      {% icon "search" 16 %}
+      <input type="search" name="q" value="{{ q }}"
+             placeholder="{% translate 'Search by name, employee no., iqama or job title' %}"
+             hx-get="{% url 'hr:employee_list' %}"
+             hx-trigger="input changed delay:300ms, search"
+             hx-target="#employee-table"
+             hx-push-url="true">
+    </label>
+  </div>
+  <div id="employee-table">
+    {% include "hr/partials/employee_table.html" %}
+  </div>
 </div>
 {% endblock %}

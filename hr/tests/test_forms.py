@@ -20,3 +20,10 @@ def test_date_inputs_always_render_iso_even_in_other_locales(lang):
 
     assert 'type="date"' in html
     assert 'value="2022-02-01"' in html
+
+
+def test_sections_cover_every_field_exactly_once():
+    form = EmployeeForm()
+    names = [bf.name for _, _, fields in form.sections() for bf in fields]
+    assert sorted(names) == sorted(form.fields)
+    assert len(names) == len(set(names))

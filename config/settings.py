@@ -64,6 +64,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.navigation",
             ],
         },
     },
@@ -122,7 +123,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # Authentication
 
 LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "hr:employee_list"
+LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "login"
 
 

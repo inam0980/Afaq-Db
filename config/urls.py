@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.urls import include, path
-from django.views.generic import RedirectView
+
+from core.views import dashboard
 
 urlpatterns = [
-    path("", RedirectView.as_view(pattern_name="hr:employee_list"), name="home"),
+    path("", dashboard, name="home"),
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
     path("i18n/", include("django.conf.urls.i18n")),

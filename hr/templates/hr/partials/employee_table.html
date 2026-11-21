@@ -1,9 +1,10 @@
-{% load i18n %}
+{% load i18n ui %}
+{% if employees %}
+<div class="table-scroll">
 <table class="table">
   <thead>
     <tr>
-      <th>{% translate "Employee no." %}</th>
-      <th>{% translate "Name" %}</th>
+      <th>{% translate "Employee" %}</th>
       <th>{% translate "Department" %}</th>
       <th>{% translate "Job title" %}</th>
       <th>{% translate "Nationality" %}</th>
@@ -13,15 +14,39 @@
   <tbody>
     {% for emp in employees %}
     <tr>
-      <td><a href="{{ emp.get_absolute_url }}">{{ emp.employee_no }}</a></td>
-      <td>{{ emp.full_name }}{% if emp.name_ar %}<div class="muted" dir="rtl">{{ emp.name_ar }}</div>{% endif %}</td>
+      <td>
+        <a class="person" href="{{ emp.get_absolute_url }}">
+          <span class="avatar">{{ emp.full_name|initials }}</span>
+          <span>
+            <span class="person-name">{{ emp.full_name }}</span>
+            <span class="muted">{{ emp.employee_no }}{% if emp.name_ar %} · <span dir="rtl">{{ emp.name_ar }}</span>{% endif %}</span>
+          </span>
+        </a>
+      </td>
       <td>{{ emp.department|default:"—" }}</td>
       <td>{{ emp.job_title }}</td>
       <td>{{ emp.get_nationality_display }}</td>
       <td><span class="badge badge-{{ emp.status }}">{{ emp.get_status_display }}</span></td>
     </tr>
-    {% empty %}
-    <tr><td colspan="6" class="muted">{% translate "No employees found." %}</td></tr>
     {% endfor %}
   </tbody>
 </table>
+</div>
+{% elif q %}
+<div class="empty-state">
+  <div class="empty-icon">{% icon "search" 28 %}</div>
+  <h2>{% translate "No employees match your search" %}</h2>
+  <p class="muted">{% translate "Try a different name, number or job title." %}</p>
+</div>
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon">{% icon "users" 28 %}</div>
+  <h2>{% translate "No employees yet" %}</h2>
+  {% if perms.hr.add_employee %}
+    <p class="muted">{% translate "Start by adding the people who work for you." %}</p>
+    <a class="btn" href="{% url 'hr:employee_create' %}">{% icon "user-plus" %}{% translate "Add your first employee" %}</a>
+  {% else %}
+    <p class="muted">{% translate "Employees added by HR will appear here." %}</p>
+  {% endif %}
+</div>
+{% endif %}

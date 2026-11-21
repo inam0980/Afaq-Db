@@ -144,4 +144,35 @@ MUTATIONS = [
         '{% if BIDI %}rtl{% else %}ltr{% endif %}',
         "ltr",
     ),
+    # --- UI redesign ---
+    (
+        "Form section drops the IBAN field",
+        "hr/forms.py",
+        '["mobile", "email", "bank_name", "iban"]',
+        '["mobile", "email", "bank_name"]',
+    ),
+    (
+        "Empty-state 'add first employee' shown without permission",
+        "hr/templates/hr/partials/employee_table.html",
+        "{% if perms.hr.add_employee %}",
+        "{% if True %}",
+    ),
+    (
+        "Avatar initials missing in list",
+        "hr/templates/hr/partials/employee_table.html",
+        '<span class="avatar">{{ emp.full_name|initials }}</span>',
+        '<span class="avatar"></span>',
+    ),
+    (
+        "Expiry badge colour ignores tone",
+        "hr/templates/hr/partials/expiry_cell.html",
+        '<span class="badge badge-{{ tone }}">',
+        '<span class="badge badge-ok">',
+    ),
+    (
+        "Expired documents shown as 'days left'",
+        "hr/templates/hr/partials/expiry_cell.html",
+        '{% if tone == "expired" %}{% with ago=left|absolute %}',
+        '{% if False %}{% with ago=left|absolute %}',
+    ),
 ]

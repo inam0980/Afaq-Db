@@ -1,46 +1,76 @@
-{% load i18n static %}{% get_current_language as LANG %}{% get_current_language_bidi as BIDI %}<!doctype html>
+{% load i18n static ui %}{% get_current_language as LANG %}{% get_current_language_bidi as BIDI %}<!doctype html>
 <html lang="{{ LANG }}" dir="{% if BIDI %}rtl{% else %}ltr{% endif %}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Afaq ERP{% endblock %}</title>
-  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <link rel="stylesheet" href="{% asset 'css/app.css' %}">
   <script src="{% static 'vendor/htmx-2.0.4.min.js' %}" defer></script>
 </head>
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-  <header class="topbar">
-    <a class="brand" href="{% url 'home' %}">Afaq ERP</a>
-    {% if user.is_authenticated %}
-    <nav class="nav">
-      <a href="{% url 'hr:employee_list' %}">{% translate "Employees" %}</a>
-      <a href="{% url 'hr:expiring_documents' %}">{% translate "Expiring documents" %}</a>
-      {% if perms.payroll.view_payrollrun %}<a href="{% url 'payroll:run_list' %}">{% translate "Payroll" %}</a>{% endif %}
-      {% if user.is_staff %}<a href="{% url 'admin:index' %}">{% translate "Admin" %}</a>{% endif %}
-    </nav>
-    {% endif %}
-    <div class="topbar-end">
-      <form action="{% url 'set_language' %}" method="post" class="inline">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ request.get_full_path }}">
-        <button type="submit" name="language" value="{% if BIDI %}en{% else %}ar{% endif %}" class="link">
-          {% if BIDI %}English{% else %}العربية{% endif %}
-        </button>
-      </form>
-      {% if user.is_authenticated %}
-      <span class="muted">{{ user.get_username }}</span>
-      <form action="{% url 'logout' %}" method="post" class="inline">
-        {% csrf_token %}
-        <button type="submit" class="link">{% translate "Log out" %}</button>
-      </form>
-      {% endif %}
-    </div>
-  </header>
+<div class="app" id="app">
+  <aside class="sidebar">
+    <a class="brand" href="{% url 'home' %}">
+      <span class="brand-mark">A</span>
+      <span class="brand-text">Afaq <strong>ERP</strong></span>
+    </a>
 
-  <main class="container">
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-    {% block content %}{% endblock %}
-  </main>
+    <nav class="sidebar-nav" aria-label="{% translate 'Main' %}">
+      <div class="nav-label">{% translate "Overview" %}</div>
+      <a href="{% url 'home' %}" {% if nav_section == "home" %}aria-current="page"{% endif %}>{% icon "dashboard" %}<span>{% translate "Dashboard" %}</span></a>
+
+      {% if perms.hr.view_employee %}
+      <div class="nav-label">{% translate "People" %}</div>
+      <a href="{% url 'hr:employee_list' %}" {% if nav_section == "employees" %}aria-current="page"{% endif %}>{% icon "users" %}<span>{% translate "Employees" %}</span></a>
+      <a href="{% url 'hr:expiring_documents' %}" {% if nav_section == "expiring" %}aria-current="page"{% endif %}>{% icon "file-warning" %}<span>{% translate "Expiring documents" %}</span></a>
+      {% endif %}
+
+      {% if perms.payroll.view_payrollrun %}
+      <div class="nav-label">{% translate "Finance" %}</div>
+      <a href="{% url 'payroll:run_list' %}" {% if nav_section == "payroll" %}aria-current="page"{% endif %}>{% icon "wallet" %}<span>{% translate "Payroll" %}</span></a>
+      {% endif %}
+
+      {% if user.is_staff %}
+      <div class="nav-label">{% translate "System" %}</div>
+      <a href="{% url 'admin:index' %}">{% icon "sliders" %}<span>{% translate "Admin" %}</span></a>
+      {% endif %}
+    </nav>
+
+    <div class="sidebar-foot muted">{% now "Y" %} · AFAQ ALSIYANAH</div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button type="button" class="icon-btn menu-btn" aria-label="{% translate 'Menu' %}"
+              onclick="document.getElementById('app').classList.toggle('nav-open')">{% icon "menu" %}</button>
+      <div class="topbar-title">{% block topbar_title %}{% endblock %}</div>
+      <div class="topbar-end">
+        <form action="{% url 'set_language' %}" method="post" class="inline">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <button type="submit" name="language" value="{% if BIDI %}en{% else %}ar{% endif %}" class="chip">
+            {% icon "globe" 16 %}{% if BIDI %}English{% else %}العربية{% endif %}
+          </button>
+        </form>
+        <div class="user-chip">
+          <span class="avatar avatar-sm">{{ user.get_full_name|default:user.get_username|initials }}</span>
+          <span class="user-name">{{ user.get_full_name|default:user.get_username }}</span>
+        </div>
+        <form action="{% url 'logout' %}" method="post" class="inline">
+          {% csrf_token %}
+          <button type="submit" class="icon-btn" title="{% translate 'Log out' %}" aria-label="{% translate 'Log out' %}">{% icon "log-out" %}</button>
+        </form>
+      </div>
+    </header>
+
+    <main class="content">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+  <div class="scrim" onclick="document.getElementById('app').classList.remove('nav-open')"></div>
+</div>
 </body>
 </html>

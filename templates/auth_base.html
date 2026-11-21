@@ -1,0 +1,18 @@
+{% load i18n static ui %}{% get_current_language as LANG %}{% get_current_language_bidi as BIDI %}<!doctype html>
+<html lang="{{ LANG }}" dir="{{ BIDI|yesno:'rtl,ltr' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Afaq ERP{% endblock %}</title>
+  <link rel="stylesheet" href="{% asset 'css/app.css' %}">
+</head>
+<body class="auth-body">
+  <main class="auth-card">
+    <div class="brand brand-center">
+      <span class="brand-mark">A</span>
+      <span class="brand-text">Afaq <strong>ERP</strong></span>
+    </div>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

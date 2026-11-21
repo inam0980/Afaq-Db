@@ -1,11 +1,14 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n ui %}
 {% block title %}{% translate "Expiring documents" %} · Afaq ERP{% endblock %}
 {% block content %}
 <div class="page-head">
-  <h1>{% translate "Expiring documents" %}</h1>
+  <div>
+    <h1>{% translate "Expiring documents" %}</h1>
+    <p class="muted">{% translate "Iqama / National ID and passports that need renewal." %}</p>
+  </div>
   <form method="get" class="inline">
-    <label>{% translate "Within" %}
+    <label class="select-inline">{% icon "calendar" 16 %}{% translate "Within" %}
       <select name="days" onchange="this.form.submit()">
         {% for d in day_options %}
         <option value="{{ d }}" {% if days == d %}selected{% endif %}>{{ d }}</option>
@@ -16,27 +19,39 @@
   </form>
 </div>
 
+<div class="card card-flush">
+{% if employees %}
+<div class="table-scroll">
 <table class="table">
   <thead>
     <tr>
-      <th>{% translate "Employee no." %}</th>
-      <th>{% translate "Name" %}</th>
+      <th>{% translate "Employee" %}</th>
       <th>{% translate "ID / iqama expiry" %}</th>
       <th>{% translate "Passport expiry" %}</th>
     </tr>
   </thead>
   <tbody>
-    {% now "Y-m-d" as today %}
     {% for emp in employees %}
     <tr>
-      <td><a href="{{ emp.get_absolute_url }}">{{ emp.employee_no }}</a></td>
-      <td>{{ emp.full_name }}</td>
-      <td class="{% if emp.id_expiry|date:'Y-m-d' < today %}expired{% endif %}">{{ emp.id_expiry }}</td>
-      <td class="{% if emp.passport_expiry and emp.passport_expiry|date:'Y-m-d' < today %}expired{% endif %}">{{ emp.passport_expiry|default:"—" }}</td>
+      <td>
+        <a class="person" href="{{ emp.get_absolute_url }}">
+          <span class="avatar">{{ emp.full_name|initials }}</span>
+          <span><span class="person-name">{{ emp.full_name }}</span><span class="muted">{{ emp.employee_no }}</span></span>
+        </a>
+      </td>
+      <td>{% include "hr/partials/expiry_cell.html" with date=emp.id_expiry %}</td>
+      <td>{% include "hr/partials/expiry_cell.html" with date=emp.passport_expiry %}</td>
     </tr>
-    {% empty %}
-    <tr><td colspan="4" class="muted">{% translate "Nothing expires in this period." %}</td></tr>
     {% endfor %}
   </tbody>
 </table>
+</div>
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon tone-green">{% icon "check-circle" 28 %}</div>
+  <h2>{% translate "Nothing expires in this period." %}</h2>
+  <p class="muted">{% translate "Try a longer window to plan ahead." %}</p>
+</div>
+{% endif %}
+</div>
 {% endblock %}
