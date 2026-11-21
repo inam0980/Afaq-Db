@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Salary" %} · {{ employee.full_name }} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{% translate "Salary" %} · {{ employee.full_name }} <span class="muted">{{ employee.employee_no }}</span></h1>
+  <a class="btn btn-secondary" href="{{ employee.get_absolute_url }}">{% translate "Back to employee" %}</a>
+</div>
+
+{% if current %}
+<div class="grid">
+  <section class="card">
+    <h2>{% translate "Current salary" %} <span class="muted">{% translate "from" %} {{ current.effective_from }}</span></h2>
+    <dl>
+      <dt>{% translate "Basic" %}</dt><dd>{{ current.basic }}</dd>
+      <dt>{% translate "Housing" %}</dt><dd>{{ current.housing }}</dd>
+      <dt>{% translate "Transport" %}</dt><dd>{{ current.transport }}</dd>
+      <dt>{% translate "Other" %}</dt><dd>{{ current.other }}</dd>
+      <dt><strong>{% translate "Total (SAR)" %}</strong></dt><dd><strong>{{ current.gross_fixed }}</strong></dd>
+    </dl>
+  </section>
+
+  <section class="card">
+    <h2>{% translate "End of service estimate" %}</h2>
+    <form method="get" class="inline">
+      <select name="reason" onchange="this.form.submit()">
+        {% for value, label in reasons %}
+          <option value="{{ value }}" {% if value == reason %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </form>
+    <dl style="margin-block-start: 12px">
+      <dt>{% translate "Service" %}</dt><dd>{{ employee.hire_date }} → {{ eosb_end_date }}</dd>
+      <dt><strong>{% translate "EOSB (SAR)" %}</strong></dt><dd><strong>{{ eosb }}</strong></dd>
+    </dl>
+    <p class="muted">{% translate "Based on Saudi Labour Law Art. 84/85 using the current total monthly salary." %}</p>
+  </section>
+</div>
+{% else %}
+<div class="card muted">{% translate "No salary structure has been set for this employee yet." %}</div>
+{% endif %}
+
+<section class="card">
+  <h2>{% translate "Salary history" %}</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>{% translate "Effective from" %}</th>
+        <th>{% translate "Basic" %}</th>
+        <th>{% translate "Housing" %}</th>
+        <th>{% translate "Transport" %}</th>
+        <th>{% translate "Other" %}</th>
+        <th>{% translate "Total" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in structures %}
+      <tr>
+        <td>{{ s.effective_from }}</td>
+        <td>{{ s.basic }}</td>
+        <td>{{ s.housing }}</td>
+        <td>{{ s.transport }}</td>
+        <td>{{ s.other }}</td>
+        <td><strong>{{ s.gross_fixed }}</strong></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="muted">—</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

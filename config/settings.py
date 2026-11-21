@@ -18,6 +18,7 @@ env = environ.Env(
 environ.Env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("SECRET_KEY")
+COMPANY_NAME = env("COMPANY_NAME", default="AFAQ ALSIYANAH ALDAWLIYAH EST")
 DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
     # Local apps
     "core",
     "hr",
+    "payroll",
 ]
 
 MIDDLEWARE = [
@@ -62,6 +64,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.navigation",
             ],
         },
     },
@@ -120,7 +123,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # Authentication
 
 LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "hr:employee_list"
+LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "login"
 
 

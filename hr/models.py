@@ -165,7 +165,7 @@ class Employee(models.Model):
                     else _("Non-Saudi employees must have an Iqama number starting with 2.")
                 )
 
-        if self.date_of_birth and self.hire_date and self.date_of_birth > self.hire_date:
+        if self.date_of_birth and self.hire_date and self.date_of_birth >= self.hire_date:
             errors["date_of_birth"] = _("Date of birth must be before the hire date.")
 
         if self.termination_date and self.hire_date and self.termination_date < self.hire_date:

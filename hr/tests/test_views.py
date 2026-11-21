@@ -68,10 +68,41 @@ def test_login_page_renders(client):
     assert client.get(reverse("login")).status_code == 200
 
 
-def test_root_redirects_to_employee_list(hr_client):
+def test_root_shows_dashboard(hr_client):
     response = hr_client.get("/")
-    assert response.status_code == 302
-    assert response.url == LIST_URL
+    assert response.status_code == 200
+    assert "core/dashboard.html" in [t.name for t in response.templates]
+
+
+# --- UI: empty state & form sections ------------------------------------------
+
+def test_empty_list_invites_to_add_first_employee(hr_client):
+    html = hr_client.get(LIST_URL).content.decode()
+    assert "Add your first employee" in html
+    assert CREATE_URL in html
+
+
+def test_empty_list_without_add_permission_has_no_add_button(viewer_client):
+    html = viewer_client.get(LIST_URL).content.decode()
+    assert "Add your first employee" not in html
+    assert CREATE_URL not in html
+
+
+def test_employee_form_is_grouped_into_sections(hr_client):
+    response = hr_client.get(CREATE_URL)
+    html = response.content.decode()
+
+    for heading in ["Personal", "Identity documents", "Employment", "Contact &amp; bank"]:
+        assert heading in html, heading
+    for name in response.context["form"].fields:      # every field still rendered
+        assert f'name="{name}"' in html, name
+
+
+def test_list_rows_show_initials_avatar(viewer_client):
+    EmployeeFactory(first_name="Ahmed", last_name="Khan")
+    html = viewer_client.get(LIST_URL).content.decode()
+    assert 'class="avatar"' in html
+    assert ">AK<" in html
 
 
 # --- List + search (HTMX) ------------------------------------------------------
@@ -243,3 +274,18 @@ def test_admin_cannot_delete_employees(rf, admin_user):
     request = rf.get("/")
     request.user = admin_user
     assert admin_site._registry[Employee].has_delete_permission(request) is False
+
+
+def test_expiring_page_shows_days_left_and_expired_badges(viewer_client):
+    from django.utils import timezone
+
+    today = timezone.localdate()
+    EmployeeFactory(id_expiry=today + dt.timedelta(days=10), passport_expiry=None)
+    EmployeeFactory(id_expiry=today - dt.timedelta(days=3), passport_expiry=None)
+
+    html = viewer_client.get(EXPIRING_URL).content.decode()
+
+    assert "10 days left" in html
+    assert "Expired 3 days ago" in html
+    assert "badge-expired" in html
+    assert "badge-soon" in html

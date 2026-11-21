@@ -1,26 +1,34 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n ui %}
 {% block title %}{% if employee %}{% translate "Edit employee" %}{% else %}{% translate "Add employee" %}{% endif %} · Afaq ERP{% endblock %}
 {% block content %}
 <div class="page-head">
-  <h1>{% if employee %}{% translate "Edit" %} {{ employee.employee_no }}{% else %}{% translate "Add employee" %}{% endif %}</h1>
+  <div>
+    <a class="back-link" href="{% if employee %}{{ employee.get_absolute_url }}{% else %}{% url 'hr:employee_list' %}{% endif %}">{% icon "arrow-left" 16 %}{% translate "Back" %}</a>
+    <h1>{% if employee %}{% translate "Edit" %} {{ employee.full_name }} <span class="muted">{{ employee.employee_no }}</span>{% else %}{% translate "Add employee" %}{% endif %}</h1>
+  </div>
 </div>
 
-<form method="post" class="card" novalidate>
+<form method="post" novalidate>
   {% csrf_token %}
   {% if form.non_field_errors %}<div class="alert alert-error">{{ form.non_field_errors }}</div>{% endif %}
-  <div class="form-grid">
-    {% for field in form %}
-      <label class="field{% if field.errors %} has-error{% endif %}">
-        <span>{{ field.label }}{% if field.field.required %} *{% endif %}</span>
-        {{ field }}
-        {% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}
-      </label>
-    {% endfor %}
-  </div>
-  <div class="actions">
-    <button type="submit" class="btn">{% translate "Save" %}</button>
-    <a href="{% if employee %}{{ employee.get_absolute_url }}{% else %}{% url 'hr:employee_list' %}{% endif %}" class="btn btn-secondary">{% translate "Cancel" %}</a>
+  {% for title, icon_name, fields in form.sections %}
+  <section class="card form-section">
+    <h2>{% icon icon_name %} {{ title }}</h2>
+    <div class="form-grid">
+      {% for field in fields %}
+        <label class="field{% if field.errors %} has-error{% endif %}">
+          <span>{{ field.label }}{% if field.field.required %} <em class="req">*</em>{% endif %}</span>
+          {{ field }}
+          {% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}
+        </label>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+  <div class="form-actions">
+    <a href="{% if employee %}{{ employee.get_absolute_url }}{% else %}{% url 'hr:employee_list' %}{% endif %}" class="btn btn-ghost">{% translate "Cancel" %}</a>
+    <button type="submit" class="btn">{% icon "check-circle" %}{% translate "Save employee" %}</button>
   </div>
 </form>
 {% endblock %}

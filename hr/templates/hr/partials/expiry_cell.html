@@ -1,0 +1,4 @@
+{% load i18n ui %}{% with tone=date|expiry_tone left=date|days_left %}{% if tone == "none" %}<span class="muted">—</span>{% else %}<div class="expiry">
+  <span>{{ date }}</span>
+  <span class="badge badge-{{ tone }}">{% if tone == "expired" %}{% with ago=left|absolute %}{% blocktranslate count n=ago %}Expired {{ n }} day ago{% plural %}Expired {{ n }} days ago{% endblocktranslate %}{% endwith %}{% elif left == 0 %}{% translate "Expires today" %}{% else %}{% blocktranslate count n=left %}{{ n }} day left{% plural %}{{ n }} days left{% endblocktranslate %}{% endif %}</span>
+</div>{% endif %}{% endwith %}

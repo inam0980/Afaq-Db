@@ -55,6 +55,12 @@ def test_birth_date_must_be_before_hire_date():
     assert "date_of_birth" in clean_errors(emp)
 
 
+def test_birth_date_equal_to_hire_date_is_rejected():
+    same_day = dt.date(2020, 1, 1)
+    emp = EmployeeFactory.build(date_of_birth=same_day, hire_date=same_day)
+    assert "date_of_birth" in clean_errors(emp)
+
+
 def test_termination_cannot_be_before_hire():
     emp = EmployeeFactory.build(
         hire_date=dt.date(2020, 1, 1),

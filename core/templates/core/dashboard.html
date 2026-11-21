@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% translate "Dashboard" %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{% blocktranslate with name=user.first_name|default:user.get_username %}Welcome, {{ name }}{% endblocktranslate %}</h1>
+    <p class="muted">{% now "l, j F Y" %}</p>
+  </div>
+  <div class="actions">
+    {% if perms.hr.add_employee %}
+      <a class="btn btn-secondary" href="{% url 'hr:employee_create' %}">{% icon "user-plus" %}{% translate "Add employee" %}</a>
+    {% endif %}
+    {% if perms.payroll.add_payrollrun %}
+      <a class="btn" href="{% url 'payroll:run_list' %}">{% icon "wallet" %}{% translate "Run payroll" %}</a>
+    {% endif %}
+  </div>
+</div>
+
+{% if not show_employees and not show_payroll %}
+  <div class="empty-state card">
+    <div class="empty-icon">{% icon "dashboard" 28 %}</div>
+    <h2>{% translate "Nothing to show yet" %}</h2>
+    <p class="muted">{% translate "Your account has no modules assigned. Ask an administrator for access." %}</p>
+  </div>
+{% endif %}
+
+<div class="kpi-grid">
+  {% if show_employees %}
+  <a class="kpi" href="{% url 'hr:employee_list' %}">
+    <span class="kpi-icon tone-blue">{% icon "users" 20 %}</span>
+    <span class="kpi-label">{% translate "Active employees" %}</span>
+    <span class="kpi-value">{{ active_employees }}</span>
+  </a>
+  <a class="kpi" href="{% url 'hr:expiring_documents' %}">
+    <span class="kpi-icon {% if expiring_count %}tone-amber{% else %}tone-green{% endif %}">{% icon "file-warning" 20 %}</span>
+    <span class="kpi-label">{% blocktranslate %}Documents expiring in {{ expiry_window }} days{% endblocktranslate %}</span>
+    <span class="kpi-value">{{ expiring_count }}</span>
+  </a>
+  {% endif %}
+
+  {% if show_payroll %}
+  <a class="kpi" href="{% if current_run %}{{ current_run.get_absolute_url }}{% else %}{% url 'payroll:run_list' %}{% endif %}">
+    <span class="kpi-icon tone-violet">{% icon "wallet" 20 %}</span>
+    <span class="kpi-label">{% translate "Payroll" %} {{ current_period|date:"F Y" }}</span>
+    {% if current_run %}
+      <span class="kpi-value">{{ current_totals.net }} <small>SAR</small></span>
+      <span class="badge badge-{{ current_run.status }}">{{ current_run.get_status_display }}</span>
+    {% else %}
+      <span class="kpi-note">{% translate "This month's payroll has not been created yet." %}</span>
+    {% endif %}
+  </a>
+  {% endif %}
+</div>
+
+{% if show_employees %}
+<section class="card">
+  <div class="card-head">
+    <h2>{% icon "file-warning" %} {% translate "Expiring soon" %}</h2>
+    <a href="{% url 'hr:expiring_documents' %}" class="link-more">{% translate "View all" %}</a>
+  </div>
+  {% if expiring %}
+  <ul class="list">
+    {% for emp in expiring %}
+    <li>
+      <span class="avatar">{{ emp.full_name|initials }}</span>
+      <div class="list-main">
+        <a href="{{ emp.get_absolute_url }}">{{ emp.full_name }}</a>
+        <div class="muted">{{ emp.employee_no }} · {{ emp.job_title }}</div>
+      </div>
+      <span class="badge {% if emp.next_expiry < today %}badge-expired{% else %}badge-on_leave{% endif %}">{% if emp.next_expiry < today %}{% translate "Expired" %} · {% endif %}{{ emp.next_expiry }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p class="muted empty-inline">{% icon "check-circle" %} {% translate "All documents are valid for the next 30 days." %}</p>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

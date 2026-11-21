@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Payslip" %} {{ slip.run }} · {{ slip.employee.full_name }}{% endblock %}
+{% block content %}
+<div class="page-head no-print">
+  <a class="btn btn-secondary" href="{{ slip.run.get_absolute_url }}">{% translate "Back to payroll" %}</a>
+  <button class="btn" onclick="window.print()">{% translate "Print / Save as PDF" %}</button>
+</div>
+
+<article class="card payslip">
+  <header class="payslip-head">
+    <div>
+      <h1>{{ company_name }}</h1>
+      <div class="muted">{% translate "Payslip for" %} {{ slip.run }}</div>
+    </div>
+    <div class="muted">{{ slip.run.period_start }} → {{ slip.run.period_end }}</div>
+  </header>
+
+  <dl>
+    <dt>{% translate "Employee" %}</dt><dd>{{ slip.employee.full_name }}{% if slip.employee.name_ar %} · <span dir="rtl">{{ slip.employee.name_ar }}</span>{% endif %}</dd>
+    <dt>{% translate "Employee no." %}</dt><dd>{{ slip.employee.employee_no }}</dd>
+    <dt>{% translate "Job title" %}</dt><dd>{{ slip.employee.job_title }}</dd>
+    <dt>{% translate "Department" %}</dt><dd>{{ slip.employee.department|default:"—" }}</dd>
+    <dt>{% translate "National ID / iqama no." %}</dt><dd>{{ slip.employee.id_number }}</dd>
+    <dt>{% translate "Bank" %}</dt><dd>{{ slip.bank_name|default:"—" }} <span class="mono">{{ slip.iban }}</span></dd>
+  </dl>
+
+  <div class="grid payslip-cols">
+    <table class="table">
+      <thead><tr><th>{% translate "Earnings" %}</th><th>SAR</th></tr></thead>
+      <tbody>
+        <tr><td>{% translate "Basic" %}</td><td>{{ slip.basic }}</td></tr>
+        <tr><td>{% translate "Housing" %}</td><td>{{ slip.housing }}</td></tr>
+        <tr><td>{% translate "Transport" %}</td><td>{{ slip.transport }}</td></tr>
+        <tr><td>{% translate "Other allowances" %}</td><td>{{ slip.other }}</td></tr>
+        <tr><td>{% translate "Overtime" %} ({{ slip.overtime_hours }} h)</td><td>{{ slip.overtime }}</td></tr>
+        <tr><td>{% translate "Other additions" %}</td><td>{{ slip.additions }}</td></tr>
+        <tr><th>{% translate "Gross pay" %}</th><th>{{ slip.gross }}</th></tr>
+      </tbody>
+    </table>
+    <table class="table">
+      <thead><tr><th>{% translate "Deductions" %}</th><th>SAR</th></tr></thead>
+      <tbody>
+        <tr><td>{% translate "Absence" %} ({{ slip.absence_days }} {% translate "days" %}{% if slip.days_not_employed %} + {{ slip.days_not_employed }} {% translate "not employed" %}{% endif %})</td><td>{{ slip.absence }}</td></tr>
+        <tr><td>{% translate "GOSI (employee)" %}</td><td>{{ slip.gosi_employee }}</td></tr>
+        <tr><td>{% translate "Other deductions" %}</td><td>{{ slip.deductions }}</td></tr>
+        <tr><th>{% translate "Total deductions" %}</th><th>{{ slip.total_deductions }}</th></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="net-pay">{% translate "Net pay" %}: <strong>SAR {{ slip.net }}</strong></div>
+  {% if slip.note %}<p class="muted">{{ slip.note }}</p>{% endif %}
+  {% if slip.run.status == "draft" %}<p class="error">{% translate "DRAFT — not yet approved" %}</p>{% endif %}
+</article>
+{% endblock %}

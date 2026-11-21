@@ -1,0 +1,19 @@
+{% load i18n %}
+<tr id="slip-{{ slip.pk }}">
+  <td>
+    <a href="{% url 'payroll:payslip_detail' slip.pk %}">{{ slip.employee.full_name }}</a>
+    <div class="muted">{{ slip.employee.employee_no }}{% if slip.days_not_employed %} · {% blocktranslate with d=slip.days_not_employed %}{{ d }} days not employed{% endblocktranslate %}{% endif %}</div>
+  </td>
+  <td>{{ slip.gross_fixed }}</td>
+  <td>{{ slip.overtime_hours }}{% if slip.overtime %} <span class="muted">({{ slip.overtime }})</span>{% endif %}</td>
+  <td>{{ slip.absence_days }}{% if slip.absence %} <span class="muted">(−{{ slip.absence }})</span>{% endif %}</td>
+  <td>{{ slip.additions }}</td>
+  <td>{{ slip.deductions }}</td>
+  <td>{{ slip.gosi_employee }}</td>
+  <td><strong>{{ slip.net }}</strong></td>
+  <td>
+    {% if not slip.run.is_locked and perms.payroll.change_payslip %}
+      <button class="link" hx-get="{% url 'payroll:payslip_edit' slip.pk %}" hx-target="closest tr" hx-swap="outerHTML">{% translate "Edit" %}</button>
+    {% endif %}
+  </td>
+</tr>

@@ -1,19 +1,37 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n ui %}
 {% block title %}{{ employee.full_name }} · Afaq ERP{% endblock %}
 {% block content %}
-<div class="page-head">
-  <h1>{{ employee.full_name }} <span class="muted">{{ employee.employee_no }}</span></h1>
-  {% if perms.hr.change_employee %}
-    <a class="btn" href="{% url 'hr:employee_update' employee.pk %}">{% translate "Edit" %}</a>
-  {% endif %}
-</div>
+<a class="back-link" href="{% url 'hr:employee_list' %}">{% icon "arrow-left" 16 %}{% translate "All employees" %}</a>
+
+<section class="card profile">
+  <span class="avatar avatar-lg">{{ employee.full_name|initials }}</span>
+  <div class="profile-main">
+    <h1>{{ employee.full_name }}
+      <span class="badge badge-{{ employee.status }}">{{ employee.get_status_display }}</span>
+    </h1>
+    {% if employee.name_ar %}<div class="muted" dir="rtl">{{ employee.name_ar }}</div>{% endif %}
+    <div class="profile-meta">
+      <span>{% icon "id-card" 16 %}{{ employee.employee_no }}</span>
+      <span>{% icon "briefcase" 16 %}{{ employee.job_title }}</span>
+      <span>{% icon "building" 16 %}{{ employee.department|default:"—" }}</span>
+      <span>{% icon "calendar" 16 %}{% translate "Since" %} {{ employee.hire_date }}</span>
+    </div>
+  </div>
+  <div class="actions">
+    {% if perms.payroll.view_salarystructure %}
+      <a class="btn btn-secondary" href="{% url 'payroll:employee_salary' employee.pk %}">{% icon "banknote" %}{% translate "Salary" %}</a>
+    {% endif %}
+    {% if perms.hr.change_employee %}
+      <a class="btn" href="{% url 'hr:employee_update' employee.pk %}">{% icon "pencil" %}{% translate "Edit" %}</a>
+    {% endif %}
+  </div>
+</section>
 
 <div class="grid">
   <section class="card">
-    <h2>{% translate "Personal" %}</h2>
+    <h2>{% icon "users" %} {% translate "Personal" %}</h2>
     <dl>
-      <dt>{% translate "Arabic name" %}</dt><dd dir="rtl">{{ employee.name_ar|default:"—" }}</dd>
       <dt>{% translate "Nationality" %}</dt><dd>{{ employee.get_nationality_display }}</dd>
       <dt>{% translate "Date of birth" %}</dt><dd>{{ employee.date_of_birth }}</dd>
       <dt>{% translate "Gender" %}</dt><dd>{{ employee.get_gender_display }}</dd>
@@ -23,29 +41,28 @@
   </section>
 
   <section class="card">
-    <h2>{% translate "Documents" %}</h2>
+    <h2>{% icon "id-card" %} {% translate "Documents" %}</h2>
     <dl>
       <dt>{% if employee.is_saudi %}{% translate "National ID" %}{% else %}{% translate "Iqama no." %}{% endif %}</dt>
-      <dd>{{ employee.id_number }}</dd>
-      <dt>{% translate "ID / iqama expiry" %}</dt><dd>{{ employee.id_expiry }}</dd>
-      <dt>{% translate "Passport no." %}</dt><dd>{{ employee.passport_no|default:"—" }}</dd>
-      <dt>{% translate "Passport expiry" %}</dt><dd>{{ employee.passport_expiry|default:"—" }}</dd>
+      <dd class="mono">{{ employee.id_number }}</dd>
+      <dt>{% translate "ID / iqama expiry" %}</dt><dd>{% include "hr/partials/expiry_cell.html" with date=employee.id_expiry %}</dd>
+      <dt>{% translate "Passport no." %}</dt><dd class="mono">{{ employee.passport_no|default:"—" }}</dd>
+      <dt>{% translate "Passport expiry" %}</dt><dd>{% include "hr/partials/expiry_cell.html" with date=employee.passport_expiry %}</dd>
     </dl>
   </section>
 
   <section class="card">
-    <h2>{% translate "Employment" %}</h2>
+    <h2>{% icon "briefcase" %} {% translate "Employment" %}</h2>
     <dl>
       <dt>{% translate "Department" %}</dt><dd>{{ employee.department|default:"—" }}</dd>
       <dt>{% translate "Job title" %}</dt><dd>{{ employee.job_title }}</dd>
       <dt>{% translate "Hire date" %}</dt><dd>{{ employee.hire_date }}</dd>
-      <dt>{% translate "Status" %}</dt><dd><span class="badge badge-{{ employee.status }}">{{ employee.get_status_display }}</span></dd>
       {% if employee.termination_date %}<dt>{% translate "Termination date" %}</dt><dd>{{ employee.termination_date }}</dd>{% endif %}
     </dl>
   </section>
 
   <section class="card">
-    <h2>{% translate "Bank" %}</h2>
+    <h2>{% icon "banknote" %} {% translate "Bank" %}</h2>
     <dl>
       <dt>{% translate "Bank name" %}</dt><dd>{{ employee.bank_name|default:"—" }}</dd>
       <dt>IBAN</dt><dd class="mono">{{ employee.iban|default:"—" }}</dd>
@@ -54,18 +71,17 @@
 </div>
 
 <section class="card">
-  <h2>{% translate "Change history" %}</h2>
-  <table class="table">
-    <thead><tr><th>{% translate "When" %}</th><th>{% translate "Who" %}</th><th>{% translate "Action" %}</th></tr></thead>
-    <tbody>
-      {% for h in history %}
-      <tr>
-        <td>{{ h.history_date|date:"Y-m-d H:i" }}</td>
-        <td>{{ h.history_user|default:"system" }}</td>
-        <td>{{ h.get_history_type_display }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <h2>{% icon "history" %} {% translate "Change history" %}</h2>
+  <ul class="timeline">
+    {% for h in history %}
+    <li>
+      <span class="timeline-dot"></span>
+      <div>
+        <strong>{{ h.get_history_type_display }}</strong>
+        <span class="muted">{% translate "by" %} {{ h.history_user|default:"system" }} · {{ h.history_date|date:"Y-m-d H:i" }}</span>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
 </section>
 {% endblock %}

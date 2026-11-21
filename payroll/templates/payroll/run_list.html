@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Payroll" %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{% translate "Payroll runs" %}</h1>
+</div>
+
+{% if perms.payroll.add_payrollrun %}
+<form method="post" class="card">
+  {% csrf_token %}
+  <h2>{% translate "New payroll" %}</h2>
+  {% if form.non_field_errors %}<div class="alert alert-error">{{ form.non_field_errors }}</div>{% endif %}
+  <div class="form-grid">
+    {% for field in form %}
+      <label class="field{% if field.errors %} has-error{% endif %}">
+        <span>{{ field.label }}</span>
+        {{ field }}
+        {% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}
+      </label>
+    {% endfor %}
+  </div>
+  <button type="submit" class="btn">{% translate "Create and generate payslips" %}</button>
+</form>
+{% endif %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>{% translate "Month" %}</th>
+      <th>{% translate "Status" %}</th>
+      <th>{% translate "Created by" %}</th>
+      <th>{% translate "Approved by" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for run in runs %}
+    <tr>
+      <td><a href="{{ run.get_absolute_url }}">{{ run }}</a></td>
+      <td><span class="badge badge-{{ run.status }}">{{ run.get_status_display }}</span></td>
+      <td>{{ run.created_by|default:"—" }}</td>
+      <td>{{ run.approved_by|default:"—" }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4" class="muted">{% translate "No payroll runs yet." %}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
