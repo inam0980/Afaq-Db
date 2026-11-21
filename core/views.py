@@ -5,7 +5,9 @@ from django.utils import timezone
 from django.views.decorators.http import require_GET
 
 from core.health import check_database
+from expenses.models import Expense
 from hr.models import Employee
+from jobs.models import Job
 from payroll.models import PayrollRun
 
 EXPIRY_WINDOW_DAYS = 30
@@ -44,6 +46,27 @@ def dashboard(request):
             current_run=run,
             current_totals=run.totals() if run else None,
             current_period=today,
+        )
+
+    context["show_expenses"] = user.has_perm("expenses.view_expense")
+    if context["show_expenses"]:
+        context.update(
+            month_expenses=Expense.objects.approved().for_month(today.year, today.month).totals()["total"],
+            pending_expenses=Expense.objects.filter(status=Expense.Status.SUBMITTED).count(),
+            current_period=today,
+        )
+
+    context["show_jobs"] = user.has_perm("jobs.view_job")
+    if context["show_jobs"]:
+        open_jobs = Job.objects.open()
+        context.update(
+            open_jobs=open_jobs.count(),
+            urgent_jobs=open_jobs.filter(priority=Job.Priority.URGENT).count(),
+            completed_this_month=Job.objects.filter(
+                status=Job.Status.COMPLETED,
+                completed_at__year=today.year,
+                completed_at__month=today.month,
+            ).count(),
         )
 
     return render(request, "core/dashboard.html", context)

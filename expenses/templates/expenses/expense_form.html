@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% if expense %}{% translate "Edit expense" %}{% else %}{% translate "New expense" %}{% endif %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <a class="back-link" href="{% if expense %}{{ expense.get_absolute_url }}{% else %}{% url 'expenses:list' %}{% endif %}">{% icon "arrow-left" 16 %}{% translate "Back" %}</a>
+    <h1>{% if expense %}{% translate "Edit" %} {{ expense.number }}{% else %}{% translate "New expense" %}{% endif %}</h1>
+  </div>
+</div>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="alert alert-error">{{ form.non_field_errors }}</div>{% endif %}
+  <section class="card form-section">
+    <h2>{% icon "receipt" %} {% translate "Expense details" %}</h2>
+    <div class="form-grid">
+      {% for field in form %}{% if field.name != "receipt" %}
+        <label class="field{% if field.errors %} has-error{% endif %}">
+          <span>{{ field.label }}{% if field.field.required %} <em class="req">*</em>{% endif %}</span>
+          {{ field }}
+          {% if field.name == "total" %}<small class="muted">{% translate "Amount on the receipt, including VAT. VAT is calculated for you." %}</small>{% endif %}
+          {% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}
+        </label>
+      {% endif %}{% endfor %}
+    </div>
+  </section>
+  <section class="card form-section">
+    <h2>{% icon "upload" %} {% translate "Receipt" %}</h2>
+    <label class="field{% if form.receipt.errors %} has-error{% endif %}">
+      {{ form.receipt }}
+      <small class="muted">{% translate "PDF, JPG or PNG, up to 5 MB. Required before submitting for approval." %}</small>
+      {% for error in form.receipt.errors %}<small class="error">{{ error }}</small>{% endfor %}
+    </label>
+  </section>
+  <div class="form-actions">
+    <a href="{% if expense %}{{ expense.get_absolute_url }}{% else %}{% url 'expenses:list' %}{% endif %}" class="btn btn-ghost">{% translate "Cancel" %}</a>
+    <button type="submit" class="btn">{% icon "check-circle" %}{% translate "Save draft" %}</button>
+  </div>
+</form>
+{% endblock %}

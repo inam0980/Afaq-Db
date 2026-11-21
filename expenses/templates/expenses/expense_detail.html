@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{{ expense.number }} · Afaq ERP{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'expenses:list' %}">{% icon "arrow-left" 16 %}{% translate "All expenses" %}</a>
+
+<section class="card profile">
+  <span class="kpi-icon tone-amber">{% icon "receipt" 22 %}</span>
+  <div class="profile-main">
+    <h1>{{ expense.description }} <span class="badge badge-{{ expense.status }}">{{ expense.get_status_display }}</span></h1>
+    <div class="profile-meta">
+      <span>{{ expense.number }}</span>
+      <span>{% icon "calendar" 16 %}{{ expense.date }}</span>
+      <span>{{ expense.category }}</span>
+    </div>
+  </div>
+  <div class="actions">
+    {% if expense.is_editable and perms.expenses.change_expense %}
+      <a class="btn btn-secondary" href="{% url 'expenses:update' expense.pk %}">{% icon "pencil" %}{% translate "Edit" %}</a>
+    {% endif %}
+    {% if expense.is_editable and perms.expenses.add_expense %}
+      <form method="post" action="{% url 'expenses:submit' expense.pk %}" class="inline">{% csrf_token %}
+        <button class="btn">{% icon "send" %}{% translate "Submit for approval" %}</button>
+      </form>
+    {% endif %}
+    {% if expense.status == "submitted" and perms.expenses.approve_expense and expense.created_by_id != user.pk %}
+      <form method="post" action="{% url 'expenses:approve' expense.pk %}" class="inline">{% csrf_token %}
+        <button class="btn">{% icon "check-circle" %}{% translate "Approve" %}</button>
+      </form>
+    {% endif %}
+  </div>
+</section>
+
+{% if expense.status == "rejected" %}
+  <div class="alert alert-error">{% translate "Rejected" %}: {{ expense.rejection_reason }}</div>
+{% endif %}
+
+<div class="grid">
+  <section class="card">
+    <h2>{% icon "banknote" %} {% translate "Amount" %}</h2>
+    <dl>
+      <dt>{% translate "Amount excl. VAT" %}</dt><dd>{{ expense.amount_excl_vat }} SAR</dd>
+      <dt>{% translate "VAT" %} ({{ expense.get_vat_rate_display }})</dt><dd>{{ expense.vat_amount }} SAR</dd>
+      <dt><strong>{% translate "Total" %}</strong></dt><dd><strong>{{ expense.total }} SAR</strong></dd>
+      <dt>{% translate "Paid by" %}</dt><dd>{{ expense.get_payment_method_display }}</dd>
+    </dl>
+  </section>
+  <section class="card">
+    <h2>{% icon "building" %} {% translate "Vendor" %}</h2>
+    <dl>
+      <dt>{% translate "Vendor" %}</dt><dd>{{ expense.vendor_name|default:"—" }}</dd>
+      <dt>{% translate "VAT number" %}</dt><dd class="mono">{{ expense.vendor_vat_number|default:"—" }}</dd>
+      <dt>{% translate "Invoice no." %}</dt><dd>{{ expense.invoice_number|default:"—" }}</dd>
+      <dt>{% translate "Receipt" %}</dt>
+      <dd>{% if expense.receipt %}<a href="{% url 'expenses:receipt' expense.pk %}" target="_blank" rel="noopener">{% icon "receipt" 16 %} {% translate "Open receipt" %}</a>{% else %}<span class="text-warn">{% translate "Not attached" %}</span>{% endif %}</dd>
+    </dl>
+  </section>
+  <section class="card">
+    <h2>{% icon "history" %} {% translate "Approval" %}</h2>
+    <dl>
+      <dt>{% translate "Entered by" %}</dt><dd>{{ expense.created_by }}</dd>
+      <dt>{% translate "Submitted" %}</dt><dd>{{ expense.submitted_at|date:"Y-m-d H:i"|default:"—" }}</dd>
+      <dt>{% translate "Decided by" %}</dt><dd>{{ expense.decided_by|default:"—" }}</dd>
+      <dt>{% translate "Decided at" %}</dt><dd>{{ expense.decided_at|date:"Y-m-d H:i"|default:"—" }}</dd>
+    </dl>
+  </section>
+</div>
+
+{% if expense.status == "submitted" and perms.expenses.approve_expense and expense.created_by_id != user.pk %}
+<section class="card">
+  <h2>{% icon "x-circle" %} {% translate "Reject" %}</h2>
+  <form method="post" action="{% url 'expenses:reject' expense.pk %}" class="reject-form">{% csrf_token %}
+    <input type="text" name="reason" required maxlength="300" placeholder="{% translate 'Reason (the submitter will see this)' %}" class="filter-input grow">
+    <button class="btn btn-danger">{% translate "Reject" %}</button>
+  </form>
+</section>
+{% endif %}
+{% endblock %}

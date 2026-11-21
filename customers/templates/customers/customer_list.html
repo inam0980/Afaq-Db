@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% translate "Customers" %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{% translate "Customers" %}</h1>
+    <p class="muted">{% translate "Homes and businesses you serve." %}</p>
+  </div>
+  {% if perms.customers.add_customer %}
+    <a class="btn" href="{% url 'customers:create' %}">{% icon "plus" %}{% translate "Add customer" %}</a>
+  {% endif %}
+</div>
+
+<div class="card card-flush">
+  <form method="get" class="toolbar filters">
+    <label class="search">{% icon "search" 16 %}<input type="search" name="q" value="{{ q }}" placeholder="{% translate 'Search name, mobile or VAT number' %}"></label>
+    <label class="select-inline"><input type="checkbox" name="all" value="1" {% if show_all %}checked{% endif %} onchange="this.form.submit()"> {% translate "Include inactive" %}</label>
+    <button class="btn btn-secondary" type="submit">{% translate "Search" %}</button>
+  </form>
+  {% if customers %}
+  <div class="table-scroll">
+  <table class="table">
+    <thead><tr><th>{% translate "Customer" %}</th><th>{% translate "Type" %}</th><th>{% translate "Mobile" %}</th><th>{% translate "VAT number" %}</th><th>{% translate "City" %}</th></tr></thead>
+    <tbody>
+      {% for c in customers %}
+      <tr>
+        <td><a class="person" href="{{ c.get_absolute_url }}"><span class="avatar">{{ c.name|initials }}</span><span><span class="person-name">{{ c.name }}</span>{% if c.name_ar %}<span class="muted" dir="rtl">{{ c.name_ar }}</span>{% endif %}</span></a></td>
+        <td><span class="badge {% if c.kind == 'business' %}badge-approved{% else %}badge-terminated{% endif %}">{{ c.get_kind_display }}</span>{% if not c.is_active %} <span class="badge badge-terminated">{% translate "Inactive" %}</span>{% endif %}</td>
+        <td>{{ c.mobile }}</td>
+        <td class="mono">{{ c.vat_number|default:"—" }}</td>
+        <td>{{ c.city|default:"—" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">{% icon "contact" 28 %}</div>
+    <h2>{% translate "No customers found" %}</h2>
+    {% if perms.customers.add_customer %}<a class="btn" href="{% url 'customers:create' %}">{% icon "plus" %}{% translate "Add your first customer" %}</a>{% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

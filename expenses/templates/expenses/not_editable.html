@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{{ expense.number }} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="card empty-state">
+  <div class="empty-icon tone-amber">{% icon "file-warning" 28 %}</div>
+  <h2>{% blocktranslate with no=expense.number status=expense.get_status_display %}{{ no }} is {{ status }} and can't be edited{% endblocktranslate %}</h2>
+  <p class="muted">{% translate "Only draft or rejected expenses can be changed." %}</p>
+  <a class="btn btn-secondary" href="{{ expense.get_absolute_url }}">{% icon "arrow-left" %}{% translate "Back to expense" %}</a>
+</div>
+{% endblock %}

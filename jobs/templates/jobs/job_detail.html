@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{{ job.number }} · Afaq ERP{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'jobs:list' %}">{% icon "arrow-left" 16 %}{% translate "All jobs" %}</a>
+
+<section class="card profile">
+  <span class="kpi-icon tone-blue">{% icon "wrench" 22 %}</span>
+  <div class="profile-main">
+    <h1>{{ job.title }}
+      <span class="badge badge-{{ job.status }}">{{ job.get_status_display }}</span>
+      {% if job.priority == "urgent" %}<span class="badge badge-expired">{% translate "Urgent" %}</span>{% endif %}
+    </h1>
+    <div class="profile-meta">
+      <span>{{ job.number }}</span>
+      <span>{% icon "briefcase" 16 %}{{ job.get_service_type_display }}</span>
+      <span>{% icon "contact" 16 %}<a href="{{ job.customer.get_absolute_url }}">{{ job.customer }}</a></span>
+      {% if job.scheduled_date %}<span>{% icon "calendar" 16 %}{{ job.scheduled_date }}</span>{% endif %}
+    </div>
+  </div>
+  <div class="actions">
+    {% if job.is_editable and perms.jobs.change_job %}
+      <a class="btn btn-secondary" href="{% url 'jobs:update' job.pk %}">{% icon "pencil" %}{% translate "Edit" %}</a>
+    {% endif %}
+  </div>
+</section>
+
+{% if perms.jobs.change_job and job.next_statuses %}
+<section class="card status-bar">
+  <h2>{% icon "refresh" %} {% translate "Move job" %}</h2>
+  <div class="actions">
+    {% for next in job.next_statuses %}{% if next != "cancelled" %}
+      <form method="post" action="{% url 'jobs:status' job.pk %}" class="inline">{% csrf_token %}
+        <input type="hidden" name="status" value="{{ next }}">
+        <button class="btn">{% for value, label in statuses.choices %}{% if value == next %}{{ label }}{% endif %}{% endfor %} →</button>
+      </form>
+    {% endif %}{% endfor %}
+    {% if "cancelled" in job.next_statuses %}
+      <form method="post" action="{% url 'jobs:status' job.pk %}" class="reject-form">{% csrf_token %}
+        <input type="hidden" name="status" value="cancelled">
+        <input type="text" name="reason" maxlength="300" required class="filter-input" placeholder="{% translate 'Reason to cancel' %}">
+        <button class="btn btn-danger">{% translate "Cancel job" %}</button>
+      </form>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+
+{% if job.status == "cancelled" %}<div class="alert alert-error">{% translate "Cancelled" %}: {{ job.cancel_reason }}</div>{% endif %}
+
+<div class="grid">
+  <section class="card">
+    <h2>{% icon "file-warning" %} {% translate "Details" %}</h2>
+    <dl>
+      <dt>{% translate "Location" %}</dt><dd>{{ job.location|default:"—" }}</dd>
+      <dt>{% translate "Quoted (excl. VAT)" %}</dt><dd>{% if job.quoted_amount is not None %}{{ job.quoted_amount }} SAR{% else %}—{% endif %}</dd>
+      <dt>{% translate "Description" %}</dt><dd>{{ job.description|default:"—"|linebreaksbr }}</dd>
+    </dl>
+  </section>
+  <section class="card">
+    <h2>{% icon "users" %} {% translate "Technicians" %}</h2>
+    <ul class="list">
+      {% for t in job.technicians.all %}
+        <li><span class="avatar">{{ t.full_name|initials }}</span><div class="list-main">{% if perms.hr.view_employee %}<a href="{{ t.get_absolute_url }}">{{ t.full_name }}</a>{% else %}{{ t.full_name }}{% endif %}<div class="muted">{{ t.job_title }}</div></div></li>
+      {% empty %}
+        <li class="muted">{% translate "No technician assigned yet." %}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  <section class="card">
+    <h2>{% icon "history" %} {% translate "Timeline" %}</h2>
+    <dl>
+      <dt>{% translate "Created" %}</dt><dd>{{ job.created_at|date:"Y-m-d H:i" }} · {{ job.created_by }}</dd>
+      <dt>{% translate "Started" %}</dt><dd>{{ job.started_at|date:"Y-m-d H:i"|default:"—" }}</dd>
+      <dt>{% translate "Completed" %}</dt><dd>{{ job.completed_at|date:"Y-m-d H:i"|default:"—" }}</dd>
+    </dl>
+  </section>
+</div>
+{% endblock %}

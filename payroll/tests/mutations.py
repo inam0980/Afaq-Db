@@ -6,7 +6,7 @@ VIEWS = "payroll/views.py"
 
 MUTATIONS = [
     # --- calculations ---
-    ("Rounding half-even instead of half-up", CALC,
+    ("Rounding half-even instead of half-up", "core/money.py",
      "quantize(CENT, rounding=ROUND_HALF_UP)", "quantize(CENT, rounding='ROUND_HALF_EVEN')"),
     ("9-hour working day", CALC,
      "HOURS_PER_DAY = Decimal(8)", "HOURS_PER_DAY = Decimal(9)"),

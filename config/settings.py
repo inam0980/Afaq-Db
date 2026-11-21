@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     "core",
     "hr",
     "payroll",
+    "expenses",
+    "customers",
+    "jobs",
 ]
 
 MIDDLEWARE = [
@@ -118,6 +121,10 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# Uploaded files (receipts). Deliberately NOT served under a public URL;
+# downloads go through permission-checked views.
+MEDIA_ROOT = Path(env("MEDIA_ROOT", default=str(BASE_DIR / "media")))
 
 
 # Authentication
