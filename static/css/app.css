@@ -76,3 +76,23 @@ td.expired { color: var(--danger); font-weight: 600; }
 .badge-active { background: #ecfdf3; color: var(--success); }
 .badge-on_leave { background: #fffaeb; color: var(--warn); }
 .badge-terminated { background: #f2f4f7; color: var(--muted); }
+
+.stat { font-size: 22px; font-weight: 700; margin-block-start: 4px; }
+.table-scroll { overflow-x: auto; }
+.table input.num { width: 90px; padding: 6px; border: 1px solid var(--border); border-radius: 4px; }
+.table input { font: inherit; }
+tr.editing { background: #f5f9ff; }
+.badge-draft { background: #fffaeb; color: var(--warn); }
+.badge-approved { background: #eff8ff; color: var(--primary); }
+.badge-paid { background: #ecfdf3; color: var(--success); }
+
+.payslip-head { display: flex; justify-content: space-between; align-items: flex-start; margin-block-end: 16px; }
+.payslip-cols { margin-block: 16px; }
+.net-pay { font-size: 18px; padding: 12px; background: #f5f9ff; border-radius: 6px; }
+
+@media print {
+  .topbar, .no-print, .alert { display: none !important; }
+  body { background: #fff; }
+  .container { padding: 0; max-width: none; }
+  .card { border: 0; }
+}

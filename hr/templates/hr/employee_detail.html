@@ -4,9 +4,14 @@
 {% block content %}
 <div class="page-head">
   <h1>{{ employee.full_name }} <span class="muted">{{ employee.employee_no }}</span></h1>
-  {% if perms.hr.change_employee %}
-    <a class="btn" href="{% url 'hr:employee_update' employee.pk %}">{% translate "Edit" %}</a>
-  {% endif %}
+  <div class="actions">
+    {% if perms.payroll.view_salarystructure %}
+      <a class="btn btn-secondary" href="{% url 'payroll:employee_salary' employee.pk %}">{% translate "Salary" %}</a>
+    {% endif %}
+    {% if perms.hr.change_employee %}
+      <a class="btn" href="{% url 'hr:employee_update' employee.pk %}">{% translate "Edit" %}</a>
+    {% endif %}
+  </div>
 </div>
 
 <div class="grid">

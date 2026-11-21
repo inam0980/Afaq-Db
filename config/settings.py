@@ -18,6 +18,7 @@ env = environ.Env(
 environ.Env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("SECRET_KEY")
+COMPANY_NAME = env("COMPANY_NAME", default="AFAQ ALSIYANAH ALDAWLIYAH EST")
 DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
     # Local apps
     "core",
     "hr",
+    "payroll",
 ]
 
 MIDDLEWARE = [

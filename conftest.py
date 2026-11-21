@@ -32,6 +32,17 @@ def viewer_client(client, django_user_model):
 
 
 @pytest.fixture
+def client_with_perms(client, django_user_model):
+    """Return a function: client_with_perms("view_employee", ...) -> logged-in client."""
+
+    def make(*codenames):
+        client.force_login(_user_with_perms(django_user_model, "custom_user", list(codenames)))
+        return client
+
+    return make
+
+
+@pytest.fixture
 def no_perm_client(client, django_user_model):
     client.force_login(django_user_model.objects.create_user("nobody", password="Test-pass-123"))
     return client

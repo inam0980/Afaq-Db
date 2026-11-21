@@ -24,3 +24,4 @@ db.sqlite3
 .idea/
 Thumbs.db
 .DS_Store
+.break_check_journal.json

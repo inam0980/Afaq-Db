@@ -8,5 +8,6 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
     path("hr/", include("hr.urls")),
+    path("payroll/", include("payroll.urls")),
     path("", include("core.urls")),
 ]

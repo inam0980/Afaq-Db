@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Payroll" %} {{ run }} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{% translate "Payroll" %} {{ run }}
+    <span class="badge badge-{{ run.status }}">{{ run.get_status_display }}</span>
+  </h1>
+  <div class="actions">
+    {% if run.status == "draft" %}
+      {% if perms.payroll.change_payrollrun %}
+      <form method="post" action="{% url 'payroll:run_regenerate' run.pk %}" class="inline">
+        {% csrf_token %}<button class="btn btn-secondary">{% translate "Recalculate" %}</button>
+      </form>
+      {% endif %}
+      {% if perms.payroll.approve_payrollrun %}
+      <form method="post" action="{% url 'payroll:run_approve' run.pk %}" class="inline"
+            onsubmit="return confirm('{% translate "Approve and lock this payroll? It cannot be changed afterwards." %}')">
+        {% csrf_token %}<button class="btn">{% translate "Approve" %}</button>
+      </form>
+      {% endif %}
+    {% elif run.status == "approved" and perms.payroll.approve_payrollrun %}
+      <form method="post" action="{% url 'payroll:run_mark_paid' run.pk %}" class="inline">
+        {% csrf_token %}<button class="btn">{% translate "Mark as paid" %}</button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+
+{% if run.approved_by %}
+<p class="muted">{% translate "Approved by" %} {{ run.approved_by }} · {{ run.approved_at|date:"Y-m-d H:i" }}{% if run.paid_at %} · {% translate "Paid" %} {{ run.paid_at|date:"Y-m-d" }}{% endif %}</p>
+{% endif %}
+
+{% if missing %}
+<div class="alert alert-error">
+  {% translate "These employees have no salary structure and were skipped:" %}
+  {% for emp in missing %}<a href="{% url 'payroll:employee_salary' emp.pk %}">{{ emp.full_name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+</div>
+{% endif %}
+
+<div class="grid">
+  <section class="card"><div class="muted">{% translate "Employees" %}</div><div class="stat">{{ totals.count }}</div></section>
+  <section class="card"><div class="muted">{% translate "Gross" %}</div><div class="stat">{{ totals.gross }}</div></section>
+  <section class="card"><div class="muted">{% translate "GOSI (employer)" %}</div><div class="stat">{{ totals.gosi_employer }}</div></section>
+  <section class="card"><div class="muted">{% translate "Net to pay" %}</div><div class="stat">{{ totals.net }}</div></section>
+</div>
+
+<div class="table-scroll">
+<table class="table">
+  <thead>
+    <tr>
+      <th>{% translate "Employee" %}</th>
+      <th>{% translate "Fixed" %}</th>
+      <th>{% translate "OT hrs" %}</th>
+      <th>{% translate "Absent days" %}</th>
+      <th>{% translate "Additions" %}</th>
+      <th>{% translate "Deductions" %}</th>
+      <th>{% translate "GOSI" %}</th>
+      <th>{% translate "Net" %}</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for slip in payslips %}
+      {% include "payroll/partials/payslip_row.html" %}
+    {% empty %}
+      <tr><td colspan="9" class="muted">{% translate "No payslips." %}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
