@@ -16,3 +16,9 @@ MUTATIONS = [
     ("CRLF files not matched", BC,
      r'return snippet.replace("\n", "\r\n") if "\r\n" in raw else snippet', "return snippet"),
 ]
+
+MUTATIONS += [
+    ("Test output decoded with the Windows code page", BC,
+     '        encoding="utf-8",      # test output can contain Arabic\n        errors="replace",\n',
+     "        text=True,\n"),
+]

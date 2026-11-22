@@ -74,7 +74,8 @@ def run_tests(app: str, rebuild_db: bool) -> subprocess.CompletedProcess:
         [sys.executable, "-m", "pytest", f"{app}/tests", "-x", "-q", "-p", "no:cacheprovider", db_flag],
         cwd=ROOT,
         capture_output=True,
-        text=True,
+        encoding="utf-8",      # test output can contain Arabic
+        errors="replace",
     )
 
 

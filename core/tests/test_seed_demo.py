@@ -218,3 +218,11 @@ def test_rerun_corrects_wrong_demo_expense_links(seeded):
     Expense.objects.filter(invoice_number="DEMO-0004").update(job=wrong)   # govt fee, not a job cost
     call_command("seed_demo", verbosity=0)
     assert Expense.objects.get(invoice_number="DEMO-0004").job is None
+
+
+def test_invoicing_roles(seeded):
+    User = get_user_model()
+    accountant = User.objects.get(username="accountant_demo")
+    manager = User.objects.get(username="manager_demo")
+    assert accountant.has_perm("invoicing.add_invoice") and not accountant.has_perm("invoicing.issue_invoice")
+    assert manager.has_perm("invoicing.issue_invoice")

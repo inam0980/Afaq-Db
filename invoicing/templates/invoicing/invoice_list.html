@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% translate "Invoices" %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{% translate "Invoices" %}</h1>
+    <p class="muted">{% translate "ZATCA-compliant tax invoices. Issued invoices cannot be changed." %}</p>
+  </div>
+  {% if perms.invoicing.add_invoice %}<a class="btn" href="{% url 'invoicing:create' %}">{% icon "plus" %}{% translate "New invoice" %}</a>{% endif %}
+</div>
+
+<div class="card card-flush">
+  <form method="get" class="toolbar filters">
+    <label class="search">{% icon "search" 16 %}<input type="search" name="q" value="{{ f.q }}" placeholder="{% translate 'Search number, customer or job' %}"></label>
+    <select name="status" class="filter-input" aria-label="{% translate 'Status' %}">
+      <option value="">{% translate "All" %}</option>
+      {% for value, label in statuses %}<option value="{{ value }}" {% if f.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+    <button class="btn btn-secondary" type="submit">{% translate "Filter" %}</button>
+  </form>
+  {% if invoices %}
+  <div class="table-scroll">
+  <table class="table">
+    <thead><tr><th>{% translate "Invoice" %}</th><th>{% translate "Customer" %}</th><th>{% translate "Issue date" %}</th><th>{% translate "Due" %}</th><th class="num">{% translate "Total" %}</th><th>{% translate "Status" %}</th></tr></thead>
+    <tbody>
+      {% for inv in invoices %}
+      <tr>
+        <td><a class="person-name mono" href="{{ inv.get_absolute_url }}">{{ inv }}</a>{% if inv.job %}<div class="muted">{{ inv.job.number }}</div>{% endif %}</td>
+        <td>{{ inv.customer }}</td>
+        <td>{{ inv.issue_date }}</td>
+        <td>{{ inv.due_date }}</td>
+        <td class="num"><strong>{{ inv.total }}</strong></td>
+        <td><span class="badge badge-{% if inv.is_draft %}draft{% else %}approved{% endif %}">{{ inv.get_status_display }}</span>{% if inv.invoice_type %} <span class="muted">{% if inv.invoice_type == "standard" %}B2B{% else %}B2C{% endif %}</span>{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">{% icon "file-text" 28 %}</div>
+    <h2>{% translate "No invoices found" %}</h2>
+    {% if perms.invoicing.add_invoice %}<a class="btn" href="{% url 'invoicing:create' %}">{% icon "plus" %}{% translate "Create an invoice" %}</a>{% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

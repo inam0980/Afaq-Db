@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{{ invoice }} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="card empty-state">
+  <div class="empty-icon tone-amber">{% icon "file-warning" 28 %}</div>
+  <h2>{% blocktranslate with no=invoice.number %}Invoice {{ no }} is issued and can't be changed{% endblocktranslate %}</h2>
+  <p class="muted">{% translate "To correct an issued invoice, raise a credit note against it." %}</p>
+  <a class="btn btn-secondary" href="{{ invoice.get_absolute_url }}">{% icon "arrow-left" %}{% translate "Back to invoice" %}</a>
+</div>
+{% endblock %}

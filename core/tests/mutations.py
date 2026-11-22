@@ -133,8 +133,14 @@ MUTATIONS += [
 
 MUTATIONS += [
     ("seed_demo: manager cannot see job costs", SEED,
-     '    + ["approve_payrollrun", "approve_expense", "view_job_costing"]',
-     '    + ["approve_payrollrun", "approve_expense"]'),
+     '    + ["approve_payrollrun", "approve_expense", "view_job_costing", "issue_invoice"]',
+     '    + ["approve_payrollrun", "approve_expense", "issue_invoice"]'),
+    ("seed_demo: manager cannot issue invoices", SEED,
+     '    + ["approve_payrollrun", "approve_expense", "view_job_costing", "issue_invoice"]',
+     '    + ["approve_payrollrun", "approve_expense", "view_job_costing"]'),
+    ("seed_demo: accountant cannot invoice", SEED,
+     '    "view_invoice", "add_invoice", "change_invoice", "view_customer", "view_job",\n',
+     ""),
     ("seed_demo: no job costs", SEED, "            self._job_costs(job, coordinator)\n", ""),
     ("seed_demo: expenses not linked to jobs", SEED,
      "                job=Job.objects.filter(title=job_title).first() if job_title else None,\n", ""),

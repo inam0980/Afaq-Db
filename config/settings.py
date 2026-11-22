@@ -19,6 +19,13 @@ environ.Env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("SECRET_KEY")
 COMPANY_NAME = env("COMPANY_NAME", default="AFAQ ALSIYANAH ALDAWLIYAH EST")
+# Seller details printed on tax invoices and encoded in the ZATCA QR code.
+# Replace the placeholders with the company's real registration data in .env.
+COMPANY_NAME_AR = env("COMPANY_NAME_AR", default="مؤسسة آفاق الصيانة الدولية")
+COMPANY_VAT_NUMBER = env("COMPANY_VAT_NUMBER", default="300000000000003")
+COMPANY_CR_NUMBER = env("COMPANY_CR_NUMBER", default="")
+COMPANY_ADDRESS = env("COMPANY_ADDRESS", default="Riyadh, Saudi Arabia")
+INVOICE_PAYMENT_TERMS_DAYS = env.int("INVOICE_PAYMENT_TERMS_DAYS", default=30)
 DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
@@ -41,6 +48,7 @@ INSTALLED_APPS = [
     "expenses",
     "customers",
     "jobs",
+    "invoicing",
 ]
 
 MIDDLEWARE = [

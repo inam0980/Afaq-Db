@@ -112,6 +112,7 @@ ACCOUNTANT_PERMS = [
     "view_employee", "view_salarystructure",
     "view_payrollrun", "add_payrollrun", "change_payrollrun", "view_payslip", "change_payslip",
     "view_expense", "add_expense", "change_expense", "view_expensecategory",
+    "view_invoice", "add_invoice", "change_invoice", "view_customer", "view_job",
 ]
 COORDINATOR_PERMS = [
     "view_job", "add_job", "change_job",
@@ -120,7 +121,7 @@ COORDINATOR_PERMS = [
 ]
 MANAGER_PERMS = sorted(set(
     HR_PERMS + ACCOUNTANT_PERMS + COORDINATOR_PERMS
-    + ["approve_payrollrun", "approve_expense", "view_job_costing"]
+    + ["approve_payrollrun", "approve_expense", "view_job_costing", "issue_invoice"]
 ))
 
 ROLES = [

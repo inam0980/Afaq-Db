@@ -38,8 +38,11 @@
       <a href="{% url 'customers:list' %}" {% if nav_section == "customers" %}aria-current="page"{% endif %}>{% icon "contact" %}<span>{% translate "Customers" %}</span></a>
       {% endif %}
 
-      {% if perms.payroll.view_payrollrun or perms.expenses.view_expense %}
+      {% if perms.payroll.view_payrollrun or perms.expenses.view_expense or perms.invoicing.view_invoice %}
       <div class="nav-label">{% translate "Finance" %}</div>
+      {% endif %}
+      {% if perms.invoicing.view_invoice %}
+      <a href="{% url 'invoicing:list' %}" {% if nav_section == "invoices" %}aria-current="page"{% endif %}>{% icon "file-text" %}<span>{% translate "Invoices" %}</span></a>
       {% endif %}
       {% if perms.payroll.view_payrollrun %}
       <a href="{% url 'payroll:run_list' %}" {% if nav_section == "payroll" %}aria-current="page"{% endif %}>{% icon "wallet" %}<span>{% translate "Payroll" %}</span></a>

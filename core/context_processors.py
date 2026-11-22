@@ -11,6 +11,7 @@ _SECTIONS = {
     ("jobs", "profitability"): "profitability",
     ("jobs", None): "jobs",
     ("customers", None): "customers",
+    ("invoicing", None): "invoices",
 }
 
 

@@ -66,3 +66,20 @@ def test_count_target_handles_crlf_files(tmp_path):
     f = tmp_path / "code.py"
     f.write_bytes(b"a = 1\r\nb = 2\r\n")
     assert break_check.count_target(f, "a = 1\nb = 2") == 1
+
+
+def test_test_output_is_decoded_as_utf8(monkeypatch):
+    # pytest output can contain Arabic; Windows' default code page cannot decode it.
+    seen = {}
+
+    def fake_run(*args, **kwargs):
+        seen.update(kwargs)
+
+        class Result:
+            returncode, stdout = 0, ""
+        return Result()
+
+    monkeypatch.setattr(break_check.subprocess, "run", fake_run)
+    break_check.run_tests("core", rebuild_db=False)
+    assert seen.get("encoding") == "utf-8"
+    assert seen.get("errors") == "replace"

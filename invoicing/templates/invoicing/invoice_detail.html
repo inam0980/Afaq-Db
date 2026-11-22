@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{{ invoice }} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head no-print">
+  <a class="back-link" href="{% url 'invoicing:list' %}">{% icon "arrow-left" 16 %}{% translate "All invoices" %}</a>
+  <div class="actions">
+    {% if invoice.is_draft %}
+      {% if perms.invoicing.change_invoice %}<a class="btn btn-secondary" href="{% url 'invoicing:update' invoice.pk %}">{% icon "pencil" %}{% translate "Edit draft" %}</a>{% endif %}
+      {% if perms.invoicing.issue_invoice %}
+      <form method="post" action="{% url 'invoicing:issue' invoice.pk %}" class="inline"
+            onsubmit="return confirm('{% translate "Issue this invoice? It gets a number and can no longer be changed." %}')">{% csrf_token %}
+        <button class="btn">{% icon "check-circle" %}{% translate "Issue invoice" %}</button>
+      </form>
+      {% endif %}
+    {% else %}
+      <button class="btn" onclick="window.print()">{% icon "printer" %}{% translate "Print / Save as PDF" %}</button>
+    {% endif %}
+  </div>
+</div>
+
+<article class="card invoice-doc" dir="ltr">
+  {% if invoice.is_draft %}<div class="draft-ribbon">DRAFT · مسودة</div>{% endif %}
+
+  <header class="inv-head">
+    <div>
+      <div class="inv-seller">{{ company.name }}</div>
+      <div class="inv-seller-ar" dir="rtl">{{ company.name_ar }}</div>
+      <div class="muted">{{ company.address }}</div>
+      <div class="muted">VAT No. / الرقم الضريبي: <span class="mono">{{ company.vat }}</span>{% if company.cr %} · CR / س.ت: <span class="mono">{{ company.cr }}</span>{% endif %}</div>
+    </div>
+    <div class="inv-title">
+      {% if invoice.invoice_type == "standard" %}
+        <div class="inv-title-ar" dir="rtl">فاتورة ضريبية</div><div>Tax Invoice</div>
+      {% elif invoice.invoice_type == "simplified" %}
+        <div class="inv-title-ar" dir="rtl">فاتورة ضريبية مبسطة</div><div>Simplified Tax Invoice</div>
+      {% else %}
+        <div class="inv-title-ar" dir="rtl">فاتورة</div><div>Invoice</div>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="inv-meta">
+    <dl>
+      <dt>Invoice No. / رقم الفاتورة</dt><dd class="mono">{{ invoice.number|default:"—" }}</dd>
+      <dt>Issue date / تاريخ الإصدار</dt><dd>{{ invoice.issue_date }}{% if invoice.issued_at %} <span class="muted">{{ invoice.issued_at|date:"H:i" }}</span>{% endif %}</dd>
+      <dt>Due date / تاريخ الاستحقاق</dt><dd>{{ invoice.due_date }}</dd>
+      {% if invoice.job %}<dt>Job / أمر العمل</dt><dd>{% if perms.jobs.view_job %}<a href="{{ invoice.job.get_absolute_url }}">{{ invoice.job.number }}</a>{% else %}{{ invoice.job.number }}{% endif %}</dd>{% endif %}
+    </dl>
+    <dl>
+      <dt>Customer / العميل</dt>
+      <dd><strong>{% if invoice.is_draft %}{{ invoice.customer.name }}{% else %}{{ invoice.buyer_name }}{% endif %}</strong></dd>
+      {% if invoice.is_draft %}
+        {% if invoice.customer.vat_number %}<dt>VAT No. / الرقم الضريبي</dt><dd class="mono">{{ invoice.customer.vat_number }}</dd>{% endif %}
+        {% if invoice.customer.address_line %}<dt>Address / العنوان</dt><dd>{{ invoice.customer.address_line }}</dd>{% endif %}
+      {% else %}
+        {% if invoice.buyer_vat_number %}<dt>VAT No. / الرقم الضريبي</dt><dd class="mono">{{ invoice.buyer_vat_number }}</dd>{% endif %}
+        {% if invoice.buyer_address %}<dt>Address / العنوان</dt><dd>{{ invoice.buyer_address }}</dd>{% endif %}
+      {% endif %}
+    </dl>
+  </div>
+
+  <table class="table inv-lines">
+    <thead>
+      <tr>
+        <th>Description<br><span dir="rtl">الوصف</span></th>
+        <th class="num">Qty<br><span dir="rtl">الكمية</span></th>
+        <th class="num">Unit price<br><span dir="rtl">سعر الوحدة</span></th>
+        <th class="num">VAT %<br><span dir="rtl">نسبة الضريبة</span></th>
+        <th class="num">VAT<br><span dir="rtl">الضريبة</span></th>
+        <th class="num">Total<br><span dir="rtl">المجموع</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for line in lines %}
+      <tr>
+        <td>{{ line.description }}</td>
+        <td class="num">{{ line.quantity }}</td>
+        <td class="num">{{ line.unit_price }}</td>
+        <td class="num">{{ line.vat_rate|floatformat:0 }}%</td>
+        <td class="num">{{ line.vat }}</td>
+        <td class="num">{{ line.total }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="muted">{% translate "No lines yet." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="inv-foot">
+    <div class="zatca-qr-wrap">
+      {% if qr %}<div class="zatca-qr" aria-label="ZATCA QR code">{{ qr|safe }}</div>{% endif %}
+    </div>
+    <table class="inv-totals">
+      <tr><td>Total excl. VAT / الإجمالي غير شامل الضريبة</td><td class="num">{{ invoice.subtotal }}</td></tr>
+      <tr><td>VAT / ضريبة القيمة المضافة</td><td class="num">{{ invoice.vat_amount }}</td></tr>
+      <tr class="grand"><td>Total incl. VAT / الإجمالي شامل الضريبة</td><td class="num">{{ invoice.total }} SAR</td></tr>
+    </table>
+  </div>
+
+  {% if invoice.notes %}<p class="muted">{{ invoice.notes|linebreaksbr }}</p>{% endif %}
+</article>
+{% endblock %}
