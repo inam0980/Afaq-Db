@@ -41,6 +41,15 @@
   </a>
   {% endif %}
 
+  {% if show_job_profit %}
+  <a class="kpi" href="{% url 'jobs:profitability' %}">
+    <span class="kpi-icon tone-green">{% icon "banknote" 20 %}</span>
+    <span class="kpi-label">{% translate "Job profit" %} {{ today|date:"F Y" }}</span>
+    <span class="kpi-value{% if month_job_profit < 0 %} text-loss{% endif %}">{{ month_job_profit }} <small>SAR</small></span>
+    <span class="muted">{% blocktranslate count n=month_jobs_done %}{{ n }} completed job{% plural %}{{ n }} completed jobs{% endblocktranslate %}</span>
+  </a>
+  {% endif %}
+
   {% if show_employees %}
   <a class="kpi" href="{% url 'hr:employee_list' %}">
     <span class="kpi-icon tone-blue">{% icon "users" 20 %}</span>

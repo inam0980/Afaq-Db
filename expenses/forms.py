@@ -2,6 +2,7 @@ from django import forms
 
 from expenses.models import Expense, ExpenseCategory
 from hr.forms import DateInput
+from jobs.models import Job
 
 
 class ExpenseForm(forms.ModelForm):
@@ -17,6 +18,7 @@ class ExpenseForm(forms.ModelForm):
             "total",
             "vat_rate",
             "payment_method",
+            "job",
             "receipt",
         ]
         widgets = {
@@ -32,6 +34,11 @@ class ExpenseForm(forms.ModelForm):
         if self.instance.pk:   # keep a now-inactive category selectable on edit
             active = active | ExpenseCategory.objects.filter(pk=self.instance.category_id)
         self.fields["category"].queryset = active.distinct()
+
+        jobs = Job.objects.exclude(status=Job.Status.CANCELLED)
+        if self.instance.pk and self.instance.job_id:
+            jobs = jobs | Job.objects.filter(pk=self.instance.job_id)
+        self.fields["job"].queryset = jobs.select_related("customer").distinct().order_by("-created_at")
 
 
 class RejectForm(forms.Form):

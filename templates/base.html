@@ -25,11 +25,14 @@
       <a href="{% url 'hr:expiring_documents' %}" {% if nav_section == "expiring" %}aria-current="page"{% endif %}>{% icon "file-warning" %}<span>{% translate "Expiring documents" %}</span></a>
       {% endif %}
 
-      {% if perms.jobs.view_job or perms.customers.view_customer %}
+      {% if perms.jobs.view_job or perms.customers.view_customer or perms.jobs.view_job_costing %}
       <div class="nav-label">{% translate "Operations" %}</div>
       {% endif %}
       {% if perms.jobs.view_job %}
       <a href="{% url 'jobs:list' %}" {% if nav_section == "jobs" %}aria-current="page"{% endif %}>{% icon "wrench" %}<span>{% translate "Jobs" %}</span></a>
+      {% endif %}
+      {% if perms.jobs.view_job_costing %}
+      <a href="{% url 'jobs:profitability' %}" {% if nav_section == "profitability" %}aria-current="page"{% endif %}>{% icon "banknote" %}<span>{% translate "Job profitability" %}</span></a>
       {% endif %}
       {% if perms.customers.view_customer %}
       <a href="{% url 'customers:list' %}" {% if nav_section == "customers" %}aria-current="page"{% endif %}>{% icon "contact" %}<span>{% translate "Customers" %}</span></a>

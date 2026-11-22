@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
@@ -39,3 +41,22 @@ class JobForm(forms.ModelForm):
 
     def sections(self):
         return [(t, i, [self[n] for n in names]) for t, i, names in self.SECTIONS]
+
+
+class MaterialForm(forms.Form):
+    description = forms.CharField(max_length=150, label=_("Material"))
+    quantity = forms.DecimalField(min_value=Decimal("0.01"), max_digits=10, decimal_places=2, label=_("Qty"))
+    unit_cost = forms.DecimalField(min_value=Decimal("0"), max_digits=12, decimal_places=2, label=_("Unit cost"))
+
+
+class LabourForm(forms.Form):
+    employee = forms.ModelChoiceField(queryset=Employee.objects.none(), label=_("Technician"))
+    date = forms.DateField(widget=DateInput(), label=_("Date"))
+    hours = forms.DecimalField(min_value=Decimal("0.01"), max_value=Decimal("24"), max_digits=5,
+                               decimal_places=2, label=_("Hours"))
+    note = forms.CharField(max_length=200, required=False, label=_("Note"))
+
+    def __init__(self, *args, job, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["employee"].queryset = job.technicians.order_by("first_name")
+        self.fields["employee"].label_from_instance = lambda e: e.full_name

@@ -165,3 +165,56 @@ def test_coordinator_role(seeded):
     assert not user.has_perm("expenses.view_expense")
     manager = get_user_model().objects.get(username="manager_demo")
     assert manager.has_perm("jobs.change_job")
+
+
+def test_jobs_have_costs_and_profit_report_has_data(seeded):
+    from jobs.costing import job_costing, profitability
+
+    for job in Job.objects.filter(status__in=["in_progress", "completed"]):
+        c = job_costing(job)
+        assert c.materials > 0 and c.labour > 0
+    today = timezone.localdate()
+    report = profitability(today.year, today.month)
+    assert report.rows and report.profit != 0
+
+
+def test_some_approved_expenses_are_linked_to_jobs(seeded):
+    assert Expense.objects.filter(job__isnull=False, status="approved").exists()
+
+
+def test_only_manager_sees_job_costs(seeded):
+    User = get_user_model()
+    assert User.objects.get(username="manager_demo").has_perm("jobs.view_job_costing")
+    assert not User.objects.get(username="coordinator_demo").has_perm("jobs.view_job_costing")
+
+
+def test_rerun_backfills_costs_and_links_on_an_older_demo_database(seeded):
+    from jobs.models import JobMaterial, LabourEntry
+
+    # Simulate a database seeded before job costing existed.
+    JobMaterial.objects.all().delete()
+    LabourEntry.objects.all().delete()
+    Expense.objects.update(job=None)
+
+    call_command("seed_demo", verbosity=0)
+
+    assert JobMaterial.objects.exists() and LabourEntry.objects.exists()
+    assert Expense.objects.filter(job__isnull=False, status="approved").exists()
+    before = (JobMaterial.objects.count(), LabourEntry.objects.count())
+    call_command("seed_demo", verbosity=0)
+    assert (JobMaterial.objects.count(), LabourEntry.objects.count()) == before
+
+
+def test_demo_job_profits_are_realistic(seeded):
+    # Demo data should show healthy jobs, not losses caused by unrelated costs.
+    from jobs.costing import job_costing
+
+    for job in Job.objects.filter(status="completed"):
+        assert job_costing(job).profit > 0, job.title
+
+
+def test_rerun_corrects_wrong_demo_expense_links(seeded):
+    wrong = Job.objects.get(title="Repaint school corridors")
+    Expense.objects.filter(invoice_number="DEMO-0004").update(job=wrong)   # govt fee, not a job cost
+    call_command("seed_demo", verbosity=0)
+    assert Expense.objects.get(invoice_number="DEMO-0004").job is None

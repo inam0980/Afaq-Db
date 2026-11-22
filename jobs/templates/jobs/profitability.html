@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% translate "Job profitability" %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{% translate "Job profitability" %}</h1>
+    <p class="muted">{% translate "Completed jobs of the month: quoted price vs. materials, labour and approved expenses." %}</p>
+  </div>
+  <form method="get" class="inline">
+    <label class="select-inline">{% icon "calendar" 16 %}<input type="month" name="month" value="{{ month_value }}" class="filter-input" onchange="this.form.submit()"></label>
+  </form>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi"><span class="kpi-label">{% translate "Revenue (quoted)" %}</span><span class="kpi-value">{{ report.revenue }} <small>SAR</small></span></div>
+  <div class="kpi"><span class="kpi-label">{% translate "Total cost" %}</span><span class="kpi-value">{{ report.total_cost }} <small>SAR</small></span></div>
+  <div class="kpi kpi-highlight"><span class="kpi-label">{% translate "Profit" %}</span><span class="kpi-value{% if report.profit < 0 %} text-loss{% endif %}">{{ report.profit }} <small>SAR</small></span><span class="muted">{% blocktranslate count n=report.rows|length %}{{ n }} completed job{% plural %}{{ n }} completed jobs{% endblocktranslate %}</span></div>
+</div>
+
+<div class="card card-flush">
+  {% if report.rows %}
+  <div class="table-scroll">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>{% translate "Job" %}</th><th>{% translate "Customer" %}</th><th>{% translate "Completed" %}</th>
+        <th class="num">{% translate "Quoted" %}</th><th class="num">{% translate "Materials" %}</th><th class="num">{% translate "Labour" %}</th>
+        <th class="num">{% translate "Expenses" %}</th><th class="num">{% translate "Profit" %}</th><th class="num">{% translate "Margin" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in report.rows %}
+      <tr>
+        <td><a class="person-name" href="{{ row.job.get_absolute_url }}">{{ row.job.title }}</a><div class="muted">{{ row.job.number }}</div></td>
+        <td>{{ row.job.customer }}</td>
+        <td>{{ row.job.completed_at|date:"Y-m-d" }}</td>
+        <td class="num">{{ row.costing.revenue|default:"—" }}</td>
+        <td class="num">{{ row.costing.materials }}</td>
+        <td class="num">{{ row.costing.labour }}</td>
+        <td class="num">{{ row.costing.expenses }}</td>
+        <td class="num"><strong{% if row.costing.profit is not None and row.costing.profit < 0 %} class="text-loss"{% endif %}>{{ row.costing.profit|default:"—" }}</strong></td>
+        <td class="num">{% if row.costing.margin_pct is not None %}<span class="badge {% if row.costing.margin_pct < 0 %}badge-expired{% else %}badge-completed{% endif %}">{{ row.costing.margin_pct }}%</span>{% else %}—{% endif %}</td>
+      </tr>
+      {% endfor %}
+      <tr class="report-total">
+        <td colspan="3">{% translate "Total" %}</td>
+        <td class="num">{{ report.revenue }}</td><td colspan="3" class="num">{{ report.total_cost }}</td>
+        <td class="num">{{ report.profit }}</td><td></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">{% icon "banknote" 28 %}</div>
+    <h2>{% translate "No jobs were completed in this month." %}</h2>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

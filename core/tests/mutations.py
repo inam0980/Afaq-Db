@@ -101,7 +101,10 @@ MUTATIONS += [
     ("seed_demo: runs in production", SEED,
      "        if not settings.DEBUG and not force:", "        if False:"),
     ("seed_demo: duplicates expenses on rerun", SEED,
-     "            if Expense.objects.filter(invoice_number=inv).exists():\n                continue\n", ""),
+     "            existing = Expense.objects.filter(invoice_number=inv).first()",
+     "            existing = None"),
+    ("seed_demo: older expenses not linked to jobs on rerun", SEED,
+     "                if existing.job_id != (job.pk if job else None):", "                if False:"),
     ("seed_demo: creator approves own expense", SEED,
      "                expense_services.approve(expense, manager)", "                expense_services.approve(expense, accountant)"),
     ("seed_demo: crashes when this month's payroll is locked", SEED,
@@ -120,7 +123,19 @@ MUTATIONS += [
     ("seed_demo: completed jobs left in progress", SEED,
      "                    change_status(job, S.COMPLETED)\n", "                    pass\n"),
     ("seed_demo: duplicates jobs on rerun", SEED,
-     "            if Job.objects.filter(customer=customer, title=title).exists():\n                continue\n", ""),
+     "            existing = Job.objects.filter(customer=customer, title=title).first()",
+     "            existing = None"),
+    ("seed_demo: costs added again on every rerun", SEED,
+     "existing.materials.exists() or existing.labour.exists()", "False"),
     ("seed_demo: technicians not assigned", SEED,
      '            job.technicians.set(Employee.objects.filter(id_number__in=tech_ids))\n', ""),
+]
+
+MUTATIONS += [
+    ("seed_demo: manager cannot see job costs", SEED,
+     '    + ["approve_payrollrun", "approve_expense", "view_job_costing"]',
+     '    + ["approve_payrollrun", "approve_expense"]'),
+    ("seed_demo: no job costs", SEED, "            self._job_costs(job, coordinator)\n", ""),
+    ("seed_demo: expenses not linked to jobs", SEED,
+     "                job=Job.objects.filter(title=job_title).first() if job_title else None,\n", ""),
 ]
