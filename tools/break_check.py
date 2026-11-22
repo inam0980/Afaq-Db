@@ -34,13 +34,18 @@ def _write_raw(path: Path, text: str) -> None:
     path.write_bytes(text.encode("utf-8"))   # no newline translation
 
 
-def _match_eol(snippet: str, raw: str) -> str:
-    return snippet.replace("\n", "\r\n") if "\r\n" in raw else snippet
+def _eol_variants(old: str, new: str) -> list[tuple[str, str]]:
+    """(old, new) pairs to try: as written (LF) and with CRLF. Files can have mixed
+    endings (git autocrlf + code appended later), so each target is matched as-is."""
+    pairs = [(old, new)]
+    if "\n" in old:
+        pairs.append((old.replace("\n", "\r\n"), new.replace("\n", "\r\n")))
+    return pairs
 
 
 def count_target(path: Path, old: str) -> int:
     raw = _read_raw(path)
-    return raw.count(_match_eol(old, raw))
+    return sum(raw.count(variant) for variant, _ in _eol_variants(old, ""))
 
 
 @contextlib.contextmanager
@@ -49,7 +54,10 @@ def mutated(path: Path, old: str, new: str, journal: Path = JOURNAL):
     original = _read_raw(path)
     journal.write_text(json.dumps({"path": str(path), "original": original}), encoding="utf-8")
     try:
-        _write_raw(path, original.replace(_match_eol(old, original), _match_eol(new, original), 1))
+        old_v, new_v = next(
+            ((o, n) for o, n in _eol_variants(old, new) if o in original), (old, new)
+        )
+        _write_raw(path, original.replace(old_v, new_v, 1))
         yield
     finally:
         _write_raw(path, original)

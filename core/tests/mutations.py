@@ -145,3 +145,11 @@ MUTATIONS += [
     ("seed_demo: expenses not linked to jobs", SEED,
      "                job=Job.objects.filter(title=job_title).first() if job_title else None,\n", ""),
 ]
+
+MUTATIONS += [
+    ("seed_demo: invoices duplicated on rerun", SEED,
+     "            if Invoice.objects.filter(notes=marker).exists():\n                continue\n", ""),
+    ("seed_demo: no credit note", SEED, "            if credit:", "            if False:"),
+    ("seed_demo: job invoices not paid", SEED,
+     "            for amount, days_ago in JOB_INVOICE_PAYMENTS[job.title]:", "            for amount, days_ago in []:"),
+]

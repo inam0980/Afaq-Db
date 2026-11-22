@@ -20,7 +20,7 @@
   </div>
 </div>
 
-{% if not show_employees and not show_payroll and not show_expenses and not show_jobs %}
+{% if not show_employees and not show_payroll and not show_expenses and not show_jobs and not show_receivables %}
   <div class="empty-state card">
     <div class="empty-icon">{% icon "dashboard" 28 %}</div>
     <h2>{% translate "Nothing to show yet" %}</h2>
@@ -29,6 +29,18 @@
 {% endif %}
 
 <div class="kpi-grid">
+  {% if show_receivables %}
+  <a class="kpi" href="{% url 'invoicing:receivables' %}">
+    <span class="kpi-icon {% if receivable_overdue > 0 %}tone-amber{% else %}tone-green{% endif %}">{% icon "file-text" 20 %}</span>
+    <span class="kpi-label">{% translate "Customers owe" %}</span>
+    <span class="kpi-value">{{ receivable_total }} <small>SAR</small></span>
+    <span class="kpi-note">
+      {% if receivable_overdue > 0 %}<span class="badge badge-expired">{{ receivable_overdue }} {% translate "overdue" %}</span>{% endif %}
+      <span class="muted">{{ collected_this_month }} {% translate "collected this month" %}</span>
+    </span>
+  </a>
+  {% endif %}
+
   {% if show_jobs %}
   <a class="kpi" href="{% url 'jobs:list' %}">
     <span class="kpi-icon tone-blue">{% icon "wrench" 20 %}</span>

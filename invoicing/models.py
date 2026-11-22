@@ -15,6 +15,7 @@ from jobs.models import Job
 
 ZERO = Decimal("0")
 INVOICE_NO_SEQUENCE = "invoicing_invoice_no_seq"
+CREDIT_NOTE_NO_SEQUENCE = "invoicing_credit_note_no_seq"
 
 
 class InvoiceLocked(Exception):
@@ -39,6 +40,10 @@ class InvoiceQuerySet(models.QuerySet):
 
 
 class Invoice(models.Model):
+    class Kind(models.TextChoices):
+        INVOICE = "invoice", _("Invoice")
+        CREDIT_NOTE = "credit_note", _("Credit note")
+
     class Status(models.TextChoices):
         DRAFT = "draft", _("Draft")
         ISSUED = "issued", _("Issued")
@@ -47,6 +52,7 @@ class Invoice(models.Model):
         STANDARD = "standard", _("Tax invoice (B2B)")
         SIMPLIFIED = "simplified", _("Simplified tax invoice (B2C)")
 
+    kind = models.CharField(_("kind"), max_length=12, choices=Kind.choices, default=Kind.INVOICE, editable=False)
     number = models.CharField(_("invoice no."), max_length=20, blank=True, default="", editable=False)
     status = models.CharField(_("status"), max_length=10, choices=Status.choices, default=Status.DRAFT)
     invoice_type = models.CharField(_("type"), max_length=12, choices=Type.choices, blank=True, editable=False)
@@ -60,6 +66,12 @@ class Invoice(models.Model):
     issue_date = models.DateField(_("issue date"))
     due_date = models.DateField(_("due date"))
     notes = models.TextField(_("notes"), blank=True)
+    # Credit notes only: the invoice being corrected and why (both printed, ZATCA KSA-10).
+    original = models.ForeignKey(
+        "self", on_delete=models.PROTECT, null=True, blank=True, related_name="credit_notes",
+        editable=False, verbose_name=_("original invoice"),
+    )
+    reason = models.CharField(_("reason"), max_length=200, blank=True)
 
     subtotal = _amount(_("subtotal (excl. VAT)"))
     vat_amount = _amount(_("VAT"))
@@ -90,7 +102,40 @@ class Invoice(models.Model):
         verbose_name_plural = _("invoices")
 
     def __str__(self):
-        return self.number or "Draft invoice"
+        if self.number:
+            return self.number
+        return "Draft credit note" if self.is_credit_note else "Draft invoice"
+
+    @property
+    def is_credit_note(self) -> bool:
+        return self.kind == self.Kind.CREDIT_NOTE
+
+    # The two properties below need the balance annotations from
+    # invoicing.balances.with_balances(); they are computed on demand otherwise.
+    def _balance(self) -> Decimal:
+        if not hasattr(self, "balance"):
+            from invoicing.balances import with_balances
+
+            annotated = with_balances(Invoice.objects.filter(pk=self.pk)).get()
+            self.paid, self.credited, self.balance = annotated.paid, annotated.credited, annotated.balance
+        return self.balance
+
+    @property
+    def payment_status(self) -> str | None:
+        if self.is_draft or self.is_credit_note:
+            return None
+        if self._balance() <= 0:
+            return "paid"
+        return "partial" if (self.paid + self.credited) > 0 else "unpaid"
+
+    @property
+    def is_overdue(self) -> bool:
+        from django.utils import timezone
+
+        return (
+            not self.is_draft and not self.is_credit_note
+            and self._balance() > 0 and self.due_date < timezone.localdate()
+        )
 
     def get_absolute_url(self):
         return reverse("invoicing:detail", args=[self.pk])
@@ -157,3 +202,38 @@ class InvoiceLine(models.Model):
     def delete(self, *args, **kwargs):
         Invoice(pk=self.invoice_id).ensure_draft()
         return super().delete(*args, **kwargs)
+
+
+class Payment(models.Model):
+    """Money received against an issued invoice. Partial payments are allowed;
+    overpayment is not (see services.record_payment)."""
+
+    class Method(models.TextChoices):
+        CASH = "cash", _("Cash")
+        BANK = "bank", _("Bank transfer")
+        CARD = "card", _("Card")
+
+    invoice = models.ForeignKey(
+        Invoice, on_delete=models.PROTECT, related_name="payments", verbose_name=_("invoice")
+    )
+    date = models.DateField(_("date"))
+    amount = models.DecimalField(
+        _("amount"), max_digits=14, decimal_places=2, validators=[MinValueValidator(Decimal("0.01"))]
+    )
+    method = models.CharField(_("method"), max_length=10, choices=Method.choices, default=Method.BANK)
+    reference = models.CharField(_("reference"), max_length=100, blank=True)
+    note = models.CharField(_("note"), max_length=200, blank=True)
+    received_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True, related_name="+"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    history = HistoricalRecords()
+
+    class Meta:
+        ordering = ["date", "pk"]
+        verbose_name = _("payment")
+        verbose_name_plural = _("payments")
+
+    def __str__(self):
+        return f"{self.invoice.number}: {self.amount:.2f}"

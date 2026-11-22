@@ -15,6 +15,13 @@
       {% if customer.vat_number %}<span class="mono">VAT {{ customer.vat_number }}</span>{% endif %}
     </div>
   </div>
+  {% if balance is not None %}
+  <div class="balance-box">
+    <span class="kpi-label">{% translate "Balance due" %}</span>
+    <span class="kpi-value{% if balance > 0 %} text-loss{% endif %}">{{ balance }} <small>SAR</small></span>
+    <a href="{% url 'invoicing:statement' customer.pk %}">{% icon "file-text" 14 %} {% translate "Statement" %}</a>
+  </div>
+  {% endif %}
   <div class="actions">
     {% if perms.jobs.add_job %}<a class="btn btn-secondary" href="{% url 'jobs:create' %}?customer={{ customer.pk }}">{% icon "wrench" %}{% translate "New job" %}</a>{% endif %}
     {% if perms.customers.change_customer %}<a class="btn" href="{% url 'customers:update' customer.pk %}">{% icon "pencil" %}{% translate "Edit" %}</a>{% endif %}

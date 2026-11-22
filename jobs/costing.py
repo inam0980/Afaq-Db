@@ -97,9 +97,11 @@ def _sum(qs, field) -> Decimal:
 def _invoiced_revenue(job: Job) -> Decimal | None:
     """Revenue excl. VAT from the job's issued invoices; None if not invoiced yet."""
     issued = job.invoices.filter(status="issued")
-    if not issued.exists():
+    if not issued.filter(kind="invoice").exists():
         return None
-    return money(_sum(issued, "subtotal"))
+    return money(
+        _sum(issued.filter(kind="invoice"), "subtotal") - _sum(issued.filter(kind="credit_note"), "subtotal")
+    )
 
 
 def job_costing(job: Job) -> JobCosting:

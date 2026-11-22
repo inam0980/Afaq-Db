@@ -10,32 +10,51 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
+from customers.models import Customer
 from invoicing import services
-from invoicing.forms import InvoiceForm, LineFormSet
-from invoicing.models import Invoice
+from invoicing.balances import aging, statement, with_balances
+from invoicing.forms import CreditNoteForm, InvoiceForm, LineFormSet, PaymentForm
+from invoicing.models import Invoice, Payment
 from invoicing.zatca import qr_svg
 from jobs.models import Job
+
+PAYMENT_FILTERS = ("unpaid", "paid", "overdue")
 
 
 @login_required
 @permission_required("invoicing.view_invoice", raise_exception=True)
 def invoice_list(request):
-    qs = Invoice.objects.select_related("customer", "job")
+    qs = with_balances(Invoice.objects.select_related("customer", "job"))
     status = request.GET.get("status", "")
     if status in Invoice.Status.values:
         qs = qs.filter(status=status)
+    payment = request.GET.get("payment", "")
+    if payment in PAYMENT_FILTERS:
+        qs = qs.filter(status=Invoice.Status.ISSUED, kind=Invoice.Kind.INVOICE)
+        if payment == "paid":
+            qs = qs.filter(balance__lte=0)
+        else:
+            qs = qs.filter(balance__gt=0)
+        if payment == "overdue":
+            qs = qs.filter(due_date__lt=timezone.localdate())
     q = request.GET.get("q", "").strip()
     qs = qs.search(q)
     return render(
         request,
         "invoicing/invoice_list.html",
-        {"invoices": qs, "f": {"status": status, "q": q}, "statuses": Invoice.Status.choices},
+        {
+            "invoices": qs,
+            "f": {"status": status, "q": q, "payment": payment},
+            "today": timezone.localdate(),
+            "statuses": Invoice.Status.choices,
+        },
     )
 
 
 def _edit(request, invoice, template_ctx):
     """Shared create/update handling for the invoice header + line formset."""
-    form = InvoiceForm(request.POST or None, instance=invoice, initial=template_ctx.pop("initial", None))
+    form_class = CreditNoteForm if invoice.is_credit_note else InvoiceForm
+    form = form_class(request.POST or None, instance=invoice, initial=template_ctx.pop("initial", None))
     lines = LineFormSet(request.POST or None, instance=invoice, prefix="lines")
     if request.method == "POST" and form.is_valid() and lines.is_valid():
         with transaction.atomic():
@@ -46,7 +65,7 @@ def _edit(request, invoice, template_ctx):
             lines.instance = invoice
             lines.save()
             services.recalculate(invoice)
-        messages.success(request, _("Draft invoice saved."))
+        messages.success(request, _("Draft saved."))
         return redirect(invoice)
     return render(request, "invoicing/invoice_form.html", {"form": form, "lines": lines, **template_ctx})
 
@@ -76,7 +95,8 @@ def invoice_update(request, pk):
 @permission_required("invoicing.view_invoice", raise_exception=True)
 def invoice_detail(request, pk):
     invoice = get_object_or_404(
-        Invoice.objects.select_related("customer", "job", "created_by", "issued_by"), pk=pk
+        with_balances(Invoice.objects.select_related("customer", "job", "original", "created_by", "issued_by")),
+        pk=pk,
     )
     payload = services.qr_for(invoice)
     return render(
@@ -85,6 +105,9 @@ def invoice_detail(request, pk):
         {
             "invoice": invoice,
             "lines": invoice.lines.all(),
+            "payments": invoice.payments.select_related("received_by"),
+            "credit_notes": invoice.credit_notes.all(),
+            "payment_form": PaymentForm(initial={"date": timezone.localdate(), "amount": invoice.balance}),
             "qr": qr_svg(payload) if payload else None,
             "company": {
                 "name": settings.COMPANY_NAME,
@@ -123,3 +146,87 @@ def invoice_from_job(request, job_pk):
         return redirect(job)
     messages.success(request, _("Draft invoice created from %(job)s. Review it, then issue.") % {"job": job.number})
     return redirect("invoicing:update", pk=invoice.pk)
+
+
+def _flash_errors(request, exc_or_form):
+    if hasattr(exc_or_form, "errors") and not isinstance(exc_or_form, ValidationError):
+        text = " ".join(f"{name}: {' '.join(errs)}" for name, errs in exc_or_form.errors.items())
+    else:
+        text = " ".join(exc_or_form.messages)
+    messages.error(request, text)
+
+
+@require_POST
+@login_required
+@permission_required("invoicing.add_payment", raise_exception=True)
+def add_payment(request, pk):
+    invoice = get_object_or_404(Invoice, pk=pk)
+    form = PaymentForm(request.POST)
+    if not form.is_valid():
+        _flash_errors(request, form)
+        return redirect(invoice)
+    try:
+        services.record_payment(invoice, request.user, **form.cleaned_data)
+    except ValidationError as exc:
+        _flash_errors(request, exc)
+    else:
+        messages.success(request, _("Payment of %(amt)s recorded.") % {"amt": form.cleaned_data["amount"]})
+    return redirect(invoice)
+
+
+@require_POST
+@login_required
+@permission_required("invoicing.delete_payment", raise_exception=True)
+def delete_payment(request, pk):
+    payment = get_object_or_404(Payment.objects.select_related("invoice"), pk=pk)
+    invoice = payment.invoice
+    services.delete_payment(payment)
+    messages.success(request, _("Payment removed."))
+    return redirect(invoice)
+
+
+@require_POST
+@login_required
+@permission_required("invoicing.add_invoice", raise_exception=True)
+def credit_note(request, pk):
+    original = get_object_or_404(Invoice, pk=pk)
+    try:
+        note = services.create_credit_note(original, request.user, reason=request.POST.get("reason", ""))
+    except ValidationError as exc:
+        _flash_errors(request, exc)
+        return redirect(original)
+    messages.success(request, _("Draft credit note created. Reduce the lines to the amount to credit, then issue."))
+    return redirect("invoicing:update", pk=note.pk)
+
+
+def _parse_date(raw, default):
+    try:
+        return dt.date.fromisoformat(raw)
+    except (TypeError, ValueError):
+        return default
+
+
+@login_required
+@permission_required("invoicing.view_invoice", raise_exception=True)
+def customer_statement(request, customer_pk):
+    customer = get_object_or_404(Customer, pk=customer_pk)
+    today = timezone.localdate()
+    start = _parse_date(request.GET.get("start"), today.replace(month=1, day=1))
+    end = _parse_date(request.GET.get("end"), today)
+    if end < start:
+        start, end = end, start
+    return render(
+        request,
+        "invoicing/statement.html",
+        {
+            "customer": customer, "start": start, "end": end,
+            "statement": statement(customer, start, end),
+            "company": {"name": settings.COMPANY_NAME, "vat": settings.COMPANY_VAT_NUMBER},
+        },
+    )
+
+
+@login_required
+@permission_required("invoicing.view_invoice", raise_exception=True)
+def receivables(request):
+    return render(request, "invoicing/receivables.html", {"report": aging()})

@@ -30,7 +30,9 @@
       <div class="muted">VAT No. / الرقم الضريبي: <span class="mono">{{ company.vat }}</span>{% if company.cr %} · CR / س.ت: <span class="mono">{{ company.cr }}</span>{% endif %}</div>
     </div>
     <div class="inv-title">
-      {% if invoice.invoice_type == "standard" %}
+      {% if invoice.is_credit_note %}
+        <div class="inv-title-ar" dir="rtl">إشعار دائن</div><div>Credit Note</div>
+      {% elif invoice.invoice_type == "standard" %}
         <div class="inv-title-ar" dir="rtl">فاتورة ضريبية</div><div>Tax Invoice</div>
       {% elif invoice.invoice_type == "simplified" %}
         <div class="inv-title-ar" dir="rtl">فاتورة ضريبية مبسطة</div><div>Simplified Tax Invoice</div>
@@ -42,9 +44,13 @@
 
   <div class="inv-meta">
     <dl>
-      <dt>Invoice No. / رقم الفاتورة</dt><dd class="mono">{{ invoice.number|default:"—" }}</dd>
+      <dt>{% if invoice.is_credit_note %}Credit note No. / رقم الإشعار{% else %}Invoice No. / رقم الفاتورة{% endif %}</dt><dd class="mono">{{ invoice.number|default:"—" }}</dd>
+      {% if invoice.is_credit_note %}
+        <dt>Original invoice / الفاتورة الأصلية</dt><dd><a class="mono" href="{{ invoice.original.get_absolute_url }}">{{ invoice.original.number }}</a> · {{ invoice.original.issue_date }}</dd>
+        <dt>Reason / سبب الإشعار</dt><dd>{{ invoice.reason }}</dd>
+      {% endif %}
       <dt>Issue date / تاريخ الإصدار</dt><dd>{{ invoice.issue_date }}{% if invoice.issued_at %} <span class="muted">{{ invoice.issued_at|date:"H:i" }}</span>{% endif %}</dd>
-      <dt>Due date / تاريخ الاستحقاق</dt><dd>{{ invoice.due_date }}</dd>
+      {% if not invoice.is_credit_note %}<dt>Due date / تاريخ الاستحقاق</dt><dd>{{ invoice.due_date }}</dd>{% endif %}
       {% if invoice.job %}<dt>Job / أمر العمل</dt><dd>{% if perms.jobs.view_job %}<a href="{{ invoice.job.get_absolute_url }}">{{ invoice.job.number }}</a>{% else %}{{ invoice.job.number }}{% endif %}</dd>{% endif %}
     </dl>
     <dl>
@@ -100,4 +106,62 @@
 
   {% if invoice.notes %}<p class="muted">{{ invoice.notes|linebreaksbr }}</p>{% endif %}
 </article>
+
+{% if not invoice.is_draft and not invoice.is_credit_note %}
+<div class="grid no-print">
+  <section class="card">
+    <div class="card-head">
+      <h2>{% icon "banknote" %} {% translate "Payments" %}</h2>
+      {% if invoice.payment_status == "paid" %}<span class="badge badge-paid">{% translate "Paid" %}</span>
+      {% elif invoice.is_overdue %}<span class="badge badge-expired">{% translate "Overdue" %}</span>
+      {% elif invoice.payment_status == "partial" %}<span class="badge badge-draft">{% translate "Partially paid" %}</span>
+      {% else %}<span class="badge badge-submitted">{% translate "Unpaid" %}</span>{% endif %}
+    </div>
+    <dl>
+      <dt>{% translate "Invoice total" %}</dt><dd>{{ invoice.total }}</dd>
+      <dt>{% translate "Paid" %}</dt><dd>{{ invoice.paid }}</dd>
+      {% if invoice.credited %}<dt>{% translate "Credited" %}</dt><dd>{{ invoice.credited }}</dd>{% endif %}
+      <dt><strong>{% translate "Balance due" %}</strong></dt><dd><strong class="{% if invoice.balance > 0 %}text-loss{% endif %}">{{ invoice.balance }} SAR</strong></dd>
+    </dl>
+    <ul class="list">
+      {% for p in payments %}
+      <li>
+        <div class="list-main"><strong>{{ p.amount }}</strong> · {{ p.get_method_display }}{% if p.reference %} · <span class="mono">{{ p.reference }}</span>{% endif %}
+          <div class="muted">{{ p.date }}{% if p.received_by %} · {{ p.received_by }}{% endif %}{% if p.note %} · {{ p.note }}{% endif %}</div></div>
+        {% if perms.invoicing.delete_payment %}
+        <form method="post" action="{% url 'invoicing:delete_payment' p.pk %}" class="inline" onsubmit="return confirm(this.dataset.confirm)" data-confirm="{% translate 'Remove this payment?' %}">{% csrf_token %}
+          <button class="icon-btn" title="{% translate 'Remove' %}">{% icon "x-circle" 16 %}</button></form>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% if invoice.balance > 0 and perms.invoicing.add_payment %}
+    <form method="post" action="{% url 'invoicing:add_payment' invoice.pk %}" class="inline-form">
+      {% csrf_token %}
+      {{ payment_form.amount }}{{ payment_form.date }}{{ payment_form.method }}{{ payment_form.reference }}
+      <button class="btn">{% icon "plus" 16 %}{% translate "Record payment" %}</button>
+    </form>
+    {% endif %}
+  </section>
+
+  <section class="card">
+    <h2>{% icon "file-text" %} {% translate "Credit notes" %}</h2>
+    <ul class="list">
+      {% for cn in credit_notes %}
+      <li><div class="list-main"><a href="{{ cn.get_absolute_url }}">{{ cn }}</a> · {{ cn.total }}<div class="muted">{{ cn.reason }}</div></div>
+        <span class="badge badge-{% if cn.is_draft %}draft{% else %}approved{% endif %}">{{ cn.get_status_display }}</span></li>
+      {% empty %}
+      <li class="muted">{% translate "None." %}</li>
+      {% endfor %}
+    </ul>
+    {% if invoice.balance > 0 and perms.invoicing.add_invoice %}
+    <form method="post" action="{% url 'invoicing:credit_note' invoice.pk %}" class="inline-form">
+      {% csrf_token %}
+      <input type="text" name="reason" maxlength="200" required placeholder="{% translate 'Reason (printed on the credit note)' %}">
+      <button class="btn btn-secondary">{% translate "Create credit note" %}</button>
+    </form>
+    {% endif %}
+  </section>
+</div>
+{% endif %}
 {% endblock %}

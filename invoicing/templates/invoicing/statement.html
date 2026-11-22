@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% translate "Statement" %} · {{ customer }} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head no-print">
+  <a class="back-link" href="{{ customer.get_absolute_url }}">{% icon "arrow-left" 16 %}{{ customer }}</a>
+  <form method="get" class="inline-form" style="border:0;background:none;padding:0">
+    <input type="date" name="start" value="{{ start|date:'Y-m-d' }}" aria-label="{% translate 'From' %}">
+    <input type="date" name="end" value="{{ end|date:'Y-m-d' }}" aria-label="{% translate 'To' %}">
+    <button class="btn btn-secondary">{% translate "Show" %}</button>
+    <button type="button" class="btn" onclick="window.print()">{% icon "printer" %}{% translate "Print" %}</button>
+  </form>
+</div>
+
+<article class="card invoice-doc" dir="ltr">
+  <header class="inv-head">
+    <div>
+      <div class="inv-seller">{{ company.name }}</div>
+      <div class="muted">VAT No. / الرقم الضريبي: <span class="mono">{{ company.vat }}</span></div>
+    </div>
+    <div class="inv-title"><div class="inv-title-ar" dir="rtl">كشف حساب</div><div>Statement of Account</div></div>
+  </header>
+
+  <div class="inv-meta">
+    <dl>
+      <dt>Customer / العميل</dt><dd><strong>{{ customer.name }}</strong></dd>
+      {% if customer.vat_number %}<dt>VAT No.</dt><dd class="mono">{{ customer.vat_number }}</dd>{% endif %}
+      {% if customer.address_line %}<dt>Address</dt><dd>{{ customer.address_line }}</dd>{% endif %}
+    </dl>
+    <dl>
+      <dt>Period / الفترة</dt><dd>{{ start }} → {{ end }}</dd>
+      <dt>Opening balance / الرصيد الافتتاحي</dt><dd>{{ statement.opening_balance }}</dd>
+      <dt><strong>Closing balance / الرصيد الختامي</strong></dt><dd><strong>{{ statement.closing_balance }} SAR</strong></dd>
+    </dl>
+  </div>
+
+  <table class="table statement-table">
+    <thead>
+      <tr><th>Date</th><th>Reference</th><th>Description</th><th class="num">Debit</th><th class="num">Credit</th><th class="num">Balance</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>{{ start }}</td><td></td><td class="muted">Opening balance</td><td></td><td></td><td class="num">{{ statement.opening_balance }}</td></tr>
+      {% for e in statement.entries %}
+      <tr>
+        <td>{{ e.date }}</td>
+        <td class="mono">{{ e.reference }}</td>
+        <td>{{ e.description }}</td>
+        <td class="num">{{ e.debit|default:"" }}</td>
+        <td class="num">{{ e.credit|default:"" }}</td>
+        <td class="num"><strong>{{ e.balance }}</strong></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="muted">No activity in this period.</td></tr>
+      {% endfor %}
+      <tr class="report-total"><td colspan="3">Totals</td><td class="num">{{ statement.total_debits }}</td><td class="num">{{ statement.total_credits }}</td><td class="num">{{ statement.closing_balance }}</td></tr>
+    </tbody>
+  </table>
+</article>
+{% endblock %}

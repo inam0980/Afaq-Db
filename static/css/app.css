@@ -446,3 +446,12 @@ td.expired { color: var(--red); font-weight: 600; }
 .line-table input, .line-table select { height: 36px; padding: 0 8px; border: 1px solid var(--border-strong); border-radius: 6px; font: inherit; width: 100%; }
 .line-table td.num input { text-align: end; }
 @media print { .invoice-doc { padding: 0; } .draft-ribbon { display: block; } }
+
+/* ---------- Receivables ---------- */
+.balance-box { display: flex; flex-direction: column; gap: 2px; padding: 10px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface-2); }
+.balance-box .kpi-value { font-size: 20px; }
+.balance-box a { font-size: 13px; display: inline-flex; gap: 4px; align-items: center; }
+.statement-table td.num, .statement-table th.num { white-space: nowrap; }
+.aging th, .aging td { text-align: end; }
+.aging th:first-child, .aging td:first-child { text-align: start; }
+.aging .bucket-late { color: var(--red); }

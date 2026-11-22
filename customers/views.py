@@ -5,6 +5,7 @@ from django.utils.translation import gettext as _
 
 from customers.forms import CustomerForm
 from customers.models import Customer
+from invoicing.balances import customer_balance
 
 
 @login_required
@@ -25,7 +26,10 @@ def customer_list(request):
 def customer_detail(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     jobs = customer.jobs.order_by("-created_at")[:50] if request.user.has_perm("jobs.view_job") else []
-    return render(request, "customers/customer_detail.html", {"customer": customer, "jobs": jobs})
+    balance = customer_balance(customer) if request.user.has_perm("invoicing.view_invoice") else None
+    return render(
+        request, "customers/customer_detail.html", {"customer": customer, "jobs": jobs, "balance": balance}
+    )
 
 
 def _save(request, form, message):

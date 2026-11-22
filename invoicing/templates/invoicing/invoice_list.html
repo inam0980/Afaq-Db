@@ -17,12 +17,18 @@
       <option value="">{% translate "All" %}</option>
       {% for value, label in statuses %}<option value="{{ value }}" {% if f.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
     </select>
+    <select name="payment" class="filter-input" aria-label="{% translate 'Payment' %}">
+      <option value="">{% translate "Any payment status" %}</option>
+      <option value="unpaid" {% if f.payment == "unpaid" %}selected{% endif %}>{% translate "Outstanding" %}</option>
+      <option value="overdue" {% if f.payment == "overdue" %}selected{% endif %}>{% translate "Overdue" %}</option>
+      <option value="paid" {% if f.payment == "paid" %}selected{% endif %}>{% translate "Paid" %}</option>
+    </select>
     <button class="btn btn-secondary" type="submit">{% translate "Filter" %}</button>
   </form>
   {% if invoices %}
   <div class="table-scroll">
   <table class="table">
-    <thead><tr><th>{% translate "Invoice" %}</th><th>{% translate "Customer" %}</th><th>{% translate "Issue date" %}</th><th>{% translate "Due" %}</th><th class="num">{% translate "Total" %}</th><th>{% translate "Status" %}</th></tr></thead>
+    <thead><tr><th>{% translate "Invoice" %}</th><th>{% translate "Customer" %}</th><th>{% translate "Issue date" %}</th><th>{% translate "Due" %}</th><th class="num">{% translate "Total" %}</th><th class="num">{% translate "Balance" %}</th><th>{% translate "Status" %}</th></tr></thead>
     <tbody>
       {% for inv in invoices %}
       <tr>
@@ -30,8 +36,9 @@
         <td>{{ inv.customer }}</td>
         <td>{{ inv.issue_date }}</td>
         <td>{{ inv.due_date }}</td>
-        <td class="num"><strong>{{ inv.total }}</strong></td>
-        <td><span class="badge badge-{% if inv.is_draft %}draft{% else %}approved{% endif %}">{{ inv.get_status_display }}</span>{% if inv.invoice_type %} <span class="muted">{% if inv.invoice_type == "standard" %}B2B{% else %}B2C{% endif %}</span>{% endif %}</td>
+        <td class="num"><strong>{% if inv.is_credit_note %}−{% endif %}{{ inv.total }}</strong></td>
+        <td class="num">{% if not inv.is_draft and not inv.is_credit_note %}{% if inv.balance > 0 %}<span class="{% if inv.due_date < today %}text-loss{% endif %}">{{ inv.balance }}</span>{% else %}<span class="badge badge-paid">{% translate "Paid" %}</span>{% endif %}{% endif %}</td>
+        <td><span class="badge badge-{% if inv.is_draft %}draft{% else %}approved{% endif %}">{{ inv.get_status_display }}</span>{% if inv.is_credit_note %} <span class="badge badge-rejected">{% translate "Credit note" %}</span>{% elif inv.invoice_type %} <span class="muted">{% if inv.invoice_type == "standard" %}B2B{% else %}B2C{% endif %}</span>{% endif %}</td>
       </tr>
       {% endfor %}
     </tbody>

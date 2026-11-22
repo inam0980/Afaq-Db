@@ -3,7 +3,7 @@ from django.forms import inlineformset_factory
 
 from customers.models import Customer
 from hr.forms import DateInput
-from invoicing.models import Invoice, InvoiceLine
+from invoicing.models import Invoice, InvoiceLine, Payment
 from jobs.models import Job
 
 
@@ -47,3 +47,26 @@ class LineForm(forms.ModelForm):
 LineFormSet = inlineformset_factory(
     Invoice, InvoiceLine, form=LineForm, extra=1, can_delete=True, min_num=1, validate_min=True
 )
+
+
+class CreditNoteForm(forms.ModelForm):
+    """A credit note's customer and job always follow the original invoice."""
+
+    class Meta:
+        model = Invoice
+        fields = ["issue_date", "reason", "notes"]
+        widgets = {"issue_date": DateInput(), "notes": forms.Textarea(attrs={"rows": 2})}
+
+    def save(self, commit=True):
+        self.instance.due_date = self.cleaned_data["issue_date"]
+        return super().save(commit=commit)
+
+
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = Payment
+        fields = ["amount", "date", "method", "reference", "note"]
+        widgets = {
+            "date": DateInput(),
+            "amount": forms.NumberInput(attrs={"step": "0.01", "min": "0.01"}),
+        }

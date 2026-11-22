@@ -44,6 +44,9 @@
       {% if perms.invoicing.view_invoice %}
       <a href="{% url 'invoicing:list' %}" {% if nav_section == "invoices" %}aria-current="page"{% endif %}>{% icon "file-text" %}<span>{% translate "Invoices" %}</span></a>
       {% endif %}
+      {% if perms.invoicing.view_invoice %}
+      <a href="{% url 'invoicing:receivables' %}" {% if nav_section == "receivables" %}aria-current="page"{% endif %}>{% icon "banknote" %}<span>{% translate "Receivables" %}</span></a>
+      {% endif %}
       {% if perms.payroll.view_payrollrun %}
       <a href="{% url 'payroll:run_list' %}" {% if nav_section == "payroll" %}aria-current="page"{% endif %}>{% icon "wallet" %}<span>{% translate "Payroll" %}</span></a>
       {% endif %}

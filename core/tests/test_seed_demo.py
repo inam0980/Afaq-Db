@@ -226,3 +226,36 @@ def test_invoicing_roles(seeded):
     manager = User.objects.get(username="manager_demo")
     assert accountant.has_perm("invoicing.add_invoice") and not accountant.has_perm("invoicing.issue_invoice")
     assert manager.has_perm("invoicing.issue_invoice")
+
+
+def test_demo_receivables_cover_every_situation(seeded):
+    from invoicing.balances import aging, with_balances
+    from invoicing.models import Invoice, Payment
+
+    issued = with_balances(Invoice.objects.filter(status="issued", kind="invoice"))
+    statuses = {i.payment_status for i in issued}
+    assert {"paid", "partial", "unpaid"} <= statuses
+    assert any(i.is_overdue for i in issued)
+    assert Invoice.objects.filter(kind="credit_note", status="issued").exists()
+    assert Invoice.objects.filter(job__status="completed", status="issued").count() == 2
+    assert Payment.objects.exists()
+    assert aging().totals["overdue"] > 0
+
+
+def test_demo_invoices_are_not_duplicated(seeded):
+    from invoicing.models import Invoice, Payment
+
+    before = (Invoice.objects.count(), Payment.objects.count())
+    call_command("seed_demo", verbosity=0)
+    assert (Invoice.objects.count(), Payment.objects.count()) == before
+
+
+def test_demo_job_invoices_are_paid_and_part_paid(seeded):
+    from invoicing.balances import with_balances
+    from invoicing.models import Invoice
+
+    def status(title):
+        return with_balances(Invoice.objects.filter(job__title=title, kind="invoice")).get().payment_status
+
+    assert status("Leaking pipe in clinic washroom") == "paid"
+    assert status("Classroom lighting rewiring") == "partial"

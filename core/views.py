@@ -1,4 +1,7 @@
+from decimal import Decimal
+
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
@@ -6,6 +9,8 @@ from django.views.decorators.http import require_GET
 
 from core.health import check_database
 from expenses.models import Expense
+from invoicing.balances import aging
+from invoicing.models import Payment
 from hr.models import Employee
 from jobs.costing import profitability
 from jobs.models import Job
@@ -68,6 +73,17 @@ def dashboard(request):
                 completed_at__year=today.year,
                 completed_at__month=today.month,
             ).count(),
+        )
+
+    context["show_receivables"] = user.has_perm("invoicing.view_invoice")
+    if context["show_receivables"]:
+        receivable = aging(today)
+        context.update(
+            receivable_total=receivable.totals["total"],
+            receivable_overdue=receivable.totals["overdue"],
+            collected_this_month=Payment.objects.filter(
+                date__year=today.year, date__month=today.month
+            ).aggregate(s=Sum("amount"))["s"] or Decimal("0"),
         )
 
     context["show_job_profit"] = user.has_perm("jobs.view_job_costing")
