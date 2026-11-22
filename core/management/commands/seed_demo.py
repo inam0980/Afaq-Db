@@ -129,6 +129,7 @@ ACCOUNTANT_PERMS = [
     "view_payrollrun", "add_payrollrun", "change_payrollrun", "view_payslip", "change_payslip",
     "view_expense", "add_expense", "change_expense", "view_expensecategory",
     "view_invoice", "add_invoice", "change_invoice", "view_customer", "view_job",
+    "add_payment", "view_payment", "view_vat_return",
 ]
 COORDINATOR_PERMS = [
     "view_job", "add_job", "change_job",

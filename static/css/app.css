@@ -455,3 +455,8 @@ td.expired { color: var(--red); font-weight: 600; }
 .aging th, .aging td { text-align: end; }
 .aging th:first-child, .aging td:first-child { text-align: start; }
 .aging .bucket-late { color: var(--red); }
+
+/* ---------- VAT return ---------- */
+.vat-form td:first-child { color: var(--muted); width: 56px; }
+.vat-section td { background: var(--surface-2); font-weight: 600; color: var(--brand); }
+.vat-form .grand td { background: var(--brand-50); font-size: 15px; }

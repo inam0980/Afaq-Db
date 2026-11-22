@@ -16,4 +16,5 @@ urlpatterns = [
     path("<int:pk>/credit-note/", views.credit_note, name="credit_note"),
     path("statement/<int:customer_pk>/", views.customer_statement, name="statement"),
     path("receivables/", views.receivables, name="receivables"),
+    path("vat-return/", views.vat_return_view, name="vat_return"),
 ]

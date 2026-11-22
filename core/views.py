@@ -11,6 +11,7 @@ from core.health import check_database
 from expenses.models import Expense
 from invoicing.balances import aging
 from invoicing.models import Payment
+from invoicing.vat_return import parse_period, vat_return
 from hr.models import Employee
 from jobs.costing import profitability
 from jobs.models import Job
@@ -85,6 +86,11 @@ def dashboard(request):
                 date__year=today.year, date__month=today.month
             ).aggregate(s=Sum("amount"))["s"] or Decimal("0"),
         )
+
+    context["show_vat"] = user.has_perm("invoicing.view_vat_return")
+    if context["show_vat"]:
+        start, end, label = parse_period(None, today)
+        context.update(vat_due_this_quarter=vat_return(start, end).net_vat, vat_quarter=label)
 
     context["show_job_profit"] = user.has_perm("jobs.view_job_costing")
     if context["show_job_profit"]:

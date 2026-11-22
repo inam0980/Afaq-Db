@@ -1,3 +1,4 @@
+import csv
 import datetime as dt
 
 from django.conf import settings
@@ -5,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -15,6 +17,7 @@ from invoicing import services
 from invoicing.balances import aging, statement, with_balances
 from invoicing.forms import CreditNoteForm, InvoiceForm, LineFormSet, PaymentForm
 from invoicing.models import Invoice, Payment
+from invoicing.vat_return import csv_rows, parse_period, vat_return
 from invoicing.zatca import qr_svg
 from jobs.models import Job
 
@@ -230,3 +233,25 @@ def customer_statement(request, customer_pk):
 @permission_required("invoicing.view_invoice", raise_exception=True)
 def receivables(request):
     return render(request, "invoicing/receivables.html", {"report": aging()})
+
+
+@login_required
+@permission_required("invoicing.view_vat_return", raise_exception=True)
+def vat_return_view(request):
+    start, end, label = parse_period(request.GET.get("period"), timezone.localdate())
+    report = vat_return(start, end)
+    if request.GET.get("format") == "csv":
+        response = HttpResponse(content_type="text/csv; charset=utf-8")
+        response["Content-Disposition"] = f'attachment; filename="vat-return-{label}.csv"'
+        response.write("\ufeff")   # BOM so Excel opens Arabic names correctly
+        writer = csv.writer(response)
+        for row in csv_rows(report):
+            writer.writerow(row)
+        return response
+    today = timezone.localdate()
+    quarters = [f"{y}-Q{q}" for y in (today.year, today.year - 1) for q in (4, 3, 2, 1)]
+    return render(
+        request,
+        "invoicing/vat_return.html",
+        {"report": report, "period": label, "quarters": quarters},
+    )

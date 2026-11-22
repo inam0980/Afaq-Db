@@ -38,7 +38,7 @@
       <a href="{% url 'customers:list' %}" {% if nav_section == "customers" %}aria-current="page"{% endif %}>{% icon "contact" %}<span>{% translate "Customers" %}</span></a>
       {% endif %}
 
-      {% if perms.payroll.view_payrollrun or perms.expenses.view_expense or perms.invoicing.view_invoice %}
+      {% if perms.payroll.view_payrollrun or perms.expenses.view_expense or perms.invoicing.view_invoice or perms.invoicing.view_vat_return %}
       <div class="nav-label">{% translate "Finance" %}</div>
       {% endif %}
       {% if perms.invoicing.view_invoice %}
@@ -46,6 +46,9 @@
       {% endif %}
       {% if perms.invoicing.view_invoice %}
       <a href="{% url 'invoicing:receivables' %}" {% if nav_section == "receivables" %}aria-current="page"{% endif %}>{% icon "banknote" %}<span>{% translate "Receivables" %}</span></a>
+      {% endif %}
+      {% if perms.invoicing.view_vat_return %}
+      <a href="{% url 'invoicing:vat_return' %}" {% if nav_section == "vat" %}aria-current="page"{% endif %}>{% icon "receipt" %}<span>{% translate "VAT return" %}</span></a>
       {% endif %}
       {% if perms.payroll.view_payrollrun %}
       <a href="{% url 'payroll:run_list' %}" {% if nav_section == "payroll" %}aria-current="page"{% endif %}>{% icon "wallet" %}<span>{% translate "Payroll" %}</span></a>

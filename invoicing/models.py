@@ -97,7 +97,10 @@ class Invoice(models.Model):
         constraints = [
             models.UniqueConstraint(fields=["number"], condition=~Q(number=""), name="uniq_invoice_number"),
         ]
-        permissions = [("issue_invoice", "Can issue (finalise) invoices")]
+        permissions = [
+            ("issue_invoice", "Can issue (finalise) invoices"),
+            ("view_vat_return", "Can see the VAT return"),
+        ]
         verbose_name = _("invoice")
         verbose_name_plural = _("invoices")
 

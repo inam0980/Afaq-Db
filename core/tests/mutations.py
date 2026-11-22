@@ -147,6 +147,8 @@ MUTATIONS += [
 ]
 
 MUTATIONS += [
+    ("seed_demo: accountant cannot see VAT return", SEED,
+     '    "add_payment", "view_payment", "view_vat_return",\n', '    "add_payment", "view_payment",\n'),
     ("seed_demo: invoices duplicated on rerun", SEED,
      "            if Invoice.objects.filter(notes=marker).exists():\n                continue\n", ""),
     ("seed_demo: no credit note", SEED, "            if credit:", "            if False:"),

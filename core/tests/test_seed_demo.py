@@ -259,3 +259,10 @@ def test_demo_job_invoices_are_paid_and_part_paid(seeded):
 
     assert status("Leaking pipe in clinic washroom") == "paid"
     assert status("Classroom lighting rewiring") == "partial"
+
+
+def test_vat_return_roles(seeded):
+    User = get_user_model()
+    assert User.objects.get(username="accountant_demo").has_perm("invoicing.view_vat_return")
+    assert User.objects.get(username="manager_demo").has_perm("invoicing.view_vat_return")
+    assert not User.objects.get(username="hr_demo").has_perm("invoicing.view_vat_return")
