@@ -409,3 +409,20 @@ td.expired { color: var(--red); font-weight: 600; }
 .field ul label { display: flex; gap: 8px; align-items: center; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; }
 .field ul label:hover { border-color: var(--brand); }
 .status-bar h2 { margin-block-end: 10px; }
+
+/* ---------- Job costing ---------- */
+.section-title { margin: 26px 0 12px; font-size: 17px; }
+.kpi-compact { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+.kpi-compact .kpi { padding: 14px 16px; }
+.kpi-compact .kpi-value { font-size: 20px; }
+.kpi-highlight { border-color: #99f6e4; background: linear-gradient(180deg, #f0fdfa, var(--surface)); }
+.text-loss { color: var(--red); }
+.pad { padding: 14px 18px; margin: 0; }
+.card-head.pad { padding-block-end: 4px; }
+.inline-form { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 16px; border-block-start: 1px solid var(--border); background: var(--surface-2); }
+.inline-form input, .inline-form select {
+  height: 36px; padding: 0 10px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  font: inherit; font-size: 13.5px; background: var(--surface); min-width: 0; flex: 1 1 110px;
+}
+.inline-form input[name="description"], .inline-form input[name="note"] { flex: 3 1 180px; }
+.report-total td { font-weight: 700; background: var(--surface-2); }

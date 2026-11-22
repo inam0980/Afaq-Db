@@ -109,6 +109,10 @@ class Expense(models.Model):
     payment_method = models.CharField(
         _("paid by"), max_length=20, choices=PaymentMethod.choices, default=PaymentMethod.CASH
     )
+    job = models.ForeignKey(
+        "jobs.Job", on_delete=models.PROTECT, null=True, blank=True, related_name="expenses",
+        verbose_name=_("job"), help_text=_("Link the cost to a job to see that job's profit."),
+    )
     receipt = models.FileField(
         _("receipt"), upload_to="receipts/%Y/%m/", blank=True, validators=[validate_receipt_file]
     )

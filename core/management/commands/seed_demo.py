@@ -23,6 +23,7 @@ from expenses import services as expense_services
 from expenses.models import Expense, ExpenseCategory
 from hr.models import Department, Employee
 from hr.validators import build_saudi_iban
+from jobs.costing import add_labour, add_material
 from jobs.models import Job
 from jobs.services import change_status
 from payroll.models import PayrollRun, SalaryStructure
@@ -77,6 +78,31 @@ EXPENSES = [
     ("DEMO-0010", "VEHICLE", "Van service & oil change", "Petromin Express", "300777888900003", "650", 15, "card", 35, "approved"),
 ]
 
+# job title -> materials [(description, qty, unit cost)], labour [(technician id, hours)]
+JOB_COSTS = {
+    "Central AC not cooling - floor 3": (
+        [("R410A refrigerant (kg)", "4", "85"), ("Compressor capacitor", "2", "45")],
+        [("2045678904", "6"), ("2056789015", "6")],
+    ),
+    "Classroom lighting rewiring": (
+        [("LED panel 60x60", "24", "62"), ("Cable 2.5mm (m)", "150", "3.2")],
+        [("2078901237", "16")],
+    ),
+    "Leaking pipe in clinic washroom": (
+        [("PPR pipe & fittings", "1", "140")],
+        [("2067890126", "3")],
+    ),
+    "Kitchen cabinets repair": (
+        [("Hinges (pair)", "6", "18"), ("MDF board", "2", "95")],
+        [("2101234560", "5")],
+    ),
+}
+# expense invoice -> job title it was spent on
+EXPENSE_JOBS = {
+    "DEMO-0002": "Classroom lighting rewiring",           # approved -> counts in job cost
+    "DEMO-0005": "Central AC not cooling - floor 3",      # only submitted -> not counted yet
+}
+
 HR_PERMS = [
     "view_employee", "add_employee", "change_employee",
     "view_department", "add_department", "change_department",
@@ -93,7 +119,8 @@ COORDINATOR_PERMS = [
     "view_employee",
 ]
 MANAGER_PERMS = sorted(set(
-    HR_PERMS + ACCOUNTANT_PERMS + COORDINATOR_PERMS + ["approve_payrollrun", "approve_expense"]
+    HR_PERMS + ACCOUNTANT_PERMS + COORDINATOR_PERMS
+    + ["approve_payrollrun", "approve_expense", "view_job_costing"]
 ))
 
 ROLES = [
@@ -154,8 +181,8 @@ class Command(BaseCommand):
             employees = self._employees(departments)
             self._salaries(employees)
             self._payroll(users)
-            self._expenses(users)
             self._jobs(users, self._customers())
+            self._expenses(users)
 
         if options.get("verbosity", 1) >= 1:
             self._summary()
@@ -268,9 +295,17 @@ class Command(BaseCommand):
     def _expenses(self, users):
         accountant, manager = users["Accountant"], users["Manager"]
         for inv, cat, desc, vendor, vat_no, total, rate, paid_by, days_ago, final in EXPENSES:
-            if Expense.objects.filter(invoice_number=inv).exists():
+            job_title = EXPENSE_JOBS.get(inv)
+            existing = Expense.objects.filter(invoice_number=inv).first()
+            if existing:
+                # Keep older demo databases in line with EXPENSE_JOBS. Some demo expenses
+                # are approved (locked for save()), so the link is set via update().
+                job = Job.objects.filter(title=job_title).first() if job_title else None
+                if existing.job_id != (job.pk if job else None):
+                    Expense.objects.filter(pk=existing.pk).update(job=job)
                 continue
             expense = Expense(
+                job=Job.objects.filter(title=job_title).first() if job_title else None,
                 date=self.today - dt.timedelta(days=days_ago),
                 category=ExpenseCategory.objects.get(code=cat),
                 description=desc,
@@ -314,7 +349,13 @@ class Command(BaseCommand):
         S = Job.Status
         for title, cust, service, priority, final, tech_ids, quoted, sched_days in JOBS:
             customer = customers[cust]
-            if Job.objects.filter(customer=customer, title=title).exists():
+            existing = Job.objects.filter(customer=customer, title=title).first()
+            if existing:
+                # Backfill costs on demo jobs created before job costing existed.
+                if existing.status != S.CANCELLED and not (
+                    existing.materials.exists() or existing.labour.exists()
+                ):
+                    self._job_costs(existing, coordinator)
                 continue
             job = Job.objects.create(
                 customer=customer, service_type=service, title=title, priority=priority,
@@ -330,6 +371,17 @@ class Command(BaseCommand):
                     change_status(job, S.COMPLETED)
             elif final == S.CANCELLED:
                 change_status(job, S.CANCELLED, reason="Customer postponed to next season.")
+            self._job_costs(job, coordinator)
+
+    def _job_costs(self, job, user):
+        materials, labour = JOB_COSTS.get(job.title, ([], []))
+        for description, qty, unit in materials:
+            add_material(job, user, description=description, quantity=D(qty), unit_cost=D(unit))
+        for id_number, hours in labour:
+            add_labour(
+                job, user, employee=Employee.objects.get(id_number=id_number),
+                date=self.today, hours=D(hours), note="",
+            )
 
     # --- output --------------------------------------------------------------------
 

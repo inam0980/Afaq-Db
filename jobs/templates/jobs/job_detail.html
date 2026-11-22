@@ -76,4 +76,107 @@
     </dl>
   </section>
 </div>
+<h2 class="section-title">{% icon "banknote" %} {% translate "Costs" %}</h2>
+
+{% if costing %}
+<div class="kpi-grid kpi-compact">
+  <div class="kpi"><span class="kpi-label">{% translate "Materials" %}</span><span class="kpi-value">{{ costing.materials }}</span></div>
+  <div class="kpi"><span class="kpi-label">{% translate "Labour" %} ({{ costing.labour_hours }} h)</span><span class="kpi-value">{{ costing.labour }}</span></div>
+  <div class="kpi"><span class="kpi-label">{% translate "Expenses (approved, excl. VAT)" %}</span><span class="kpi-value">{{ costing.expenses }}</span></div>
+  <div class="kpi"><span class="kpi-label">{% translate "Total cost" %}</span><span class="kpi-value">{{ costing.total_cost }} <small>SAR</small></span></div>
+  <div class="kpi kpi-highlight">
+    <span class="kpi-label">{% translate "Profit" %}{% if costing.revenue is not None %} · {% translate "quote" %} {{ costing.revenue }}{% endif %}</span>
+    {% if costing.profit is not None %}
+      <span class="kpi-value{% if costing.profit < 0 %} text-loss{% endif %}">{{ costing.profit }} <small>SAR</small></span>
+      {% if costing.margin_pct is not None %}<span class="badge {% if costing.margin_pct < 0 %}badge-expired{% else %}badge-completed{% endif %}">{{ costing.margin_pct }}% {% translate "margin" %}</span>{% endif %}
+    {% else %}
+      <span class="kpi-note">{% translate "Add a quoted amount to see profit." %}</span>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+{% with can_edit=perms.jobs.change_job %}
+<div class="grid">
+  <section class="card card-flush">
+    <div class="card-head pad"><h2>{% icon "briefcase" %} {% translate "Materials" %}</h2></div>
+    <table class="table">
+      <thead><tr><th>{% translate "Material" %}</th><th class="num">{% translate "Qty" %}</th>{% if costing %}<th class="num">{% translate "Unit" %}</th><th class="num">{% translate "Total" %}</th>{% endif %}<th></th></tr></thead>
+      <tbody>
+        {% for m in materials %}
+        <tr>
+          <td>{{ m.description }}<div class="muted">{{ m.added_by }} · {{ m.added_at|date:"Y-m-d" }}</div></td>
+          <td class="num">{{ m.quantity }}</td>
+          {% if costing %}<td class="num">{{ m.unit_cost }}</td><td class="num"><strong>{{ m.total }}</strong></td>{% endif %}
+          <td>{% if can_edit and job.status != "cancelled" %}<form method="post" action="{% url 'jobs:delete_material' m.pk %}" class="inline">{% csrf_token %}<button class="icon-btn" title="{% translate 'Remove' %}">{% icon "x-circle" 16 %}</button></form>{% endif %}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="muted">{% translate "No materials recorded." %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if can_edit and job.status != "cancelled" %}
+    <form method="post" action="{% url 'jobs:add_material' job.pk %}" class="inline-form">
+      {% csrf_token %}
+      {{ material_form.description }}{{ material_form.quantity }}{{ material_form.unit_cost }}
+      <button class="btn btn-secondary">{% icon "plus" 16 %}{% translate "Add" %}</button>
+    </form>
+    {% endif %}
+  </section>
+
+  <section class="card card-flush">
+    <div class="card-head pad"><h2>{% icon "users" %} {% translate "Hours worked" %}</h2></div>
+    <table class="table">
+      <thead><tr><th>{% translate "Technician" %}</th><th>{% translate "Date" %}</th><th class="num">{% translate "Hours" %}</th>{% if costing %}<th class="num">{% translate "Cost" %}</th>{% endif %}<th></th></tr></thead>
+      <tbody>
+        {% for e in labour %}
+        <tr>
+          <td>{{ e.employee.full_name }}{% if e.note %}<div class="muted">{{ e.note }}</div>{% endif %}</td>
+          <td>{{ e.date }}</td>
+          <td class="num">{{ e.hours }}</td>
+          {% if costing %}<td class="num"><strong>{{ e.cost }}</strong><div class="muted">@ {{ e.hourly_cost }}/h</div></td>{% endif %}
+          <td>{% if can_edit and job.status != "cancelled" %}<form method="post" action="{% url 'jobs:delete_labour' e.pk %}" class="inline">{% csrf_token %}<button class="icon-btn" title="{% translate 'Remove' %}">{% icon "x-circle" 16 %}</button></form>{% endif %}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="muted">{% translate "No hours logged." %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if can_edit and job.status != "cancelled" %}
+      {% if job.technicians.exists %}
+      <form method="post" action="{% url 'jobs:add_labour' job.pk %}" class="inline-form">
+        {% csrf_token %}
+        {{ labour_form.employee }}{{ labour_form.date }}{{ labour_form.hours }}{{ labour_form.note }}
+        <button class="btn btn-secondary">{% icon "plus" 16 %}{% translate "Log" %}</button>
+      </form>
+      {% else %}
+      <p class="muted pad">{% translate "Assign technicians to log their hours." %}</p>
+      {% endif %}
+    {% endif %}
+  </section>
+</div>
+{% endwith %}
+
+{% if costing %}
+<section class="card card-flush">
+  <div class="card-head pad"><h2>{% icon "receipt" %} {% translate "Linked expenses" %}</h2></div>
+  <table class="table">
+    <thead><tr><th>{% translate "Expense" %}</th><th>{% translate "Category" %}</th><th class="num">{% translate "Excl. VAT" %}</th><th>{% translate "Status" %}</th></tr></thead>
+    <tbody>
+      {% for x in linked_expenses %}
+      <tr>
+        <td>{% if perms.expenses.view_expense %}<a href="{{ x.get_absolute_url }}">{{ x.description }}</a>{% else %}{{ x.description }}{% endif %}<div class="muted">{{ x.number }}</div></td>
+        <td>{{ x.category }}</td>
+        <td class="num">{{ x.amount_excl_vat }}</td>
+        <td><span class="badge badge-{{ x.status }}">{{ x.get_status_display }}</span></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="muted">{% translate "No expenses linked. Pick this job when recording an expense." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="muted pad">{% translate "Only approved expenses count towards the job cost." %}</p>
+</section>
+{% endif %}
+
 {% endblock %}

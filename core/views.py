@@ -7,6 +7,7 @@ from django.views.decorators.http import require_GET
 from core.health import check_database
 from expenses.models import Expense
 from hr.models import Employee
+from jobs.costing import profitability
 from jobs.models import Job
 from payroll.models import PayrollRun
 
@@ -68,5 +69,10 @@ def dashboard(request):
                 completed_at__month=today.month,
             ).count(),
         )
+
+    context["show_job_profit"] = user.has_perm("jobs.view_job_costing")
+    if context["show_job_profit"]:
+        report = profitability(today.year, today.month)
+        context.update(month_job_profit=report.profit, month_jobs_done=len(report.rows))
 
     return render(request, "core/dashboard.html", context)

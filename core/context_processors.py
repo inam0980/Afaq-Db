@@ -8,6 +8,7 @@ _SECTIONS = {
     ("payroll", "employee_salary"): "employees",
     ("payroll", None): "payroll",
     ("expenses", None): "expenses",
+    ("jobs", "profitability"): "profitability",
     ("jobs", None): "jobs",
     ("customers", None): "customers",
 }

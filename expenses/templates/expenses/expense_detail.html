@@ -51,6 +51,7 @@
       <dt>{% translate "Vendor" %}</dt><dd>{{ expense.vendor_name|default:"—" }}</dd>
       <dt>{% translate "VAT number" %}</dt><dd class="mono">{{ expense.vendor_vat_number|default:"—" }}</dd>
       <dt>{% translate "Invoice no." %}</dt><dd>{{ expense.invoice_number|default:"—" }}</dd>
+      <dt>{% translate "Job" %}</dt><dd>{% if expense.job %}<a href="{{ expense.job.get_absolute_url }}">{{ expense.job }}</a>{% else %}—{% endif %}</dd>
       <dt>{% translate "Receipt" %}</dt>
       <dd>{% if expense.receipt %}<a href="{% url 'expenses:receipt' expense.pk %}" target="_blank" rel="noopener">{% icon "receipt" 16 %} {% translate "Open receipt" %}</a>{% else %}<span class="text-warn">{% translate "Not attached" %}</span>{% endif %}</dd>
     </dl>
