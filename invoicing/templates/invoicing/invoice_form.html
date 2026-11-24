@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% if invoice %}{% translate "Edit draft invoice" %}{% else %}{% translate "New invoice" %}{% endif %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <a class="back-link" href="{% if invoice %}{{ invoice.get_absolute_url }}{% else %}{% url 'invoicing:list' %}{% endif %}">{% icon "arrow-left" 16 %}{% translate "Back" %}</a>
+    <h1>{% if invoice %}{% translate "Edit draft invoice" %}{% else %}{% translate "New invoice" %}{% endif %}</h1>
+  </div>
+</div>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="alert alert-error">{{ form.non_field_errors }}</div>{% endif %}
+  <section class="card form-section">
+    <h2>{% icon "contact" %} {% translate "Customer & dates" %}</h2>
+    <div class="form-grid">
+      {% for field in form %}
+        <label class="field{% if field.errors %} has-error{% endif %}{% if field.name == 'notes' %} field-wide{% endif %}">
+          <span>{{ field.label }}{% if field.field.required %} <em class="req">*</em>{% endif %}</span>
+          {{ field }}
+          {% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}
+        </label>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="card card-flush form-section">
+    <div class="card-head pad"><h2>{% icon "file-text" %} {% translate "Lines" %}</h2></div>
+    {{ lines.management_form }}
+    {% if lines.non_form_errors %}<div class="alert alert-error" style="margin:0 16px 12px">{{ lines.non_form_errors }}</div>{% endif %}
+    <div class="table-scroll">
+    <table class="table line-table">
+      <thead><tr><th>{% translate "Description" %}</th><th class="num">{% translate "Qty" %}</th><th class="num">{% translate "Unit price (excl. VAT)" %}</th><th>{% translate "VAT" %}</th><th>{% translate "Remove" %}</th></tr></thead>
+      <tbody>
+        {% for lf in lines %}
+        <tr>
+          <td>{{ lf.id }}{{ lf.description }}{% for e in lf.description.errors %}<small class="error">{{ e }}</small>{% endfor %}</td>
+          <td class="num">{{ lf.quantity }}{% for e in lf.quantity.errors %}<small class="error">{{ e }}</small>{% endfor %}</td>
+          <td class="num">{{ lf.unit_price }}{% for e in lf.unit_price.errors %}<small class="error">{{ e }}</small>{% endfor %}</td>
+          <td>{{ lf.vat_rate }}</td>
+          <td>{% if lf.instance.pk %}{{ lf.DELETE }}{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    <p class="muted pad">{% translate "Save to add more lines — an empty row is always added at the bottom." %}</p>
+  </section>
+
+  <div class="form-actions">
+    <a href="{% if invoice %}{{ invoice.get_absolute_url }}{% else %}{% url 'invoicing:list' %}{% endif %}" class="btn btn-ghost">{% translate "Cancel" %}</a>
+    <button type="submit" class="btn">{% icon "check-circle" %}{% translate "Save draft" %}</button>
+  </div>
+</form>
+{% endblock %}

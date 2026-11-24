@@ -14,5 +14,13 @@ MUTATIONS = [
     ("Newlines translated on write", BC,
      'path.write_bytes(text.encode("utf-8"))', 'path.write_text(text, encoding="utf-8")'),
     ("CRLF files not matched", BC,
-     r'return snippet.replace("\n", "\r\n") if "\r\n" in raw else snippet', "return snippet"),
+     '    if "\\n" in old:\n        pairs.append(', "    if False:\n        pairs.append("),
+    ("Mutation applied with the wrong line ending", BC,
+     "if o in original), (old, new)", "if True), (old, new)"),
+]
+
+MUTATIONS += [
+    ("Test output decoded with the Windows code page", BC,
+     '        encoding="utf-8",      # test output can contain Arabic\n        errors="replace",\n',
+     "        text=True,\n"),
 ]

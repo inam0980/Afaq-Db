@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% translate "Receivables" %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{% translate "Receivables" %}</h1>
+    <p class="muted">{% blocktranslate with d=report.as_of %}What customers owe, by how late it is (as of {{ d }}).{% endblocktranslate %}</p>
+  </div>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi"><span class="kpi-label">{% translate "Total owed" %}</span><span class="kpi-value">{{ report.totals.total }} <small>SAR</small></span></div>
+  <div class="kpi"><span class="kpi-label">{% translate "Overdue" %}</span><span class="kpi-value{% if report.totals.overdue > 0 %} text-loss{% endif %}">{{ report.totals.overdue }} <small>SAR</small></span></div>
+  <div class="kpi"><span class="kpi-label">{% translate "Over 90 days" %}</span><span class="kpi-value{% if report.totals.90_plus > 0 %} text-loss{% endif %}">{{ report.totals.90_plus }} <small>SAR</small></span></div>
+</div>
+
+<div class="card card-flush">
+  {% if report.rows %}
+  <div class="table-scroll">
+  <table class="table aging">
+    <thead>
+      <tr>
+        <th>{% translate "Customer" %}</th><th>{% translate "Not yet due" %}</th><th>1–30</th><th>31–60</th><th>61–90</th><th>90+</th><th>{% translate "Total" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in report.rows %}
+      <tr>
+        <td><a class="person-name" href="{{ row.customer.get_absolute_url }}">{{ row.customer }}</a>
+          <div class="muted"><a href="{% url 'invoicing:statement' row.customer.pk %}">{% translate "Statement" %}</a> · {{ row.customer.mobile }}</div></td>
+        <td>{{ row.buckets.current }}</td>
+        <td class="{% if row.buckets.1_30 > 0 %}bucket-late{% endif %}">{{ row.buckets.1_30 }}</td>
+        <td class="{% if row.buckets.31_60 > 0 %}bucket-late{% endif %}">{{ row.buckets.31_60 }}</td>
+        <td class="{% if row.buckets.61_90 > 0 %}bucket-late{% endif %}">{{ row.buckets.61_90 }}</td>
+        <td class="{% if row.buckets.90_plus > 0 %}bucket-late{% endif %}">{{ row.buckets.90_plus }}</td>
+        <td><strong>{{ row.total }}</strong></td>
+      </tr>
+      {% endfor %}
+      <tr class="report-total">
+        <td>{% translate "Total" %}</td><td>{{ report.totals.current }}</td><td>{{ report.totals.1_30 }}</td><td>{{ report.totals.31_60 }}</td>
+        <td>{{ report.totals.61_90 }}</td><td>{{ report.totals.90_plus }}</td><td>{{ report.totals.total }}</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon tone-green">{% icon "check-circle" 28 %}</div>
+    <h2>{% translate "Nobody owes you anything right now." %}</h2>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

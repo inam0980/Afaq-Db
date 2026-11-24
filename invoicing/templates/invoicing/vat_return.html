@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% translate "VAT return" %} {{ period }} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head no-print">
+  <div>
+    <h1>{% translate "VAT return" %} <span class="muted">{{ period }}</span></h1>
+    <p class="muted">{{ report.start }} → {{ report.end }} · {% translate "Figures follow the ZATCA VAT return form." %}</p>
+  </div>
+  <div class="actions">
+    <form method="get" class="inline">
+      <select name="period" class="filter-input" onchange="this.form.submit()" aria-label="{% translate 'Period' %}">
+        {% for q in quarters %}<option value="{{ q }}" {% if q == period %}selected{% endif %}>{{ q }}</option>{% endfor %}
+        {% if period not in quarters %}<option value="{{ period }}" selected>{{ period }}</option>{% endif %}
+      </select>
+    </form>
+    <a class="btn btn-secondary" href="?period={{ period }}&amp;format=csv">{% icon "file-text" %}{% translate "Download CSV" %}</a>
+    <button class="btn" onclick="window.print()">{% icon "printer" %}{% translate "Print" %}</button>
+  </div>
+</div>
+
+{% if report.warnings.draft_invoices or report.warnings.unapproved_expenses %}
+<div class="alert alert-error no-print">
+  {% translate "Not included yet — finish these before filing:" %}
+  {% if report.warnings.draft_invoices %}<a href="{% url 'invoicing:list' %}?status=draft">{% blocktranslate count n=report.warnings.draft_invoices %}{{ n }} draft invoice{% plural %}{{ n }} draft invoices{% endblocktranslate %}</a>{% endif %}
+  {% if report.warnings.unapproved_expenses %}<a href="{% url 'expenses:list' %}?status=submitted">{% blocktranslate count n=report.warnings.unapproved_expenses %}{{ n }} expense not approved{% plural %}{{ n }} expenses not approved{% endblocktranslate %}</a>{% endif %}
+</div>
+{% endif %}
+
+<div class="kpi-grid">
+  <div class="kpi"><span class="kpi-label">{% translate "Output VAT (sales)" %}</span><span class="kpi-value">{{ report.output_vat }}</span></div>
+  <div class="kpi"><span class="kpi-label">{% translate "Input VAT (purchases)" %}</span><span class="kpi-value">{{ report.input_vat }}</span></div>
+  <div class="kpi kpi-highlight">
+    <span class="kpi-label">{% if report.is_refund %}{% translate "Net VAT refundable / carried forward" %}{% else %}{% translate "Net VAT payable" %}{% endif %}</span>
+    <span class="kpi-value">{{ report.net_vat }} <small>SAR</small></span>
+  </div>
+</div>
+
+<section class="card card-flush">
+  <table class="table vat-form" dir="ltr">
+    <thead>
+      <tr><th>#</th><th>Box / البند</th><th class="num">Amount (SAR)</th><th class="num">Adjustment</th><th class="num">VAT</th></tr>
+    </thead>
+    <tbody>
+      <tr class="vat-section"><td colspan="5">VAT on sales / ضريبة القيمة المضافة على المبيعات</td></tr>
+      <tr><td>1</td><td>Standard rated sales (15%) / المبيعات الخاضعة للنسبة الأساسية</td><td class="num">{{ report.sales_standard.amount }}</td><td class="num">{{ report.sales_standard.adjustment }}</td><td class="num">{{ report.sales_standard.vat }}</td></tr>
+      <tr><td>3</td><td>Zero rated domestic sales / المبيعات المحلية الخاضعة للنسبة الصفرية</td><td class="num">{{ report.sales_zero.amount }}</td><td class="num">{{ report.sales_zero.adjustment }}</td><td class="num">—</td></tr>
+      <tr class="report-total"><td>6</td><td>Total sales / إجمالي المبيعات</td><td class="num">{{ report.total_sales.amount }}</td><td class="num">{{ report.total_sales.adjustment }}</td><td class="num">{{ report.total_sales.vat }}</td></tr>
+
+      <tr class="vat-section"><td colspan="5">VAT on purchases / ضريبة القيمة المضافة على المشتريات</td></tr>
+      <tr><td>7</td><td>Standard rated domestic purchases (15%) / المشتريات المحلية الخاضعة للنسبة الأساسية</td><td class="num">{{ report.purchases_standard.amount }}</td><td class="num">—</td><td class="num">{{ report.purchases_standard.vat }}</td></tr>
+      <tr><td>10–11</td><td>Zero rated / exempt purchases / المشتريات الخاضعة للنسبة الصفرية أو المعفاة</td><td class="num">{{ report.purchases_zero.amount }}</td><td class="num">—</td><td class="num">—</td></tr>
+      <tr class="report-total"><td>12</td><td>Total purchases / إجمالي المشتريات</td><td class="num">{{ report.total_purchases.amount }}</td><td class="num">—</td><td class="num">{{ report.total_purchases.vat }}</td></tr>
+
+      <tr class="report-total grand"><td>13</td><td>Net VAT due (or reclaimed) / صافي الضريبة المستحقة</td><td></td><td></td><td class="num">{{ report.net_vat }}</td></tr>
+    </tbody>
+  </table>
+  <p class="muted pad">{% translate "Boxes 2 (citizen sales), 4 (exports), 5 (exempt sales), 8–9 (imports) and 14–15 (corrections, credit carried forward) are not tracked by this system; enter them on the ZATCA portal if they apply." %}</p>
+</section>
+
+<section class="card card-flush">
+  <div class="card-head pad"><h2>{% icon "file-text" %} {% translate "Documents included" %}</h2></div>
+  {% if report.documents %}
+  <div class="table-scroll">
+  <table class="table">
+    <thead><tr><th>{% translate "Type" %}</th><th>{% translate "Date" %}</th><th>{% translate "Reference" %}</th><th>{% translate "Party" %}</th><th class="num">{% translate "Rate" %}</th><th class="num">{% translate "Amount" %}</th><th class="num">{% translate "VAT" %}</th></tr></thead>
+    <tbody>
+      {% for d in report.documents %}
+      <tr>
+        <td><span class="badge {% if d.kind == 'expense' %}badge-on_leave{% elif d.kind == 'credit_note' %}badge-rejected{% else %}badge-approved{% endif %}">{{ d.kind|title }}</span></td>
+        <td>{{ d.date }}</td>
+        <td><a class="mono" href="{{ d.url }}">{{ d.reference }}</a></td>
+        <td>{{ d.party|default:"—" }}</td>
+        <td class="num">{{ d.rate|floatformat:0 }}%</td>
+        <td class="num">{{ d.amount }}</td>
+        <td class="num">{{ d.vat }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+  <p class="muted pad">{% translate "No issued invoices or approved expenses in this period." %}</p>
+  {% endif %}
+</section>
+{% endblock %}

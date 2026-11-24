@@ -1,8 +1,8 @@
 """Job costing: cost entries (materials, labour) and profit summaries.
 
 Cost of a job = materials + labour + APPROVED linked expenses (excl. VAT,
-because input VAT is recovered). Revenue = the quoted amount (excl. VAT)
-until invoicing exists.
+because input VAT is recovered). Revenue = the issued invoices of the job
+(excl. VAT); until the job is invoiced, its quoted amount.
 """
 
 import datetime as dt
@@ -94,6 +94,16 @@ def _sum(qs, field) -> Decimal:
     return qs.aggregate(s=Sum(field))["s"] or ZERO
 
 
+def _invoiced_revenue(job: Job) -> Decimal | None:
+    """Revenue excl. VAT from the job's issued invoices; None if not invoiced yet."""
+    issued = job.invoices.filter(status="issued")
+    if not issued.filter(kind="invoice").exists():
+        return None
+    return money(
+        _sum(issued.filter(kind="invoice"), "subtotal") - _sum(issued.filter(kind="credit_note"), "subtotal")
+    )
+
+
 def job_costing(job: Job) -> JobCosting:
     materials = money(_sum(job.materials.all(), "total"))
     labour = money(_sum(job.labour.all(), "cost"))
@@ -101,7 +111,9 @@ def job_costing(job: Job) -> JobCosting:
     expenses = money(_sum(job.expenses.filter(status=Expense.Status.APPROVED), "amount_excl_vat"))
     total = materials + labour + expenses
 
-    revenue = None if job.quoted_amount is None else money(job.quoted_amount)
+    revenue = _invoiced_revenue(job)
+    if revenue is None and job.quoted_amount is not None:
+        revenue = money(job.quoted_amount)
     profit = None if revenue is None else revenue - total
     margin = money(profit / revenue * 100) if revenue else None
     return JobCosting(materials, labour, hours, expenses, total, revenue, profit, margin)

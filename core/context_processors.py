@@ -11,6 +11,9 @@ _SECTIONS = {
     ("jobs", "profitability"): "profitability",
     ("jobs", None): "jobs",
     ("customers", None): "customers",
+    ("invoicing", "receivables"): "receivables",
+    ("invoicing", "vat_return"): "vat",
+    ("invoicing", None): "invoices",
 }
 
 

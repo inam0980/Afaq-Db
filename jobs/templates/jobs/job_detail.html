@@ -19,6 +19,15 @@
     </div>
   </div>
   <div class="actions">
+    {% with invoice=job.invoices.first %}
+      {% if invoice and perms.invoicing.view_invoice %}
+        <a class="btn btn-secondary" href="{{ invoice.get_absolute_url }}">{% icon "file-text" %}{{ invoice }}</a>
+      {% elif not invoice and job.status == "completed" and perms.invoicing.add_invoice %}
+        <form method="post" action="{% url 'invoicing:from_job' job.pk %}" class="inline">{% csrf_token %}
+          <button class="btn">{% icon "file-text" %}{% translate "Create invoice" %}</button>
+        </form>
+      {% endif %}
+    {% endwith %}
     {% if job.is_editable and perms.jobs.change_job %}
       <a class="btn btn-secondary" href="{% url 'jobs:update' job.pk %}">{% icon "pencil" %}{% translate "Edit" %}</a>
     {% endif %}

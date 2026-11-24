@@ -23,6 +23,8 @@ from expenses import services as expense_services
 from expenses.models import Expense, ExpenseCategory
 from hr.models import Department, Employee
 from hr.validators import build_saudi_iban
+from invoicing import services as invoicing_services
+from invoicing.models import Invoice, InvoiceLine
 from jobs.costing import add_labour, add_material
 from jobs.models import Job
 from jobs.services import change_status
@@ -103,6 +105,20 @@ EXPENSE_JOBS = {
     "DEMO-0005": "Central AC not cooling - floor 3",      # only submitted -> not counted yet
 }
 
+# Standalone demo invoices: marker (stored in notes), customer index, description,
+# amount excl. VAT, issued N days ago, payment terms (days), payments [(amount, N days ago)],
+# credit note (amount excl. VAT, reason) or None
+DEMO_INVOICES = [
+    ("DEMO-INV-CONTRACT", 1, "Annual AC maintenance contract - Q3", "5000", 60, 30, [], ("500", "Discount for a delayed visit")),
+    ("DEMO-INV-VILLA", 3, "Villa AC servicing - 4 split units", "800", 95, 30, [("920", 70)], None),
+    ("DEMO-INV-RECENT", 0, "Generator room ventilation fan replacement", "1200", 5, 30, [], None),
+]
+# job title -> payments [(amount incl. VAT, days ago)]
+JOB_INVOICE_PAYMENTS = {
+    "Leaking pipe in clinic washroom": [("747.50", 0)],      # paid in full
+    "Classroom lighting rewiring": [("2000", 0)],            # partly paid
+}
+
 HR_PERMS = [
     "view_employee", "add_employee", "change_employee",
     "view_department", "add_department", "change_department",
@@ -112,6 +128,8 @@ ACCOUNTANT_PERMS = [
     "view_employee", "view_salarystructure",
     "view_payrollrun", "add_payrollrun", "change_payrollrun", "view_payslip", "change_payslip",
     "view_expense", "add_expense", "change_expense", "view_expensecategory",
+    "view_invoice", "add_invoice", "change_invoice", "view_customer", "view_job",
+    "add_payment", "view_payment", "view_vat_return",
 ]
 COORDINATOR_PERMS = [
     "view_job", "add_job", "change_job",
@@ -120,7 +138,7 @@ COORDINATOR_PERMS = [
 ]
 MANAGER_PERMS = sorted(set(
     HR_PERMS + ACCOUNTANT_PERMS + COORDINATOR_PERMS
-    + ["approve_payrollrun", "approve_expense", "view_job_costing"]
+    + ["approve_payrollrun", "approve_expense", "view_job_costing", "issue_invoice"]
 ))
 
 ROLES = [
@@ -181,8 +199,10 @@ class Command(BaseCommand):
             employees = self._employees(departments)
             self._salaries(employees)
             self._payroll(users)
-            self._jobs(users, self._customers())
+            customers = self._customers()
+            self._jobs(users, customers)
             self._expenses(users)
+            self._invoices(users, customers)
 
         if options.get("verbosity", 1) >= 1:
             self._summary()
@@ -383,6 +403,47 @@ class Command(BaseCommand):
                 date=self.today, hours=D(hours), note="",
             )
 
+    # --- invoices & payments ----------------------------------------------------
+
+    def _invoices(self, users, customers):
+        accountant, manager = users["Accountant"], users["Manager"]
+
+        for job in Job.objects.filter(status=Job.Status.COMPLETED, title__in=JOB_INVOICE_PAYMENTS):
+            if job.invoices.exists():
+                continue
+            invoice = invoicing_services.create_from_job(job, accountant)
+            invoicing_services.issue(invoice, manager)
+            for amount, days_ago in JOB_INVOICE_PAYMENTS[job.title]:
+                self._pay(invoice, accountant, amount, days_ago)
+
+        for marker, cust, description, amount, issued_ago, terms, payments, credit in DEMO_INVOICES:
+            if Invoice.objects.filter(notes=marker).exists():
+                continue
+            issued_on = self.today - dt.timedelta(days=issued_ago)
+            invoice = Invoice.objects.create(
+                customer=customers[cust], issue_date=issued_on,
+                due_date=issued_on + dt.timedelta(days=terms), notes=marker, created_by=accountant,
+            )
+            InvoiceLine.objects.create(invoice=invoice, description=description, unit_price=D(amount))
+            invoicing_services.recalculate(invoice)
+            invoicing_services.issue(invoice, manager)
+            for paid, days_ago in payments:
+                self._pay(invoice, accountant, paid, days_ago)
+            if credit:
+                credit_amount, reason = credit
+                note = invoicing_services.create_credit_note(invoice, accountant, reason=reason)
+                line = note.lines.get()
+                line.unit_price = D(credit_amount)
+                line.save()
+                invoicing_services.recalculate(note)
+                invoicing_services.issue(note, manager)
+
+    def _pay(self, invoice, user, amount, days_ago):
+        invoicing_services.record_payment(
+            invoice, user, amount=D(amount), date=self.today - dt.timedelta(days=days_ago),
+            method="bank", reference=f"TRX-{invoice.pk:04d}",
+        )
+
     # --- output --------------------------------------------------------------------
 
     def _summary(self):
@@ -390,7 +451,7 @@ class Command(BaseCommand):
         w(self.style.SUCCESS("Demo data ready."))
         w(f"  Employees: {Employee.objects.count()}   Payroll runs: {PayrollRun.objects.count()}   "
           f"Expenses: {Expense.objects.count()}   Customers: {Customer.objects.count()}   "
-          f"Jobs: {Job.objects.count()}")
+          f"Jobs: {Job.objects.count()}   Invoices: {Invoice.objects.count()}")
         w("  Demo logins (password: %s):" % DEMO_PASSWORD)
         for username, _f, _l, group, _p in ROLES:
             w(f"    {username:<17} {group}")

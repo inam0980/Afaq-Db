@@ -133,9 +133,53 @@ MUTATIONS += [
 
 MUTATIONS += [
     ("seed_demo: manager cannot see job costs", SEED,
-     '    + ["approve_payrollrun", "approve_expense", "view_job_costing"]',
-     '    + ["approve_payrollrun", "approve_expense"]'),
+     '    + ["approve_payrollrun", "approve_expense", "view_job_costing", "issue_invoice"]',
+     '    + ["approve_payrollrun", "approve_expense", "issue_invoice"]'),
+    ("seed_demo: manager cannot issue invoices", SEED,
+     '    + ["approve_payrollrun", "approve_expense", "view_job_costing", "issue_invoice"]',
+     '    + ["approve_payrollrun", "approve_expense", "view_job_costing"]'),
+    ("seed_demo: accountant cannot invoice", SEED,
+     '    "view_invoice", "add_invoice", "change_invoice", "view_customer", "view_job",\n',
+     ""),
     ("seed_demo: no job costs", SEED, "            self._job_costs(job, coordinator)\n", ""),
     ("seed_demo: expenses not linked to jobs", SEED,
      "                job=Job.objects.filter(title=job_title).first() if job_title else None,\n", ""),
+]
+
+MUTATIONS += [
+    ("seed_demo: accountant cannot see VAT return", SEED,
+     '    "add_payment", "view_payment", "view_vat_return",\n', '    "add_payment", "view_payment",\n'),
+    ("seed_demo: invoices duplicated on rerun", SEED,
+     "            if Invoice.objects.filter(notes=marker).exists():\n                continue\n", ""),
+    ("seed_demo: no credit note", SEED, "            if credit:", "            if False:"),
+    ("seed_demo: job invoices not paid", SEED,
+     "            for amount, days_ago in JOB_INVOICE_PAYMENTS[job.title]:", "            for amount, days_ago in []:"),
+]
+
+I18N = "tools/i18n.py"
+PO_FILE = "locale/ar/LC_MESSAGES/django.po"
+
+MUTATIONS += [
+    # --- extraction tool ---
+    ("i18n: _() calls not extracted", I18N, '    "_": None,\n', ""),
+    ("i18n: plural strings not extracted", I18N, '    "ngettext": (1, 2),\n', ""),
+    ("i18n: templates not scanned", I18N,
+     'if path.suffix in {".py", ".html", ".txt"}:', 'if path.suffix in {".py"}:'),
+    ("i18n: template code not de-indented", I18N,
+     'code = "\\n".join(line.lstrip() for line in templatize(text, origin=str(path)).splitlines())',
+     "code = templatize(text, origin=str(path))"),
+    # --- the catalogue itself ---
+    ("po: a string left in English", PO_FILE,
+     'msgid "Employees"\nmsgstr "الموظفون"', 'msgid "Employees"\nmsgstr "Employees"'),
+    ("po: Babel's wrong Arabic plural rule", PO_FILE,
+     "n%100>=11 && n%100<=99 ? 4", "n%100>=0 && n%100<=2 ? 4"),
+    ("po: placeholder dropped from a translation", PO_FILE,
+     'msgstr "تم إصدار الفاتورة %(no)s."', 'msgstr "تم إصدار الفاتورة."'),
+    ("translation source drifts from the .po", "tools/ar_translations.py",
+     '"Employees": "الموظفون",', '"Employees": "الموظفين",'),
+    # --- wiring ---
+    ("settings: project translations not loaded", "config/settings.py",
+     'LOCALE_PATHS = [BASE_DIR / "locale"]', "LOCALE_PATHS = []"),
+    ("settings: browser language ignored", "config/settings.py",
+     '    "django.middleware.locale.LocaleMiddleware",\n', ""),
 ]

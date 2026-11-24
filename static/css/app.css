@@ -426,3 +426,37 @@ td.expired { color: var(--red); font-weight: 600; }
 }
 .inline-form input[name="description"], .inline-form input[name="note"] { flex: 3 1 180px; }
 .report-total td { font-weight: 700; background: var(--surface-2); }
+
+/* ---------- Invoices ---------- */
+.invoice-doc { position: relative; padding: 28px 32px; overflow: hidden; }
+.draft-ribbon { position: absolute; top: 18px; inset-inline-end: -42px; transform: rotate(35deg); background: var(--amber); color: #fff; font-weight: 700; padding: 4px 48px; font-size: 12px; letter-spacing: .1em; }
+.inv-head { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding-block-end: 18px; border-block-end: 2px solid var(--brand); }
+.inv-seller { font-size: 18px; font-weight: 700; }
+.inv-seller-ar { font-family: "IBM Plex Sans Arabic", var(--font); font-size: 16px; font-weight: 600; }
+.inv-title { text-align: end; font-weight: 700; font-size: 16px; color: var(--brand); }
+.inv-title-ar { font-family: "IBM Plex Sans Arabic", var(--font); font-size: 20px; }
+.inv-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-block: 20px; }
+.inv-lines th { text-transform: none; letter-spacing: 0; }
+.inv-lines th span { font-family: "IBM Plex Sans Arabic", var(--font); font-weight: 500; }
+.inv-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-block-start: 18px; }
+.zatca-qr svg { width: 150px; height: 150px; }
+.inv-totals { border-collapse: collapse; min-width: 320px; }
+.inv-totals td { padding: 8px 12px; border-block-end: 1px solid var(--border); }
+.inv-totals .grand td { font-weight: 700; font-size: 16px; background: var(--brand-50); border-block-end: 0; }
+.line-table input, .line-table select { height: 36px; padding: 0 8px; border: 1px solid var(--border-strong); border-radius: 6px; font: inherit; width: 100%; }
+.line-table td.num input { text-align: end; }
+@media print { .invoice-doc { padding: 0; } .draft-ribbon { display: block; } }
+
+/* ---------- Receivables ---------- */
+.balance-box { display: flex; flex-direction: column; gap: 2px; padding: 10px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface-2); }
+.balance-box .kpi-value { font-size: 20px; }
+.balance-box a { font-size: 13px; display: inline-flex; gap: 4px; align-items: center; }
+.statement-table td.num, .statement-table th.num { white-space: nowrap; }
+.aging th, .aging td { text-align: end; }
+.aging th:first-child, .aging td:first-child { text-align: start; }
+.aging .bucket-late { color: var(--red); }
+
+/* ---------- VAT return ---------- */
+.vat-form td:first-child { color: var(--muted); width: 56px; }
+.vat-section td { background: var(--surface-2); font-weight: 600; color: var(--brand); }
+.vat-form .grand td { background: var(--brand-50); font-size: 15px; }
