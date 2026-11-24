@@ -560,6 +560,31 @@ AR = {
     "Your account has no modules assigned. Ask an administrator for access.": "لم تُخصص لحسابك أي وحدات. اطلب الصلاحية من مسؤول النظام.",
     "ZATCA-compliant tax invoices. Issued invoices cannot be changed.": "فواتير ضريبية متوافقة مع هيئة الزكاة والضريبة والجمارك. لا يمكن تعديل الفواتير الصادرة.",
 
+    # --- security --------------------------------------------------------------------
+    "Back to dashboard": "العودة إلى لوحة التحكم",
+    "Change password": "تغيير كلمة المرور",
+    "IP address": "عنوان IP",
+    "Password changed": "تم تغيير كلمة المرور",
+    ("Too many failed attempts. Try again in %(m)s minute.",
+     "Too many failed attempts. Try again in %(m)s minutes."): [
+        "محاولات فاشلة كثيرة. حاول مرة أخرى الآن.",
+        "محاولات فاشلة كثيرة. حاول مرة أخرى بعد دقيقة.",
+        "محاولات فاشلة كثيرة. حاول مرة أخرى بعد دقيقتين.",
+        "محاولات فاشلة كثيرة. حاول مرة أخرى بعد %(m)s دقائق.",
+        "محاولات فاشلة كثيرة. حاول مرة أخرى بعد %(m)s دقيقة.",
+        "محاولات فاشلة كثيرة. حاول مرة أخرى بعد %(m)s دقيقة.",
+    ],
+    "Use at least 10 characters with letters and numbers.": "استخدم 10 أحرف على الأقل تتضمن حروفًا وأرقامًا.",
+    "You were signed out after %(m)s minutes without activity.": "تم تسجيل خروجك بعد %(m)s دقيقة دون أي نشاط.",
+    "Your password must contain both letters and numbers.": "يجب أن تحتوي كلمة المرور على حروف وأرقام معًا.",
+    "Your password was changed.": "تم تغيير كلمة المرور بنجاح.",
+    "browser": "المتصفح",
+    "login event": "عملية دخول",
+    "login events": "سجل عمليات الدخول",
+    "successful": "ناجحة",
+    "time": "الوقت",
+    "username": "اسم المستخدم",
+
     # --- model field names (lower case in source) ---------------------------------------
     "absence days": "أيام الغياب",
     "absence deduction": "خصم الغياب",

@@ -83,6 +83,7 @@
           <span class="avatar avatar-sm">{{ user.get_full_name|default:user.get_username|initials }}</span>
           <span class="user-name">{{ user.get_full_name|default:user.get_username }}</span>
         </div>
+        <a class="icon-btn" href="{% url 'password_change' %}" title="{% translate 'Change password' %}" aria-label="{% translate 'Change password' %}">{% icon "lock" %}</a>
         <form action="{% url 'logout' %}" method="post" class="inline">
           {% csrf_token %}
           <button type="submit" class="icon-btn" title="{% translate 'Log out' %}" aria-label="{% translate 'Log out' %}">{% icon "log-out" %}</button>

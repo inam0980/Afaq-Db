@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Afaq ERP VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-22 19:59+0530\n"
+"POT-Creation-Date: 2026-11-25 00:49+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ar\n"
@@ -348,6 +348,10 @@ msgstr "أرفق الإيصال قبل التقديم."
 msgid "Back"
 msgstr "رجوع"
 
+#: templates/registration/password_change_done.html:8
+msgid "Back to dashboard"
+msgstr "العودة إلى لوحة التحكم"
+
 #: payroll/templates/payroll/employee_salary.html:7
 msgid "Back to employee"
 msgstr "العودة إلى الموظف"
@@ -422,6 +426,7 @@ msgstr "منشأة"
 #: invoicing/templates/invoicing/invoice_form.html:52
 #: jobs/templates/jobs/job_form.html:30
 #: payroll/templates/payroll/partials/payslip_form_row.html:19
+#: templates/registration/password_change_form.html:21
 msgid "Cancel"
 msgstr "إلغاء"
 
@@ -458,6 +463,12 @@ msgstr "الفئة"
 #: hr/templates/hr/employee_detail.html:74
 msgid "Change history"
 msgstr "سجل التغييرات"
+
+#: templates/base.html:86 templates/registration/password_change_form.html:3
+#: templates/registration/password_change_form.html:7
+#: templates/registration/password_change_form.html:22
+msgid "Change password"
+msgstr "تغيير كلمة المرور"
 
 #: customers/templates/customers/customer_list.html:24
 msgid "City"
@@ -982,6 +993,10 @@ msgstr "انتهاء الهوية / الإقامة"
 msgid "ID must be 10 digits starting with 1 (National ID) or 2 (Iqama)."
 msgstr "رقم الهوية يتكوّن من 10 أرقام ويبدأ بـ 1 (هوية وطنية) أو 2 (إقامة)."
 
+#: security/models.py:13
+msgid "IP address"
+msgstr "عنوان IP"
+
 #: hr/forms.py:52
 msgid "Identity documents"
 msgstr "وثائق الهوية"
@@ -1145,11 +1160,11 @@ msgstr "الموقع"
 msgid "Log"
 msgstr "تسجيل"
 
-#: templates/registration/login.html:3 templates/registration/login.html:19
+#: templates/registration/login.html:3 templates/registration/login.html:24
 msgid "Log in"
 msgstr "تسجيل الدخول"
 
-#: templates/base.html:88
+#: templates/base.html:89
 msgid "Log out"
 msgstr "تسجيل الخروج"
 
@@ -1534,6 +1549,10 @@ msgstr "انتهاء جواز السفر"
 #: hr/templates/hr/employee_detail.html:49
 msgid "Passport no."
 msgstr "رقم جواز السفر"
+
+#: templates/registration/password_change_done.html:3
+msgid "Password changed"
+msgstr "تم تغيير كلمة المرور"
 
 #: invoicing/templates/invoicing/invoice_list.html:20
 msgid "Payment"
@@ -1986,6 +2005,17 @@ msgstr "إلى"
 msgid "To correct an issued invoice, raise a credit note against it."
 msgstr "لتصحيح فاتورة صادرة، أصدر إشعارًا دائنًا عليها."
 
+#: security/views.py:18
+#, python-format
+msgid "Too many failed attempts. Try again in %(m)s minute."
+msgid_plural "Too many failed attempts. Try again in %(m)s minutes."
+msgstr[0] "محاولات فاشلة كثيرة. حاول مرة أخرى الآن."
+msgstr[1] "محاولات فاشلة كثيرة. حاول مرة أخرى بعد دقيقة."
+msgstr[2] "محاولات فاشلة كثيرة. حاول مرة أخرى بعد دقيقتين."
+msgstr[3] "محاولات فاشلة كثيرة. حاول مرة أخرى بعد %(m)s دقائق."
+msgstr[4] "محاولات فاشلة كثيرة. حاول مرة أخرى بعد %(m)s دقيقة."
+msgstr[5] "محاولات فاشلة كثيرة. حاول مرة أخرى بعد %(m)s دقيقة."
+
 #: expenses/templates/expenses/expense_list.html:18
 msgid "Top categories"
 msgstr "أعلى الفئات"
@@ -2074,6 +2104,10 @@ msgstr "ارفع إيصالًا بصيغة PDF أو JPG أو PNG."
 msgid "Urgent"
 msgstr "عاجل"
 
+#: templates/registration/password_change_form.html:8
+msgid "Use at least 10 characters with letters and numbers."
+msgstr "استخدم 10 أحرف على الأقل تتضمن حروفًا وأرقامًا."
+
 #: expenses/models.py:105 expenses/templates/expenses/expense_detail.html:43
 #: expenses/templates/expenses/expense_list.html:47 invoicing/models.py:77
 #: invoicing/models.py:184 invoicing/templates/invoicing/invoice_form.html:34
@@ -2151,7 +2185,7 @@ msgstr "خلال"
 msgid "Work orders from request to completion."
 msgstr "أوامر العمل من الطلب حتى الإنجاز."
 
-#: templates/registration/login.html:8
+#: templates/registration/login.html:12
 msgid "Wrong username or password."
 msgstr "اسم المستخدم أو كلمة المرور غير صحيحة."
 
@@ -2163,9 +2197,22 @@ msgstr "اليمن"
 msgid "You cannot approve or reject your own expense."
 msgstr "لا يمكنك اعتماد أو رفض مصروفك الخاص."
 
+#: security/middleware.py:28
+#, python-format
+msgid "You were signed out after %(m)s minutes without activity."
+msgstr "تم تسجيل خروجك بعد %(m)s دقيقة دون أي نشاط."
+
 #: core/templates/core/dashboard.html:27
 msgid "Your account has no modules assigned. Ask an administrator for access."
 msgstr "لم تُخصص لحسابك أي وحدات. اطلب الصلاحية من مسؤول النظام."
+
+#: security/validators.py:13 security/validators.py:17
+msgid "Your password must contain both letters and numbers."
+msgstr "يجب أن تحتوي كلمة المرور على حروف وأرقام معًا."
+
+#: templates/registration/password_change_done.html:7
+msgid "Your password was changed."
+msgstr "تم تغيير كلمة المرور بنجاح."
 
 #: invoicing/templates/invoicing/invoice_list.html:8
 msgid "ZATCA-compliant tax invoices. Issued invoices cannot be changed."
@@ -2202,6 +2249,10 @@ msgstr "الأساسي"
 #: payroll/models.py:49
 msgid "basic salary"
 msgstr "الراتب الأساسي"
+
+#: security/models.py:14
+msgid "browser"
+msgstr "المتصفح"
 
 #: customers/models.py:47
 msgid "building no."
@@ -2430,6 +2481,14 @@ msgstr "سجل عمالة"
 msgid "last name"
 msgstr "اسم العائلة"
 
+#: security/models.py:20
+msgid "login event"
+msgstr "عملية دخول"
+
+#: security/models.py:21
+msgid "login events"
+msgstr "سجل عمليات الدخول"
+
 #: jobs/templates/jobs/job_detail.html:100
 msgid "margin"
 msgstr "هامش الربح"
@@ -2627,6 +2686,10 @@ msgstr "الشارع"
 msgid "subtotal (excl. VAT)"
 msgstr "المجموع الفرعي (غير شامل الضريبة)"
 
+#: security/models.py:15
+msgid "successful"
+msgstr "ناجحة"
+
 #: jobs/models.py:171
 msgid "technician"
 msgstr "الفني"
@@ -2638,6 +2701,10 @@ msgstr "الفنيون"
 #: hr/models.py:114
 msgid "termination date"
 msgstr "تاريخ انتهاء الخدمة"
+
+#: security/models.py:16
+msgid "time"
+msgstr "الوقت"
 
 #: jobs/models.py:70
 msgid "title"
@@ -2678,6 +2745,10 @@ msgstr "تكلفة الوحدة"
 #: invoicing/models.py:180
 msgid "unit price (excl. VAT)"
 msgstr "سعر الوحدة (غير شامل الضريبة)"
+
+#: security/models.py:9
+msgid "username"
+msgstr "اسم المستخدم"
 
 #: expenses/models.py:92
 msgid "vendor"

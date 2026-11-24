@@ -4,8 +4,13 @@
 {% block content %}
 <h1 class="auth-title">{% translate "Welcome back" %}</h1>
 <p class="muted auth-sub">{% translate "Sign in to continue to your workspace." %}</p>
+{% for message in messages %}<div class="alert alert-{{ message.tags }}">{{ message }}</div>{% endfor %}
 {% if form.errors %}
-  <div class="alert alert-error">{% translate "Wrong username or password." %}</div>
+  {% if form.non_field_errors.as_data.0.code == "locked" %}
+    <div class="alert alert-error">{{ form.non_field_errors.0 }}</div>
+  {% else %}
+    <div class="alert alert-error">{% translate "Wrong username or password." %}</div>
+  {% endif %}
 {% endif %}
 <form method="post">
   {% csrf_token %}
