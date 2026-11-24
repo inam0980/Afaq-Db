@@ -1,0 +1,2697 @@
+# Arabic translations for Afaq ERP.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the Afaq ERP project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Afaq ERP VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-11-22 19:59+0530\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ar\n"
+"Language-Team: ar <LL@li.org>\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: payroll/templates/payroll/partials/payslip_row.html:5
+#, python-format
+msgid "%(d)s days not employed"
+msgstr "%(d)s يوم خارج فترة التوظيف"
+
+#: payroll/services.py:62
+#, python-format
+msgid "%(emp)s has no salary structure."
+msgstr "لا يوجد هيكل راتب للموظف %(emp)s."
+
+#: core/templates/core/dashboard.html:70
+#: jobs/templates/jobs/profitability.html:18
+#, python-format
+msgid "%(n)s completed job"
+msgid_plural "%(n)s completed jobs"
+msgstr[0] "لا توجد أوامر عمل مكتملة"
+msgstr[1] "أمر عمل مكتمل واحد"
+msgstr[2] "أمرا عمل مكتملان"
+msgstr[3] "%(n)s أوامر عمل مكتملة"
+msgstr[4] "%(n)s أمر عمل مكتملًا"
+msgstr[5] "%(n)s أمر عمل مكتمل"
+
+#: core/templates/core/dashboard.html:60
+#, python-format
+msgid "%(n)s completed this month"
+msgid_plural "%(n)s completed this month"
+msgstr[0] "لم يكتمل أي عمل هذا الشهر"
+msgstr[1] "عمل واحد مكتمل هذا الشهر"
+msgstr[2] "عملان مكتملان هذا الشهر"
+msgstr[3] "%(n)s أعمال مكتملة هذا الشهر"
+msgstr[4] "%(n)s عملًا مكتملًا هذا الشهر"
+msgstr[5] "%(n)s عمل مكتمل هذا الشهر"
+
+#: hr/templates/hr/partials/expiry_cell.html:3
+#, python-format
+msgid "%(n)s day left"
+msgid_plural "%(n)s days left"
+msgstr[0] "لم يتبقَّ أي يوم"
+msgstr[1] "يتبقى يوم واحد"
+msgstr[2] "يتبقى يومان"
+msgstr[3] "يتبقى %(n)s أيام"
+msgstr[4] "يتبقى %(n)s يومًا"
+msgstr[5] "يتبقى %(n)s يوم"
+
+#: invoicing/templates/invoicing/vat_return.html:25
+#, python-format
+msgid "%(n)s draft invoice"
+msgid_plural "%(n)s draft invoices"
+msgstr[0] "لا توجد فواتير مسودة"
+msgstr[1] "فاتورة مسودة واحدة"
+msgstr[2] "فاتورتان مسودتان"
+msgstr[3] "%(n)s فواتير مسودة"
+msgstr[4] "%(n)s فاتورة مسودة"
+msgstr[5] "%(n)s فاتورة مسودة"
+
+#: expenses/templates/expenses/expense_list.html:16
+#, python-format
+msgid "%(n)s expense"
+msgid_plural "%(n)s expenses"
+msgstr[0] "لا توجد مصروفات"
+msgstr[1] "مصروف واحد"
+msgstr[2] "مصروفان"
+msgstr[3] "%(n)s مصروفات"
+msgstr[4] "%(n)s مصروفًا"
+msgstr[5] "%(n)s مصروف"
+
+#: invoicing/templates/invoicing/vat_return.html:26
+#, python-format
+msgid "%(n)s expense not approved"
+msgid_plural "%(n)s expenses not approved"
+msgstr[0] "لا توجد مصروفات غير معتمدة"
+msgstr[1] "مصروف واحد غير معتمد"
+msgstr[2] "مصروفان غير معتمدين"
+msgstr[3] "%(n)s مصروفات غير معتمدة"
+msgstr[4] "%(n)s مصروفًا غير معتمد"
+msgstr[5] "%(n)s مصروف غير معتمد"
+
+#: core/templates/core/dashboard.html:59
+#, python-format
+msgid "%(n)s urgent"
+msgid_plural "%(n)s urgent"
+msgstr[0] "لا يوجد عاجل"
+msgstr[1] "عاجل واحد"
+msgstr[2] "اثنان عاجلان"
+msgstr[3] "%(n)s عاجلة"
+msgstr[4] "%(n)s عاجلًا"
+msgstr[5] "%(n)s عاجل"
+
+#: core/templates/core/dashboard.html:106
+#, python-format
+msgid "%(n)s waiting for approval"
+msgid_plural "%(n)s waiting for approval"
+msgstr[0] "لا شيء بانتظار الاعتماد"
+msgstr[1] "واحد بانتظار الاعتماد"
+msgstr[2] "اثنان بانتظار الاعتماد"
+msgstr[3] "%(n)s بانتظار الاعتماد"
+msgstr[4] "%(n)s بانتظار الاعتماد"
+msgstr[5] "%(n)s بانتظار الاعتماد"
+
+#: jobs/costing.py:61
+#, python-format
+msgid "%(name)s has no salary on that date, so the cost is unknown."
+msgstr "لا يوجد راتب مسجل لـ %(name)s في ذلك التاريخ، لذا التكلفة غير معروفة."
+
+#: expenses/templates/expenses/not_editable.html:7
+#: jobs/templates/jobs/not_editable.html:7
+#, python-format
+msgid "%(no)s is %(status)s and can't be edited"
+msgstr "%(no)s حالته %(status)s ولا يمكن تعديله"
+
+#: invoicing/models.py:171
+msgid "0%"
+msgstr "0%"
+
+#: expenses/models.py:84
+msgid "0% / exempt / no VAT invoice"
+msgstr "0% / معفى / بدون فاتورة ضريبية"
+
+#: invoicing/models.py:170
+msgid "15%"
+msgstr "15%"
+
+#: expenses/models.py:83
+msgid "15% (standard)"
+msgstr "15% (النسبة الأساسية)"
+
+#: jobs/services.py:22
+#, python-format
+msgid "A %(current)s job cannot be moved to %(target)s."
+msgstr "لا يمكن نقل أمر عمل حالته %(current)s إلى %(target)s."
+
+#: core/validators.py:18
+msgid "A Saudi VAT number has 15 digits and starts and ends with 3."
+msgstr "الرقم الضريبي السعودي مكوّن من 15 رقمًا ويبدأ وينتهي بالرقم 3."
+
+#: invoicing/services.py:73
+msgid "A credit note needs a reason."
+msgstr "يجب ذكر سبب الإشعار الدائن."
+
+#: hr/models.py:174
+msgid "A terminated employee needs a termination date."
+msgstr "الموظف المنتهية خدمته يحتاج إلى تاريخ انتهاء الخدمة."
+
+#: jobs/models.py:43
+msgid "AC maintenance"
+msgstr "صيانة التكييف"
+
+#: payroll/templates/payroll/payslip_detail.html:44
+msgid "Absence"
+msgstr "الغياب"
+
+#: payroll/services.py:69
+#, python-format
+msgid "Absence plus days not employed (%(d)s) cannot exceed 30."
+msgstr "مجموع أيام الغياب والأيام خارج فترة التوظيف (%(d)s) لا يمكن أن يتجاوز 30 يومًا."
+
+#: payroll/templates/payroll/run_detail.html:55
+msgid "Absent days"
+msgstr "أيام الغياب"
+
+#: hr/models.py:74
+msgid "Active"
+msgstr "نشط"
+
+#: core/templates/core/dashboard.html:77
+msgid "Active employees"
+msgstr "الموظفون النشطون"
+
+#: jobs/templates/jobs/job_detail.html:131
+msgid "Add"
+msgstr "إضافة"
+
+#: jobs/templates/jobs/job_detail.html:102
+msgid "Add a quoted amount to see profit."
+msgstr "أضف مبلغ عرض السعر لعرض الربح."
+
+#: invoicing/services.py:61
+msgid "Add at least one line before issuing."
+msgstr "أضف بندًا واحدًا على الأقل قبل الإصدار."
+
+#: customers/templates/customers/customer_form.html:3
+#: customers/templates/customers/customer_form.html:8
+#: customers/templates/customers/customer_list.html:11
+msgid "Add customer"
+msgstr "إضافة عميل"
+
+#: core/templates/core/dashboard.html:15 hr/templates/hr/employee_form.html:3
+#: hr/templates/hr/employee_form.html:8 hr/templates/hr/employee_list.html:11
+msgid "Add employee"
+msgstr "إضافة موظف"
+
+#: customers/templates/customers/customer_list.html:42
+msgid "Add your first customer"
+msgstr "أضف أول عميل"
+
+#: hr/templates/hr/partials/employee_table.html:47
+msgid "Add your first employee"
+msgstr "أضف أول موظف"
+
+#: payroll/templates/payroll/run_detail.html:56
+msgid "Additions"
+msgstr "الإضافات"
+
+#: templates/base.html:62
+msgid "Admin"
+msgstr "لوحة الإدارة"
+
+#: invoicing/templates/invoicing/invoice_list.html:17
+msgid "All"
+msgstr "الكل"
+
+#: expenses/templates/expenses/expense_list.html:28
+msgid "All categories"
+msgstr "جميع الفئات"
+
+#: customers/templates/customers/customer_detail.html:5
+msgid "All customers"
+msgstr "جميع العملاء"
+
+#: core/templates/core/dashboard.html:132
+msgid "All documents are valid for the next 30 days."
+msgstr "جميع الوثائق سارية خلال الثلاثين يومًا القادمة."
+
+#: hr/templates/hr/employee_detail.html:5
+msgid "All employees"
+msgstr "جميع الموظفين"
+
+#: expenses/templates/expenses/expense_detail.html:5
+msgid "All expenses"
+msgstr "جميع المصروفات"
+
+#: invoicing/templates/invoicing/invoice_detail.html:6
+msgid "All invoices"
+msgstr "جميع الفواتير"
+
+#: jobs/templates/jobs/job_detail.html:5 jobs/templates/jobs/job_list.html:18
+msgid "All jobs"
+msgstr "جميع أوامر العمل"
+
+#: jobs/templates/jobs/job_list.html:22
+msgid "All services"
+msgstr "جميع الخدمات"
+
+#: expenses/templates/expenses/expense_list.html:32
+msgid "All statuses"
+msgstr "جميع الحالات"
+
+#: jobs/templates/jobs/job_list.html:26
+msgid "All technicians"
+msgstr "جميع الفنيين"
+
+#: expenses/templates/expenses/expense_detail.html:40
+#: invoicing/templates/invoicing/vat_return.html:66
+msgid "Amount"
+msgstr "المبلغ"
+
+#: expenses/templates/expenses/expense_detail.html:42
+msgid "Amount excl. VAT"
+msgstr "المبلغ غير شامل الضريبة"
+
+#: expenses/templates/expenses/expense_form.html:22
+msgid "Amount on the receipt, including VAT. VAT is calculated for you."
+msgstr "المبلغ المذكور في الإيصال شاملًا الضريبة. يتم احتساب الضريبة تلقائيًا."
+
+#: invoicing/services.py:65
+msgid "An invoice cannot be issued with a future date."
+msgstr "لا يمكن إصدار فاتورة بتاريخ مستقبلي."
+
+#: invoicing/services.py:63
+msgid "An invoice total must be more than zero."
+msgstr "يجب أن يكون إجمالي الفاتورة أكبر من صفر."
+
+#: customers/models.py:70
+msgid "Another customer already has this VAT number."
+msgstr "هذا الرقم الضريبي مسجل لعميل آخر."
+
+#: invoicing/templates/invoicing/invoice_list.html:21
+msgid "Any payment status"
+msgstr "أي حالة سداد"
+
+#: jobs/templates/jobs/job_list.html:30
+msgid "Any priority"
+msgstr "أي أولوية"
+
+#: expenses/templates/expenses/expense_detail.html:60
+msgid "Approval"
+msgstr "الاعتماد"
+
+#: expenses/templates/expenses/expense_detail.html:28
+#: payroll/templates/payroll/run_detail.html:19
+msgid "Approve"
+msgstr "اعتماد"
+
+#: payroll/templates/payroll/run_detail.html:18
+msgid "Approve and lock this payroll? It cannot be changed afterwards."
+msgstr "اعتماد مسير الرواتب وقفله؟ لا يمكن تعديله بعد ذلك."
+
+#: expenses/models.py:74 payroll/models.py:124
+msgid "Approved"
+msgstr "معتمد"
+
+#: payroll/templates/payroll/run_detail.html:31
+#: payroll/templates/payroll/run_list.html:33
+msgid "Approved by"
+msgstr "اعتمده"
+
+#: core/templates/core/dashboard.html:103
+msgid "Approved expenses"
+msgstr "المصروفات المعتمدة"
+
+#: jobs/services.py:31
+msgid "Assign at least one active technician before starting."
+msgstr "عيّن فنيًا نشطًا واحدًا على الأقل قبل البدء."
+
+#: jobs/templates/jobs/job_detail.html:162
+msgid "Assign technicians to log their hours."
+msgstr "عيّن فنيين لتسجيل ساعات عملهم."
+
+#: expenses/services.py:26
+msgid "Attach the receipt before submitting."
+msgstr "أرفق الإيصال قبل التقديم."
+
+#: customers/templates/customers/customer_form.html:7
+#: expenses/templates/expenses/expense_form.html:7
+#: hr/templates/hr/employee_form.html:7
+#: invoicing/templates/invoicing/invoice_form.html:7
+#: jobs/templates/jobs/job_form.html:7
+msgid "Back"
+msgstr "رجوع"
+
+#: payroll/templates/payroll/employee_salary.html:7
+msgid "Back to employee"
+msgstr "العودة إلى الموظف"
+
+#: expenses/templates/expenses/not_editable.html:9
+msgid "Back to expense"
+msgstr "العودة إلى المصروف"
+
+#: invoicing/templates/invoicing/not_editable.html:9
+msgid "Back to invoice"
+msgstr "العودة إلى الفاتورة"
+
+#: jobs/templates/jobs/not_editable.html:8
+msgid "Back to job"
+msgstr "العودة إلى أمر العمل"
+
+#: payroll/templates/payroll/payslip_detail.html:6
+msgid "Back to payroll"
+msgstr "العودة إلى مسير الرواتب"
+
+#: invoicing/templates/invoicing/invoice_list.html:31
+msgid "Balance"
+msgstr "الرصيد"
+
+#: customers/templates/customers/customer_detail.html:20
+#: invoicing/templates/invoicing/invoice_detail.html:124
+msgid "Balance due"
+msgstr "الرصيد المستحق"
+
+#: hr/constants.py:9
+msgid "Bangladesh"
+msgstr "بنغلاديش"
+
+#: hr/templates/hr/employee_detail.html:65
+#: payroll/templates/payroll/payslip_detail.html:25
+msgid "Bank"
+msgstr "البنك"
+
+#: hr/templates/hr/employee_detail.html:67
+msgid "Bank name"
+msgstr "اسم البنك"
+
+#: expenses/models.py:79 invoicing/models.py:216
+msgid "Bank transfer"
+msgstr "تحويل بنكي"
+
+#: payroll/templates/payroll/employee_salary.html:36
+msgid "Based on Saudi Labour Law Art. 84/85 using the current total monthly salary."
+msgstr "وفقًا للمادتين 84 و85 من نظام العمل السعودي، على أساس إجمالي الراتب الشهري الحالي."
+
+#: payroll/templates/payroll/employee_salary.html:15
+#: payroll/templates/payroll/employee_salary.html:49
+#: payroll/templates/payroll/payslip_detail.html:32
+msgid "Basic"
+msgstr "الأساسي"
+
+#: invoicing/templates/invoicing/vat_return.html:58
+msgid "Boxes 2 (citizen sales), 4 (exports), 5 (exempt sales), 8–9 (imports) and 14–15 (corrections, credit carried forward) are not tracked by this system; enter them on the ZATCA portal if they apply."
+msgstr "البنود 2 (مبيعات المواطنين) و4 (الصادرات) و5 (المبيعات المعفاة) و8–9 (الواردات) و14–15 (التصحيحات والرصيد المرحّل) لا يتتبعها هذا النظام؛ أدخلها في بوابة هيئة الزكاة والضريبة والجمارك إن وُجدت."
+
+#: core/validators.py:30
+msgid "Building number must be 4 digits."
+msgstr "رقم المبنى يجب أن يتكوّن من 4 أرقام."
+
+#: customers/models.py:34
+msgid "Business"
+msgstr "منشأة"
+
+#: customers/templates/customers/customer_form.html:30
+#: expenses/templates/expenses/expense_form.html:37
+#: hr/templates/hr/employee_form.html:30
+#: invoicing/templates/invoicing/invoice_form.html:52
+#: jobs/templates/jobs/job_form.html:30
+#: payroll/templates/payroll/partials/payslip_form_row.html:19
+msgid "Cancel"
+msgstr "إلغاء"
+
+#: jobs/templates/jobs/job_detail.html:51
+msgid "Cancel job"
+msgstr "إلغاء أمر العمل"
+
+#: jobs/models.py:40 jobs/templates/jobs/job_detail.html:58
+msgid "Cancelled"
+msgstr "ملغى"
+
+#: payroll/services.py:137
+msgid "Cannot approve a payroll with no payslips."
+msgstr "لا يمكن اعتماد مسير رواتب بدون قسائم رواتب."
+
+#: expenses/models.py:80 invoicing/models.py:217
+msgid "Card"
+msgstr "بطاقة"
+
+#: jobs/models.py:47
+msgid "Carpentry"
+msgstr "النجارة"
+
+#: expenses/models.py:78 invoicing/models.py:215
+msgid "Cash"
+msgstr "نقدًا"
+
+#: expenses/templates/expenses/expense_list.html:27
+#: expenses/templates/expenses/expense_list.html:45
+#: jobs/templates/jobs/job_detail.html:173
+msgid "Category"
+msgstr "الفئة"
+
+#: hr/templates/hr/employee_detail.html:74
+msgid "Change history"
+msgstr "سجل التغييرات"
+
+#: customers/templates/customers/customer_list.html:24
+msgid "City"
+msgstr "المدينة"
+
+#: jobs/models.py:48
+msgid "Cleaning"
+msgstr "التنظيف"
+
+#: expenses/templates/expenses/expense_list.html:8
+msgid "Company spending with receipts, VAT and approvals."
+msgstr "مصروفات المنشأة مع الإيصالات والضريبة والاعتمادات."
+
+#: jobs/models.py:39 jobs/templates/jobs/job_detail.html:84
+#: jobs/templates/jobs/profitability.html:27
+msgid "Completed"
+msgstr "مكتمل"
+
+#: jobs/templates/jobs/profitability.html:8
+msgid "Completed jobs of the month: quoted price vs. materials, labour and approved expenses."
+msgstr "أوامر العمل المكتملة خلال الشهر: سعر العرض مقابل المواد والعمالة والمصروفات المعتمدة."
+
+#: hr/forms.py:56
+msgid "Contact & bank"
+msgstr "التواصل والبنك"
+
+#: jobs/templates/jobs/job_detail.html:139
+msgid "Cost"
+msgstr "التكلفة"
+
+#: jobs/templates/jobs/job_detail.html:88
+msgid "Costs"
+msgstr "التكاليف"
+
+#: jobs/costing.py:31
+msgid "Costs of a cancelled job cannot be changed."
+msgstr "لا يمكن تعديل تكاليف أمر عمل ملغى."
+
+#: jobs/templates/jobs/job_list.html:59
+msgid "Create a job"
+msgstr "إنشاء أمر عمل"
+
+#: invoicing/templates/invoicing/invoice_list.html:51
+msgid "Create an invoice"
+msgstr "إنشاء فاتورة"
+
+#: payroll/templates/payroll/run_list.html:23
+msgid "Create and generate payslips"
+msgstr "إنشاء وتوليد قسائم الرواتب"
+
+#: invoicing/templates/invoicing/invoice_detail.html:161
+msgid "Create credit note"
+msgstr "إنشاء إشعار دائن"
+
+#: jobs/templates/jobs/job_detail.html:27
+msgid "Create invoice"
+msgstr "إنشاء فاتورة"
+
+#: customers/templates/customers/customer_detail.html:36
+#: jobs/templates/jobs/job_detail.html:82
+msgid "Created"
+msgstr "تاريخ الإنشاء"
+
+#: payroll/templates/payroll/run_list.html:32
+msgid "Created by"
+msgstr "أنشأه"
+
+#: invoicing/models.py:45 invoicing/templates/invoicing/invoice_list.html:41
+msgid "Credit note"
+msgstr "إشعار دائن"
+
+#: invoicing/templates/invoicing/invoice_detail.html:148
+msgid "Credit notes"
+msgstr "الإشعارات الدائنة"
+
+#: invoicing/services.py:146
+msgid "Credit notes can only be raised against issued invoices."
+msgstr "لا يمكن إصدار إشعار دائن إلا على فواتير صادرة."
+
+#: invoicing/templates/invoicing/invoice_detail.html:123
+msgid "Credited"
+msgstr "المبلغ المخصوم بإشعار دائن"
+
+#: payroll/templates/payroll/employee_salary.html:13
+msgid "Current salary"
+msgstr "الراتب الحالي"
+
+#: customers/forms.py:22 customers/templates/customers/customer_list.html:24
+#: invoicing/templates/invoicing/invoice_list.html:31
+#: invoicing/templates/invoicing/receivables.html:24
+#: jobs/templates/jobs/job_list.html:40
+#: jobs/templates/jobs/profitability.html:27
+msgid "Customer"
+msgstr "العميل"
+
+#: customers/views.py:47
+#, python-format
+msgid "Customer %(name)s added."
+msgstr "تمت إضافة العميل %(name)s."
+
+#: customers/views.py:57
+#, python-format
+msgid "Customer %(name)s updated."
+msgstr "تم تحديث بيانات العميل %(name)s."
+
+#: invoicing/templates/invoicing/invoice_form.html:16
+msgid "Customer & dates"
+msgstr "العميل والتواريخ"
+
+#: customers/templates/customers/customer_list.html:3
+#: customers/templates/customers/customer_list.html:7 templates/base.html:38
+msgid "Customers"
+msgstr "العملاء"
+
+#: core/templates/core/dashboard.html:35
+msgid "Customers owe"
+msgstr "مستحقات العملاء"
+
+#: payroll/templates/payroll/payslip_detail.html:54
+msgid "DRAFT — not yet approved"
+msgstr "مسودة — لم تُعتمد بعد"
+
+#: core/templates/core/dashboard.html:3 templates/base.html:20
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+#: expenses/templates/expenses/expense_list.html:44
+#: invoicing/templates/invoicing/vat_return.html:66 jobs/forms.py:54
+#: jobs/templates/jobs/job_detail.html:139
+msgid "Date"
+msgstr "التاريخ"
+
+#: hr/templates/hr/employee_detail.html:36
+msgid "Date of birth"
+msgstr "تاريخ الميلاد"
+
+#: hr/models.py:169
+msgid "Date of birth must be before the hire date."
+msgstr "يجب أن يكون تاريخ الميلاد قبل تاريخ التعيين."
+
+#: expenses/templates/expenses/expense_detail.html:65
+msgid "Decided at"
+msgstr "تاريخ القرار"
+
+#: expenses/templates/expenses/expense_detail.html:64
+msgid "Decided by"
+msgstr "صاحب القرار"
+
+#: payroll/templates/payroll/payslip_detail.html:42
+#: payroll/templates/payroll/run_detail.html:57
+msgid "Deductions"
+msgstr "الاستقطاعات"
+
+#: hr/templates/hr/employee_detail.html:57
+#: hr/templates/hr/partials/employee_table.html:8
+#: payroll/templates/payroll/payslip_detail.html:23
+msgid "Department"
+msgstr "القسم"
+
+#: invoicing/templates/invoicing/invoice_form.html:34
+#: jobs/templates/jobs/job_detail.html:66
+msgid "Description"
+msgstr "الوصف"
+
+#: jobs/templates/jobs/job_detail.html:62
+msgid "Details"
+msgstr "التفاصيل"
+
+#: hr/templates/hr/employee_detail.html:44
+msgid "Documents"
+msgstr "الوثائق"
+
+#: core/templates/core/dashboard.html:82
+#, python-format
+msgid "Documents expiring in %(expiry_window)s days"
+msgstr "وثائق تنتهي خلال %(expiry_window)s يومًا"
+
+#: invoicing/templates/invoicing/vat_return.html:62
+msgid "Documents included"
+msgstr "المستندات المشمولة"
+
+#: invoicing/templates/invoicing/vat_return.html:17
+msgid "Download CSV"
+msgstr "تنزيل ملف CSV"
+
+#: expenses/models.py:72 invoicing/models.py:48 payroll/models.py:123
+msgid "Draft"
+msgstr "مسودة"
+
+#: invoicing/views.py:201
+msgid "Draft credit note created. Reduce the lines to the amount to credit, then issue."
+msgstr "تم إنشاء مسودة إشعار دائن. خفّض البنود إلى المبلغ المراد خصمه ثم أصدره."
+
+#: invoicing/views.py:150
+#, python-format
+msgid "Draft invoice created from %(job)s. Review it, then issue."
+msgstr "تم إنشاء مسودة فاتورة من %(job)s. راجعها ثم أصدرها."
+
+#: invoicing/views.py:71
+msgid "Draft saved."
+msgstr "تم حفظ المسودة."
+
+#: invoicing/templates/invoicing/invoice_list.html:31
+msgid "Due"
+msgstr "الاستحقاق"
+
+#: invoicing/models.py:152
+msgid "Due date cannot be before the issue date."
+msgstr "لا يمكن أن يكون تاريخ الاستحقاق قبل تاريخ الإصدار."
+
+#: payroll/templates/payroll/employee_salary.html:34
+msgid "EOSB (SAR)"
+msgstr "مكافأة نهاية الخدمة (ريال)"
+
+#: payroll/templates/payroll/payslip_detail.html:30
+msgid "Earnings"
+msgstr "المستحقات"
+
+#: customers/templates/customers/customer_detail.html:27
+#: customers/templates/customers/customer_form.html:8
+#: expenses/templates/expenses/expense_detail.html:19
+#: expenses/templates/expenses/expense_form.html:8
+#: hr/templates/hr/employee_detail.html:26 hr/templates/hr/employee_form.html:8
+#: jobs/templates/jobs/job_detail.html:32 jobs/templates/jobs/job_form.html:8
+#: payroll/templates/payroll/partials/payslip_row.html:16
+msgid "Edit"
+msgstr "تعديل"
+
+#: customers/templates/customers/customer_form.html:3
+msgid "Edit customer"
+msgstr "تعديل العميل"
+
+#: invoicing/templates/invoicing/invoice_detail.html:9
+msgid "Edit draft"
+msgstr "تعديل المسودة"
+
+#: invoicing/templates/invoicing/invoice_form.html:3
+#: invoicing/templates/invoicing/invoice_form.html:8
+msgid "Edit draft invoice"
+msgstr "تعديل مسودة الفاتورة"
+
+#: hr/templates/hr/employee_form.html:3
+msgid "Edit employee"
+msgstr "تعديل الموظف"
+
+#: expenses/templates/expenses/expense_form.html:3
+msgid "Edit expense"
+msgstr "تعديل المصروف"
+
+#: jobs/templates/jobs/job_form.html:3
+msgid "Edit job"
+msgstr "تعديل أمر العمل"
+
+#: payroll/templates/payroll/employee_salary.html:48
+msgid "Effective from"
+msgstr "ساري من"
+
+#: hr/constants.py:10
+msgid "Egypt"
+msgstr "مصر"
+
+#: jobs/models.py:45
+msgid "Electrical"
+msgstr "الكهرباء"
+
+#: hr/templates/hr/employee_detail.html:39
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#: hr/templates/hr/expiring_documents.html:28
+#: hr/templates/hr/partials/employee_table.html:7
+#: payroll/templates/payroll/payslip_detail.html:20
+#: payroll/templates/payroll/run_detail.html:52
+msgid "Employee"
+msgstr "الموظف"
+
+#: hr/views.py:44
+#, python-format
+msgid "Employee %(no)s created."
+msgstr "تم إنشاء الموظف %(no)s."
+
+#: hr/views.py:56
+#, python-format
+msgid "Employee %(no)s updated."
+msgstr "تم تحديث بيانات الموظف %(no)s."
+
+#: payroll/templates/payroll/payslip_detail.html:21
+msgid "Employee no."
+msgstr "الرقم الوظيفي"
+
+#: hr/templates/hr/employee_list.html:3 hr/templates/hr/employee_list.html:7
+#: payroll/templates/payroll/run_detail.html:42 templates/base.html:24
+msgid "Employees"
+msgstr "الموظفون"
+
+#: hr/templates/hr/partials/employee_table.html:49
+msgid "Employees added by HR will appear here."
+msgstr "سيظهر هنا الموظفون الذين تضيفهم الموارد البشرية."
+
+#: hr/forms.py:54 hr/templates/hr/employee_detail.html:55
+msgid "Employment"
+msgstr "بيانات التوظيف"
+
+#: payroll/templates/payroll/employee_salary.html:24
+msgid "End of service estimate"
+msgstr "تقدير مكافأة نهاية الخدمة"
+
+#: hr/validators.py:45
+msgid "Enter a Saudi mobile number in the format 05XXXXXXXX."
+msgstr "أدخل رقم جوال سعودي بالصيغة 05XXXXXXXX."
+
+#: hr/validators.py:37
+msgid "Enter a valid Saudi IBAN (SA followed by 22 characters)."
+msgstr "أدخل رقم آيبان سعودي صحيح (SA متبوعًا بـ 22 خانة)."
+
+#: expenses/templates/expenses/expense_detail.html:62
+msgid "Entered by"
+msgstr "أدخله"
+
+#: hr/constants.py:11
+msgid "Ethiopia"
+msgstr "إثيوبيا"
+
+#: hr/templates/hr/employee_list.html:8
+msgid "Everyone on your team, with their documents and status."
+msgstr "جميع أعضاء فريقك مع وثائقهم وحالاتهم."
+
+#: jobs/templates/jobs/job_detail.html:173
+msgid "Excl. VAT"
+msgstr "غير شامل الضريبة"
+
+#: expenses/templates/expenses/expense_list.html:43
+#: jobs/templates/jobs/job_detail.html:173
+msgid "Expense"
+msgstr "المصروف"
+
+#: expenses/views.py:121
+#, python-format
+msgid "Expense %(no)s approved."
+msgstr "تم اعتماد المصروف %(no)s."
+
+#: expenses/views.py:130
+#, python-format
+msgid "Expense %(no)s rejected."
+msgstr "تم رفض المصروف %(no)s."
+
+#: expenses/views.py:66
+#, python-format
+msgid "Expense %(no)s saved as draft."
+msgstr "تم حفظ المصروف %(no)s كمسودة."
+
+#: expenses/views.py:113
+#, python-format
+msgid "Expense %(no)s submitted for approval."
+msgstr "تم تقديم المصروف %(no)s للاعتماد."
+
+#: expenses/views.py:89
+#, python-format
+msgid "Expense %(no)s updated."
+msgstr "تم تحديث المصروف %(no)s."
+
+#: expenses/models.py:158
+msgid "Expense date cannot be in the future."
+msgstr "لا يمكن أن يكون تاريخ المصروف في المستقبل."
+
+#: expenses/templates/expenses/expense_form.html:16
+msgid "Expense details"
+msgstr "تفاصيل المصروف"
+
+#: expenses/templates/expenses/expense_list.html:3
+#: expenses/templates/expenses/expense_list.html:7
+#: jobs/templates/jobs/profitability.html:29 templates/base.html:57
+msgid "Expenses"
+msgstr "المصروفات"
+
+#: jobs/templates/jobs/job_detail.html:94
+msgid "Expenses (approved, excl. VAT)"
+msgstr "المصروفات (المعتمدة، غير شاملة الضريبة)"
+
+#: core/templates/core/dashboard.html:127
+msgid "Expired"
+msgstr "منتهية"
+
+#: hr/templates/hr/partials/expiry_cell.html:3
+#, python-format
+msgid "Expired %(n)s day ago"
+msgid_plural "Expired %(n)s days ago"
+msgstr[0] "انتهت اليوم"
+msgstr[1] "انتهت منذ يوم واحد"
+msgstr[2] "انتهت منذ يومين"
+msgstr[3] "انتهت منذ %(n)s أيام"
+msgstr[4] "انتهت منذ %(n)s يومًا"
+msgstr[5] "انتهت منذ %(n)s يوم"
+
+#: hr/templates/hr/partials/expiry_cell.html:3
+msgid "Expires today"
+msgstr "تنتهي اليوم"
+
+#: hr/templates/hr/expiring_documents.html:3
+#: hr/templates/hr/expiring_documents.html:7 templates/base.html:25
+msgid "Expiring documents"
+msgstr "الوثائق قاربت على الانتهاء"
+
+#: core/templates/core/dashboard.html:115
+msgid "Expiring soon"
+msgstr "تنتهي قريبًا"
+
+#: hr/models.py:71
+msgid "Female"
+msgstr "أنثى"
+
+#: invoicing/templates/invoicing/vat_return.html:8
+msgid "Figures follow the ZATCA VAT return form."
+msgstr "الأرقام وفق نموذج إقرار ضريبة القيمة المضافة لدى هيئة الزكاة والضريبة والجمارك."
+
+#: expenses/templates/expenses/expense_list.html:35
+#: invoicing/templates/invoicing/invoice_list.html:26
+#: jobs/templates/jobs/job_list.html:34
+msgid "Filter"
+msgstr "تصفية"
+
+#: templates/base.html:42
+msgid "Finance"
+msgstr "المالية"
+
+#: payroll/templates/payroll/run_detail.html:53
+msgid "Fixed"
+msgstr "الثابت"
+
+#: invoicing/templates/invoicing/statement.html:8
+msgid "From"
+msgstr "من"
+
+#: payroll/templates/payroll/run_detail.html:58
+msgid "GOSI"
+msgstr "التأمينات الاجتماعية"
+
+#: payroll/models.py:226 payroll/templates/payroll/payslip_detail.html:45
+msgid "GOSI (employee)"
+msgstr "التأمينات الاجتماعية (حصة الموظف)"
+
+#: payroll/models.py:227 payroll/templates/payroll/run_detail.html:44
+msgid "GOSI (employer)"
+msgstr "التأمينات الاجتماعية (حصة صاحب العمل)"
+
+#: payroll/models.py:98
+msgid "GOSI rate"
+msgstr "نسبة التأمينات الاجتماعية"
+
+#: payroll/models.py:99
+msgid "GOSI rates"
+msgstr "نسب التأمينات الاجتماعية"
+
+#: hr/templates/hr/employee_detail.html:37
+msgid "Gender"
+msgstr "الجنس"
+
+#: jobs/services.py:40
+msgid "Give a reason for cancelling."
+msgstr "اذكر سبب الإلغاء."
+
+#: expenses/services.py:57
+msgid "Give a reason so the submitter can fix it."
+msgstr "اذكر السبب ليتمكن مقدم الطلب من تصحيحه."
+
+#: invoicing/services.py:144
+msgid "Give the reason for the credit note."
+msgstr "اذكر سبب الإشعار الدائن."
+
+#: payroll/templates/payroll/run_detail.html:43
+msgid "Gross"
+msgstr "الإجمالي"
+
+#: payroll/templates/payroll/payslip_detail.html:38
+msgid "Gross pay"
+msgstr "إجمالي الراتب"
+
+#: hr/templates/hr/employee_detail.html:59
+msgid "Hire date"
+msgstr "تاريخ التعيين"
+
+#: customers/templates/customers/customer_list.html:8
+msgid "Homes and businesses you serve."
+msgstr "المنازل والمنشآت التي تخدمها."
+
+#: jobs/forms.py:56 jobs/templates/jobs/job_detail.html:139
+msgid "Hours"
+msgstr "الساعات"
+
+#: jobs/costing.py:53
+msgid "Hours cannot be logged for a future date."
+msgstr "لا يمكن تسجيل ساعات لتاريخ مستقبلي."
+
+#: jobs/views.py:160
+msgid "Hours logged."
+msgstr "تم تسجيل الساعات."
+
+#: jobs/views.py:177
+msgid "Hours removed."
+msgstr "تم حذف الساعات."
+
+#: jobs/templates/jobs/job_detail.html:137
+msgid "Hours worked"
+msgstr "ساعات العمل"
+
+#: payroll/templates/payroll/employee_salary.html:16
+#: payroll/templates/payroll/employee_salary.html:50
+#: payroll/templates/payroll/payslip_detail.html:33
+msgid "Housing"
+msgstr "السكن"
+
+#: hr/models.py:128 payroll/models.py:232
+msgid "IBAN"
+msgstr "رقم الآيبان (IBAN)"
+
+#: hr/models.py:99 hr/templates/hr/employee_detail.html:48
+#: hr/templates/hr/expiring_documents.html:29
+msgid "ID / iqama expiry"
+msgstr "انتهاء الهوية / الإقامة"
+
+#: hr/validators.py:53
+msgid "ID must be 10 digits starting with 1 (National ID) or 2 (Iqama)."
+msgstr "رقم الهوية يتكوّن من 10 أرقام ويبدأ بـ 1 (هوية وطنية) أو 2 (إقامة)."
+
+#: hr/forms.py:52
+msgid "Identity documents"
+msgstr "وثائق الهوية"
+
+#: jobs/models.py:38
+msgid "In progress"
+msgstr "قيد التنفيذ"
+
+#: customers/templates/customers/customer_list.html:29
+msgid "Inactive"
+msgstr "غير نشط"
+
+#: customers/templates/customers/customer_list.html:18
+msgid "Include inactive"
+msgstr "تضمين غير النشطين"
+
+#: hr/constants.py:13
+msgid "India"
+msgstr "الهند"
+
+#: customers/models.py:33
+msgid "Individual"
+msgstr "فرد"
+
+#: hr/constants.py:12
+msgid "Indonesia"
+msgstr "إندونيسيا"
+
+#: invoicing/templates/invoicing/vat_return.html:32
+msgid "Input VAT (purchases)"
+msgstr "ضريبة المدخلات (المشتريات)"
+
+#: invoicing/models.py:44 invoicing/templates/invoicing/invoice_list.html:31
+msgid "Invoice"
+msgstr "الفاتورة"
+
+#: invoicing/templates/invoicing/not_editable.html:7
+#, python-format
+msgid "Invoice %(no)s is issued and can't be changed"
+msgstr "الفاتورة %(no)s صادرة ولا يمكن تعديلها"
+
+#: invoicing/views.py:136
+#, python-format
+msgid "Invoice %(no)s issued."
+msgstr "تم إصدار الفاتورة %(no)s."
+
+#: expenses/templates/expenses/expense_detail.html:53
+msgid "Invoice no."
+msgstr "رقم الفاتورة"
+
+#: invoicing/templates/invoicing/invoice_detail.html:121
+msgid "Invoice total"
+msgstr "إجمالي الفاتورة"
+
+#: invoicing/templates/invoicing/invoice_list.html:3
+#: invoicing/templates/invoicing/invoice_list.html:7 templates/base.html:45
+msgid "Invoices"
+msgstr "الفواتير"
+
+#: hr/templates/hr/expiring_documents.html:8
+msgid "Iqama / National ID and passports that need renewal."
+msgstr "الإقامات والهويات الوطنية وجوازات السفر التي تحتاج إلى تجديد."
+
+#: hr/templates/hr/employee_detail.html:46
+msgid "Iqama no."
+msgstr "رقم الإقامة"
+
+#: invoicing/templates/invoicing/invoice_list.html:31
+msgid "Issue date"
+msgstr "تاريخ الإصدار"
+
+#: invoicing/templates/invoicing/invoice_detail.html:13
+msgid "Issue invoice"
+msgstr "إصدار الفاتورة"
+
+#: invoicing/templates/invoicing/invoice_detail.html:12
+msgid "Issue this invoice? It gets a number and can no longer be changed."
+msgstr "إصدار هذه الفاتورة؟ سيُخصص لها رقم ولن يمكن تعديلها بعد ذلك."
+
+#: invoicing/models.py:49
+msgid "Issued"
+msgstr "صادرة"
+
+#: customers/templates/customers/customer_detail.html:36
+#: expenses/templates/expenses/expense_detail.html:54 jobs/forms.py:27
+#: jobs/templates/jobs/job_list.html:40
+#: jobs/templates/jobs/profitability.html:27
+msgid "Job"
+msgstr "أمر العمل"
+
+#: jobs/views.py:83
+#, python-format
+msgid "Job %(no)s created."
+msgstr "تم إنشاء أمر العمل %(no)s."
+
+#: jobs/views.py:112
+#, python-format
+msgid "Job %(no)s is now %(status)s."
+msgstr "أمر العمل %(no)s أصبح: %(status)s."
+
+#: jobs/views.py:97
+#, python-format
+msgid "Job %(no)s updated."
+msgstr "تم تحديث أمر العمل %(no)s."
+
+#: core/templates/core/dashboard.html:68
+msgid "Job profit"
+msgstr "ربح أوامر العمل"
+
+#: jobs/templates/jobs/profitability.html:3
+#: jobs/templates/jobs/profitability.html:7 templates/base.html:35
+msgid "Job profitability"
+msgstr "ربحية أوامر العمل"
+
+#: hr/templates/hr/employee_detail.html:58
+#: hr/templates/hr/partials/employee_table.html:9
+#: payroll/templates/payroll/payslip_detail.html:22
+msgid "Job title"
+msgstr "المسمى الوظيفي"
+
+#: customers/templates/customers/customer_detail.html:33
+#: jobs/templates/jobs/job_list.html:3 jobs/templates/jobs/job_list.html:7
+#: templates/base.html:32
+msgid "Jobs"
+msgstr "أوامر العمل"
+
+#: hr/constants.py:14
+msgid "Jordan"
+msgstr "الأردن"
+
+#: hr/constants.py:15
+msgid "Kenya"
+msgstr "كينيا"
+
+#: jobs/templates/jobs/job_detail.html:93
+#: jobs/templates/jobs/profitability.html:28
+msgid "Labour"
+msgstr "العمالة"
+
+#: jobs/models.py:74
+msgid "Leave empty to use the customer's address."
+msgstr "اتركه فارغًا لاستخدام عنوان العميل."
+
+#: invoicing/templates/invoicing/invoice_form.html:29
+msgid "Lines"
+msgstr "البنود"
+
+#: expenses/models.py:114
+msgid "Link the cost to a job to see that job's profit."
+msgstr "اربط التكلفة بأمر عمل لعرض ربحيته."
+
+#: jobs/templates/jobs/job_detail.html:171
+msgid "Linked expenses"
+msgstr "المصروفات المرتبطة"
+
+#: jobs/templates/jobs/job_detail.html:64
+msgid "Location"
+msgstr "الموقع"
+
+#: jobs/templates/jobs/job_detail.html:159
+msgid "Log"
+msgstr "تسجيل"
+
+#: templates/registration/login.html:3 templates/registration/login.html:19
+msgid "Log in"
+msgstr "تسجيل الدخول"
+
+#: templates/base.html:88
+msgid "Log out"
+msgstr "تسجيل الخروج"
+
+#: templates/base.html:18
+msgid "Main"
+msgstr "الرئيسية"
+
+#: hr/models.py:70
+msgid "Male"
+msgstr "ذكر"
+
+#: jobs/templates/jobs/profitability.html:29
+msgid "Margin"
+msgstr "هامش الربح"
+
+#: payroll/templates/payroll/run_detail.html:24
+msgid "Mark as paid"
+msgstr "تسجيل كمدفوع"
+
+#: jobs/forms.py:47 jobs/templates/jobs/job_detail.html:113
+msgid "Material"
+msgstr "المادة"
+
+#: jobs/views.py:145
+msgid "Material added."
+msgstr "تمت إضافة المادة."
+
+#: jobs/views.py:169
+msgid "Material removed."
+msgstr "تم حذف المادة."
+
+#: jobs/templates/jobs/job_detail.html:92
+#: jobs/templates/jobs/job_detail.html:111
+#: jobs/templates/jobs/profitability.html:28
+msgid "Materials"
+msgstr "المواد"
+
+#: templates/base.html:71
+msgid "Menu"
+msgstr "القائمة"
+
+#: customers/templates/customers/customer_list.html:24
+#: hr/templates/hr/employee_detail.html:38
+msgid "Mobile"
+msgstr "الجوال"
+
+#: expenses/templates/expenses/expense_list.html:26
+#: payroll/templates/payroll/run_list.html:30
+msgid "Month"
+msgstr "الشهر"
+
+#: jobs/templates/jobs/job_detail.html:39
+msgid "Move job"
+msgstr "تحويل أمر العمل"
+
+#: hr/templates/hr/employee_detail.html:46
+msgid "National ID"
+msgstr "الهوية الوطنية"
+
+#: payroll/templates/payroll/payslip_detail.html:24
+msgid "National ID / iqama no."
+msgstr "رقم الهوية / الإقامة"
+
+#: customers/forms.py:23
+msgid "National address"
+msgstr "العنوان الوطني"
+
+#: hr/templates/hr/employee_detail.html:35
+#: hr/templates/hr/partials/employee_table.html:10
+msgid "Nationality"
+msgstr "الجنسية"
+
+#: hr/constants.py:17
+msgid "Nepal"
+msgstr "نيبال"
+
+#: payroll/templates/payroll/run_detail.html:59
+msgid "Net"
+msgstr "الصافي"
+
+#: invoicing/templates/invoicing/vat_return.html:34
+msgid "Net VAT payable"
+msgstr "صافي الضريبة المستحقة"
+
+#: invoicing/templates/invoicing/vat_return.html:34
+msgid "Net VAT refundable / carried forward"
+msgstr "صافي الضريبة القابلة للاسترداد / المرحّلة"
+
+#: payroll/templates/payroll/payslip_detail.html:52
+msgid "Net pay"
+msgstr "صافي الراتب"
+
+#: payroll/templates/payroll/run_detail.html:45
+msgid "Net to pay"
+msgstr "الصافي المستحق للدفع"
+
+#: jobs/models.py:36
+msgid "New"
+msgstr "جديد"
+
+#: expenses/templates/expenses/expense_form.html:3
+#: expenses/templates/expenses/expense_form.html:8
+#: expenses/templates/expenses/expense_list.html:11
+msgid "New expense"
+msgstr "مصروف جديد"
+
+#: invoicing/templates/invoicing/invoice_form.html:3
+#: invoicing/templates/invoicing/invoice_form.html:8
+#: invoicing/templates/invoicing/invoice_list.html:10
+msgid "New invoice"
+msgstr "فاتورة جديدة"
+
+#: core/templates/core/dashboard.html:12
+#: customers/templates/customers/customer_detail.html:26
+#: jobs/templates/jobs/job_form.html:3 jobs/templates/jobs/job_form.html:8
+#: jobs/templates/jobs/job_list.html:10
+msgid "New job"
+msgstr "أمر عمل جديد"
+
+#: payroll/templates/payroll/run_list.html:12
+msgid "New payroll"
+msgstr "مسير رواتب جديد"
+
+#: customers/templates/customers/customer_list.html:41
+msgid "No customers found"
+msgstr "لم يتم العثور على عملاء"
+
+#: hr/templates/hr/partials/employee_table.html:38
+msgid "No employees match your search"
+msgstr "لا يوجد موظفون مطابقون لبحثك"
+
+#: hr/templates/hr/partials/employee_table.html:44
+msgid "No employees yet"
+msgstr "لا يوجد موظفون بعد"
+
+#: expenses/templates/expenses/expense_list.html:70
+msgid "No expenses found"
+msgstr "لم يتم العثور على مصروفات"
+
+#: jobs/templates/jobs/job_detail.html:183
+msgid "No expenses linked. Pick this job when recording an expense."
+msgstr "لا توجد مصروفات مرتبطة. اختر أمر العمل هذا عند تسجيل مصروف."
+
+#: jobs/templates/jobs/job_detail.html:150
+msgid "No hours logged."
+msgstr "لم تُسجل أي ساعات."
+
+#: invoicing/templates/invoicing/invoice_list.html:50
+msgid "No invoices found"
+msgstr "لم يتم العثور على فواتير"
+
+#: invoicing/templates/invoicing/vat_return.html:83
+msgid "No issued invoices or approved expenses in this period."
+msgstr "لا توجد فواتير صادرة أو مصروفات معتمدة في هذه الفترة."
+
+#: jobs/templates/jobs/job_list.html:58
+msgid "No jobs found"
+msgstr "لم يتم العثور على أوامر عمل"
+
+#: jobs/templates/jobs/profitability.html:57
+msgid "No jobs were completed in this month."
+msgstr "لم يكتمل أي أمر عمل في هذا الشهر."
+
+#: customers/templates/customers/customer_detail.html:49
+msgid "No jobs yet for this customer."
+msgstr "لا توجد أوامر عمل لهذا العميل بعد."
+
+#: invoicing/templates/invoicing/invoice_detail.html:91
+msgid "No lines yet."
+msgstr "لا توجد بنود بعد."
+
+#: jobs/templates/jobs/job_detail.html:123
+msgid "No materials recorded."
+msgstr "لم تُسجل أي مواد."
+
+#: payroll/templates/payroll/run_list.html:45
+msgid "No payroll runs yet."
+msgstr "لا توجد مسيرات رواتب بعد."
+
+#: payroll/templates/payroll/run_detail.html:67
+msgid "No payslips."
+msgstr "لا توجد قسائم رواتب."
+
+#: payroll/templates/payroll/employee_salary.html:40
+msgid "No salary structure has been set for this employee yet."
+msgstr "لم يُحدد هيكل راتب لهذا الموظف بعد."
+
+#: jobs/templates/jobs/job_detail.html:75
+msgid "No technician assigned yet."
+msgstr "لم يُعيَّن أي فني بعد."
+
+#: invoicing/templates/invoicing/receivables.html:50
+msgid "Nobody owes you anything right now."
+msgstr "لا توجد مستحقات على أي عميل حاليًا."
+
+#: payroll/models.py:81
+msgid "Non-Saudi"
+msgstr "غير سعودي"
+
+#: hr/models.py:165
+msgid "Non-Saudi employees must have an Iqama number starting with 2."
+msgstr "يجب أن يبدأ رقم إقامة الموظف غير السعودي بالرقم 2."
+
+#: invoicing/templates/invoicing/invoice_detail.html:154
+msgid "None."
+msgstr "لا يوجد."
+
+#: jobs/models.py:52 jobs/templates/jobs/job_list.html:32
+msgid "Normal"
+msgstr "عادي"
+
+#: expenses/templates/expenses/expense_detail.html:56
+msgid "Not attached"
+msgstr "غير مرفق"
+
+#: invoicing/templates/invoicing/vat_return.html:24
+msgid "Not included yet — finish these before filing:"
+msgstr "غير مشمولة بعد — أكملها قبل تقديم الإقرار:"
+
+#: invoicing/templates/invoicing/receivables.html:24
+msgid "Not yet due"
+msgstr "لم يحن موعدها"
+
+#: jobs/forms.py:57
+msgid "Note"
+msgstr "ملاحظة"
+
+#: hr/templates/hr/expiring_documents.html:52
+msgid "Nothing expires in this period."
+msgstr "لا شيء ينتهي في هذه الفترة."
+
+#: invoicing/services.py:148
+msgid "Nothing is owed on this invoice any more; a refund is needed instead."
+msgstr "لم يعد هناك مبلغ مستحق على هذه الفاتورة؛ يلزم إجراء استرداد بدلًا من ذلك."
+
+#: core/templates/core/dashboard.html:26
+msgid "Nothing to show yet"
+msgstr "لا يوجد ما يُعرض بعد"
+
+#: payroll/templates/payroll/run_detail.html:54
+msgid "OT hrs"
+msgstr "ساعات إضافية"
+
+#: hr/models.py:75
+msgid "On leave"
+msgstr "في إجازة"
+
+#: invoicing/services.py:184
+#, python-format
+msgid "Only %(bal)s is still owed on this invoice."
+msgstr "المبلغ المتبقي على هذه الفاتورة هو %(bal)s فقط."
+
+#: payroll/services.py:151
+msgid "Only an approved payroll can be marked as paid."
+msgstr "لا يمكن تسجيل مسير الرواتب كمدفوع إلا بعد اعتماده."
+
+#: jobs/templates/jobs/job_detail.html:187
+msgid "Only approved expenses count towards the job cost."
+msgstr "تُحتسب المصروفات المعتمدة فقط ضمن تكلفة أمر العمل."
+
+#: customers/models.py:91
+msgid "Only business customers have a VAT number."
+msgstr "الرقم الضريبي متاح للعملاء من المنشآت فقط."
+
+#: invoicing/services.py:100
+msgid "Only completed jobs can be invoiced."
+msgstr "لا يمكن إصدار فاتورة إلا لأوامر العمل المكتملة."
+
+#: expenses/templates/expenses/not_editable.html:8
+msgid "Only draft or rejected expenses can be changed."
+msgstr "لا يمكن تعديل إلا المصروفات المسودة أو المرفوضة."
+
+#: expenses/services.py:24
+msgid "Only draft or rejected expenses can be submitted."
+msgstr "لا يمكن تقديم إلا المصروفات المسودة أو المرفوضة."
+
+#: expenses/services.py:40
+msgid "Only submitted expenses can be approved."
+msgstr "لا يمكن اعتماد إلا المصروفات المقدّمة."
+
+#: expenses/services.py:53
+msgid "Only submitted expenses can be rejected."
+msgstr "لا يمكن رفض إلا المصروفات المقدّمة."
+
+#: jobs/costing.py:51
+msgid "Only technicians assigned to this job can log hours on it."
+msgstr "يمكن فقط للفنيين المعيّنين على أمر العمل تسجيل ساعات عليه."
+
+#: core/templates/core/dashboard.html:56 jobs/templates/jobs/job_list.html:17
+msgid "Open jobs"
+msgstr "أوامر العمل المفتوحة"
+
+#: expenses/templates/expenses/expense_detail.html:56
+msgid "Open receipt"
+msgstr "فتح الإيصال"
+
+#: templates/base.html:29
+msgid "Operations"
+msgstr "العمليات"
+
+#: hr/constants.py:24 jobs/models.py:49
+#: payroll/templates/payroll/employee_salary.html:18
+#: payroll/templates/payroll/employee_salary.html:52
+msgid "Other"
+msgstr "أخرى"
+
+#: payroll/templates/payroll/payslip_detail.html:37
+msgid "Other additions"
+msgstr "إضافات أخرى"
+
+#: payroll/templates/payroll/payslip_detail.html:35
+msgid "Other allowances"
+msgstr "بدلات أخرى"
+
+#: payroll/templates/payroll/payslip_detail.html:46
+msgid "Other deductions"
+msgstr "استقطاعات أخرى"
+
+#: invoicing/templates/invoicing/vat_return.html:31
+msgid "Output VAT (sales)"
+msgstr "ضريبة المخرجات (المبيعات)"
+
+#: invoicing/templates/invoicing/invoice_list.html:22
+msgid "Outstanding"
+msgstr "غير مسددة"
+
+#: invoicing/templates/invoicing/receivables.html:15
+msgid "Over 90 days"
+msgstr "أكثر من 90 يومًا"
+
+#: invoicing/templates/invoicing/invoice_detail.html:116
+#: invoicing/templates/invoicing/invoice_list.html:23
+#: invoicing/templates/invoicing/receivables.html:14
+msgid "Overdue"
+msgstr "متأخرة السداد"
+
+#: payroll/templates/payroll/payslip_detail.html:36
+msgid "Overtime"
+msgstr "العمل الإضافي"
+
+#: templates/base.html:19
+msgid "Overview"
+msgstr "نظرة عامة"
+
+#: expenses/templates/expenses/expense_form.html:32
+msgid "PDF, JPG or PNG, up to 5 MB. Required before submitting for approval."
+msgstr "ملف PDF أو JPG أو PNG بحد أقصى 5 ميجابايت. مطلوب قبل التقديم للاعتماد."
+
+#: invoicing/templates/invoicing/invoice_detail.html:115
+#: invoicing/templates/invoicing/invoice_detail.html:122
+#: invoicing/templates/invoicing/invoice_list.html:24
+#: invoicing/templates/invoicing/invoice_list.html:40 payroll/models.py:125
+#: payroll/templates/payroll/run_detail.html:31
+msgid "Paid"
+msgstr "مدفوع"
+
+#: expenses/templates/expenses/expense_detail.html:45
+msgid "Paid by"
+msgstr "طريقة الدفع"
+
+#: jobs/models.py:46
+msgid "Painting"
+msgstr "الدهانات"
+
+#: hr/constants.py:19
+msgid "Pakistan"
+msgstr "باكستان"
+
+#: invoicing/templates/invoicing/invoice_detail.html:117
+msgid "Partially paid"
+msgstr "مدفوع جزئيًا"
+
+#: invoicing/templates/invoicing/vat_return.html:66
+msgid "Party"
+msgstr "الطرف"
+
+#: hr/templates/hr/employee_detail.html:50
+#: hr/templates/hr/expiring_documents.html:30
+msgid "Passport expiry"
+msgstr "انتهاء جواز السفر"
+
+#: hr/templates/hr/employee_detail.html:49
+msgid "Passport no."
+msgstr "رقم جواز السفر"
+
+#: invoicing/templates/invoicing/invoice_list.html:20
+msgid "Payment"
+msgstr "الدفع"
+
+#: invoicing/services.py:179
+msgid "Payment date cannot be before the invoice date."
+msgstr "لا يمكن أن يكون تاريخ الدفع قبل تاريخ الفاتورة."
+
+#: invoicing/services.py:181
+msgid "Payment date cannot be in the future."
+msgstr "لا يمكن أن يكون تاريخ الدفع في المستقبل."
+
+#: invoicing/views.py:176
+#, python-format
+msgid "Payment of %(amt)s recorded."
+msgstr "تم تسجيل دفعة بمبلغ %(amt)s."
+
+#: invoicing/views.py:187
+msgid "Payment removed."
+msgstr "تم حذف الدفعة."
+
+#: invoicing/templates/invoicing/invoice_detail.html:114
+msgid "Payments"
+msgstr "المدفوعات"
+
+#: invoicing/services.py:177
+msgid "Payments can only be recorded against issued invoices."
+msgstr "لا يمكن تسجيل المدفوعات إلا على فواتير صادرة."
+
+#: core/templates/core/dashboard.html:90
+#: payroll/templates/payroll/run_detail.html:3
+#: payroll/templates/payroll/run_detail.html:6
+#: payroll/templates/payroll/run_list.html:3 templates/base.html:54
+msgid "Payroll"
+msgstr "مسير الرواتب"
+
+#: payroll/views.py:104
+#, python-format
+msgid "Payroll %(run)s approved and locked."
+msgstr "تم اعتماد مسير الرواتب %(run)s وقفله."
+
+#: payroll/views.py:64
+#, python-format
+msgid "Payroll %(run)s created with %(n)d payslips."
+msgstr "تم إنشاء مسير الرواتب %(run)s مع %(n)d قسيمة راتب."
+
+#: payroll/services.py:134
+#, python-format
+msgid "Payroll %(run)s is already %(status)s."
+msgstr "مسير الرواتب %(run)s حالته بالفعل %(status)s."
+
+#: payroll/services.py:28
+#, python-format
+msgid "Payroll %(run)s is locked."
+msgstr "مسير الرواتب %(run)s مقفل."
+
+#: payroll/views.py:114
+#, python-format
+msgid "Payroll %(run)s marked as paid."
+msgstr "تم تسجيل مسير الرواتب %(run)s كمدفوع."
+
+#: payroll/views.py:122
+#, python-format
+msgid "Payroll %(run)s recalculated."
+msgstr "تمت إعادة احتساب مسير الرواتب %(run)s."
+
+#: payroll/templates/payroll/run_list.html:6
+msgid "Payroll runs"
+msgstr "مسيرات الرواتب"
+
+#: payroll/templates/payroll/payslip_detail.html:3
+msgid "Payslip"
+msgstr "قسيمة الراتب"
+
+#: payroll/templates/payroll/payslip_detail.html:14
+msgid "Payslip for"
+msgstr "قسيمة راتب شهر"
+
+#: templates/base.html:23
+msgid "People"
+msgstr "الموارد البشرية"
+
+#: invoicing/templates/invoicing/vat_return.html:12
+msgid "Period"
+msgstr "الفترة"
+
+#: hr/forms.py:50 hr/templates/hr/employee_detail.html:33
+msgid "Personal"
+msgstr "البيانات الشخصية"
+
+#: hr/constants.py:18
+msgid "Philippines"
+msgstr "الفلبين"
+
+#: jobs/models.py:44
+msgid "Plumbing"
+msgstr "السباكة"
+
+#: core/validators.py:25
+msgid "Postal code must be 5 digits."
+msgstr "الرمز البريدي يجب أن يتكوّن من 5 أرقام."
+
+#: invoicing/templates/invoicing/statement.html:11
+#: invoicing/templates/invoicing/vat_return.html:18
+msgid "Print"
+msgstr "طباعة"
+
+#: invoicing/templates/invoicing/invoice_detail.html:17
+#: payroll/templates/payroll/payslip_detail.html:7
+msgid "Print / Save as PDF"
+msgstr "طباعة / حفظ كملف PDF"
+
+#: jobs/templates/jobs/job_list.html:29
+msgid "Priority"
+msgstr "الأولوية"
+
+#: jobs/templates/jobs/job_detail.html:97
+#: jobs/templates/jobs/profitability.html:18
+#: jobs/templates/jobs/profitability.html:29
+msgid "Profit"
+msgstr "الربح"
+
+#: invoicing/templates/invoicing/invoice_form.html:34 jobs/forms.py:48
+#: jobs/templates/jobs/job_detail.html:113
+msgid "Qty"
+msgstr "الكمية"
+
+#: jobs/templates/jobs/profitability.html:28
+msgid "Quoted"
+msgstr "عرض السعر"
+
+#: jobs/templates/jobs/job_detail.html:65
+msgid "Quoted (excl. VAT)"
+msgstr "عرض السعر (غير شامل الضريبة)"
+
+#: invoicing/templates/invoicing/vat_return.html:66
+msgid "Rate"
+msgstr "النسبة"
+
+#: invoicing/templates/invoicing/invoice_detail.html:160
+msgid "Reason (printed on the credit note)"
+msgstr "السبب (يُطبع على الإشعار الدائن)"
+
+#: expenses/templates/expenses/expense_detail.html:74
+msgid "Reason (the submitter will see this)"
+msgstr "السبب (سيظهر لمقدم الطلب)"
+
+#: jobs/templates/jobs/job_detail.html:50
+msgid "Reason to cancel"
+msgstr "سبب الإلغاء"
+
+#: payroll/templates/payroll/run_detail.html:13
+msgid "Recalculate"
+msgstr "إعادة الاحتساب"
+
+#: expenses/templates/expenses/expense_detail.html:55
+#: expenses/templates/expenses/expense_form.html:29
+msgid "Receipt"
+msgstr "الإيصال"
+
+#: expenses/validators.py:30
+msgid "Receipt must be 5 MB or smaller."
+msgstr "يجب ألا يتجاوز حجم الإيصال 5 ميجابايت."
+
+#: invoicing/templates/invoicing/receivables.html:3
+#: invoicing/templates/invoicing/receivables.html:7 templates/base.html:48
+msgid "Receivables"
+msgstr "الذمم المدينة"
+
+#: expenses/templates/expenses/expense_list.html:71
+msgid "Record an expense"
+msgstr "تسجيل مصروف"
+
+#: invoicing/templates/invoicing/invoice_detail.html:142
+msgid "Record payment"
+msgstr "تسجيل دفعة"
+
+#: invoicing/templates/invoicing/vat_return.html:66
+msgid "Reference"
+msgstr "المرجع"
+
+#: expenses/templates/expenses/expense_detail.html:72
+#: expenses/templates/expenses/expense_detail.html:75
+msgid "Reject"
+msgstr "رفض"
+
+#: expenses/models.py:75 expenses/templates/expenses/expense_detail.html:35
+msgid "Rejected"
+msgstr "مرفوض"
+
+#: invoicing/templates/invoicing/invoice_detail.html:133
+#: invoicing/templates/invoicing/invoice_form.html:34
+#: jobs/templates/jobs/job_detail.html:120
+#: jobs/templates/jobs/job_detail.html:147
+msgid "Remove"
+msgstr "حذف"
+
+#: invoicing/templates/invoicing/invoice_detail.html:132
+msgid "Remove this payment?"
+msgstr "حذف هذه الدفعة؟"
+
+#: customers/templates/customers/customer_form.html:17
+msgid "Required for VAT-registered businesses — it is printed on tax invoices."
+msgstr "مطلوب للمنشآت المسجلة في ضريبة القيمة المضافة — يُطبع على الفواتير الضريبية."
+
+#: customers/models.py:95
+msgid "Required for a VAT-registered business (shown on tax invoices)."
+msgstr "مطلوب للمنشأة المسجلة في ضريبة القيمة المضافة (يظهر على الفواتير الضريبية)."
+
+#: payroll/calculations.py:61
+msgid "Resignation"
+msgstr "استقالة"
+
+#: jobs/templates/jobs/profitability.html:16
+msgid "Revenue (quoted)"
+msgstr "الإيرادات (حسب عرض السعر)"
+
+#: core/templates/core/dashboard.html:18
+msgid "Run payroll"
+msgstr "تشغيل مسير الرواتب"
+
+#: hr/templates/hr/employee_detail.html:23
+#: payroll/templates/payroll/employee_salary.html:3
+#: payroll/templates/payroll/employee_salary.html:6
+msgid "Salary"
+msgstr "الراتب"
+
+#: payroll/templates/payroll/employee_salary.html:44
+msgid "Salary history"
+msgstr "سجل الراتب"
+
+#: payroll/models.py:80
+msgid "Saudi"
+msgstr "سعودي"
+
+#: hr/constants.py:8
+msgid "Saudi Arabia"
+msgstr "المملكة العربية السعودية"
+
+#: hr/models.py:163
+msgid "Saudi nationals must have a National ID starting with 1."
+msgstr "يجب أن تبدأ الهوية الوطنية للمواطن السعودي بالرقم 1."
+
+#: payroll/templates/payroll/partials/payslip_form_row.html:18
+msgid "Save"
+msgstr "حفظ"
+
+#: customers/templates/customers/customer_form.html:31
+msgid "Save customer"
+msgstr "حفظ العميل"
+
+#: expenses/templates/expenses/expense_form.html:38
+#: invoicing/templates/invoicing/invoice_form.html:53
+msgid "Save draft"
+msgstr "حفظ المسودة"
+
+#: hr/templates/hr/employee_form.html:31
+msgid "Save employee"
+msgstr "حفظ الموظف"
+
+#: jobs/templates/jobs/job_form.html:31
+msgid "Save job"
+msgstr "حفظ أمر العمل"
+
+#: invoicing/templates/invoicing/invoice_form.html:48
+msgid "Save to add more lines — an empty row is always added at the bottom."
+msgstr "احفظ لإضافة بنود أخرى — يُضاف صف فارغ دائمًا في الأسفل."
+
+#: jobs/models.py:37 jobs/templates/jobs/job_list.html:40
+msgid "Scheduled"
+msgstr "مجدول"
+
+#: customers/templates/customers/customer_list.html:19
+msgid "Search"
+msgstr "بحث"
+
+#: hr/templates/hr/employee_list.html:20
+msgid "Search by name, employee no., iqama or job title"
+msgstr "ابحث بالاسم أو الرقم الوظيفي أو الإقامة أو المسمى الوظيفي"
+
+#: jobs/templates/jobs/job_list.html:15
+msgid "Search job no., title, customer, address"
+msgstr "ابحث برقم أمر العمل أو العنوان أو العميل أو الموقع"
+
+#: customers/templates/customers/customer_list.html:17
+msgid "Search name, mobile or VAT number"
+msgstr "ابحث بالاسم أو الجوال أو الرقم الضريبي"
+
+#: invoicing/templates/invoicing/invoice_list.html:15
+msgid "Search number, customer or job"
+msgstr "ابحث بالرقم أو العميل أو أمر العمل"
+
+#: expenses/templates/expenses/expense_list.html:25
+msgid "Search number, description, vendor"
+msgstr "ابحث بالرقم أو الوصف أو المورد"
+
+#: customers/templates/customers/customer_detail.html:36
+#: jobs/templates/jobs/job_list.html:21 jobs/templates/jobs/job_list.html:40
+#: payroll/templates/payroll/employee_salary.html:33
+msgid "Service"
+msgstr "الخدمة"
+
+#: jobs/services.py:27
+msgid "Set a scheduled date first."
+msgstr "حدد تاريخ الموعد أولًا."
+
+#: hr/models.py:177
+msgid "Set status to Terminated when a termination date is given."
+msgstr "اجعل الحالة «منتهية خدمته» عند إدخال تاريخ انتهاء الخدمة."
+
+#: invoicing/services.py:102
+msgid "Set the job's quoted amount before invoicing it."
+msgstr "حدد مبلغ عرض السعر لأمر العمل قبل إصدار فاتورته."
+
+#: invoicing/templates/invoicing/statement.html:10
+msgid "Show"
+msgstr "عرض"
+
+#: templates/registration/login.html:6
+msgid "Sign in to continue to your workspace."
+msgstr "سجّل الدخول للمتابعة إلى مساحة عملك."
+
+#: invoicing/models.py:53
+msgid "Simplified tax invoice (B2C)"
+msgstr "فاتورة ضريبية مبسطة (للأفراد)"
+
+#: hr/templates/hr/employee_detail.html:18
+msgid "Since"
+msgstr "منذ"
+
+#: core/templates/core/dashboard.html:49
+msgid "So far this quarter"
+msgstr "حتى الآن في هذا الربع"
+
+#: hr/constants.py:16
+msgid "Sri Lanka"
+msgstr "سريلانكا"
+
+#: hr/templates/hr/partials/employee_table.html:46
+msgid "Start by adding the people who work for you."
+msgstr "ابدأ بإضافة الأشخاص الذين يعملون لديك."
+
+#: jobs/templates/jobs/job_detail.html:83
+msgid "Started"
+msgstr "تاريخ البدء"
+
+#: customers/templates/customers/customer_detail.html:22
+#: invoicing/templates/invoicing/receivables.html:31
+#: invoicing/templates/invoicing/statement.html:3
+msgid "Statement"
+msgstr "كشف الحساب"
+
+#: customers/templates/customers/customer_detail.html:36
+#: expenses/templates/expenses/expense_list.html:31
+#: expenses/templates/expenses/expense_list.html:49
+#: hr/templates/hr/partials/employee_table.html:11
+#: invoicing/templates/invoicing/invoice_list.html:16
+#: invoicing/templates/invoicing/invoice_list.html:31
+#: jobs/templates/jobs/job_detail.html:173 jobs/templates/jobs/job_list.html:16
+#: jobs/templates/jobs/job_list.html:40
+#: payroll/templates/payroll/run_list.html:31
+msgid "Status"
+msgstr "الحالة"
+
+#: expenses/templates/expenses/expense_detail.html:23
+msgid "Submit for approval"
+msgstr "تقديم للاعتماد"
+
+#: expenses/models.py:73 expenses/templates/expenses/expense_detail.html:63
+msgid "Submitted"
+msgstr "مقدّم"
+
+#: hr/constants.py:20
+msgid "Sudan"
+msgstr "السودان"
+
+#: hr/constants.py:21
+msgid "Syria"
+msgstr "سوريا"
+
+#: templates/base.html:61
+msgid "System"
+msgstr "النظام"
+
+#: invoicing/models.py:52
+msgid "Tax invoice (B2B)"
+msgstr "فاتورة ضريبية (للمنشآت)"
+
+#: jobs/forms.py:53 jobs/templates/jobs/job_detail.html:139
+#: jobs/templates/jobs/job_list.html:25
+msgid "Technician"
+msgstr "الفني"
+
+#: jobs/forms.py:29 jobs/templates/jobs/job_detail.html:70
+#: jobs/templates/jobs/job_list.html:40
+msgid "Technicians"
+msgstr "الفنيون"
+
+#: hr/models.py:76
+msgid "Terminated"
+msgstr "منتهية خدمته"
+
+#: payroll/calculations.py:60
+msgid "Termination by employer / contract end"
+msgstr "إنهاء من صاحب العمل / انتهاء العقد"
+
+#: hr/templates/hr/employee_detail.html:60
+msgid "Termination date"
+msgstr "تاريخ انتهاء الخدمة"
+
+#: hr/models.py:172
+msgid "Termination date cannot be before the hire date."
+msgstr "لا يمكن أن يكون تاريخ انتهاء الخدمة قبل تاريخ التعيين."
+
+#: invoicing/services.py:77
+#, python-format
+msgid "The credit note (%(cn)s) exceeds what is still owed on %(no)s (%(bal)s)."
+msgstr "الإشعار الدائن (%(cn)s) يتجاوز المبلغ المتبقي على %(no)s (%(bal)s)."
+
+#: jobs/costing.py:56
+msgid "The job did not exist yet on that date."
+msgstr "لم يكن أمر العمل موجودًا في ذلك التاريخ."
+
+#: payroll/templates/payroll/run_detail.html:36
+msgid "These employees have no salary structure and were skipped:"
+msgstr "تم تخطي الموظفين التاليين لعدم وجود هيكل راتب لهم:"
+
+#: invoicing/services.py:58
+msgid "This invoice is already issued."
+msgstr "هذه الفاتورة صادرة بالفعل."
+
+#: invoicing/services.py:104
+msgid "This job already has an invoice."
+msgstr "يوجد لأمر العمل هذا فاتورة بالفعل."
+
+#: core/templates/core/dashboard.html:95
+msgid "This month's payroll has not been created yet."
+msgstr "لم يُنشأ مسير رواتب هذا الشهر بعد."
+
+#: jobs/templates/jobs/job_detail.html:80
+msgid "Timeline"
+msgstr "التسلسل الزمني"
+
+#: invoicing/templates/invoicing/statement.html:9
+msgid "To"
+msgstr "إلى"
+
+#: invoicing/templates/invoicing/not_editable.html:8
+msgid "To correct an issued invoice, raise a credit note against it."
+msgstr "لتصحيح فاتورة صادرة، أصدر إشعارًا دائنًا عليها."
+
+#: expenses/templates/expenses/expense_list.html:18
+msgid "Top categories"
+msgstr "أعلى الفئات"
+
+#: expenses/templates/expenses/expense_detail.html:44
+#: expenses/templates/expenses/expense_list.html:48
+#: invoicing/templates/invoicing/invoice_list.html:31
+#: invoicing/templates/invoicing/receivables.html:24
+#: invoicing/templates/invoicing/receivables.html:41
+#: jobs/templates/jobs/job_detail.html:113
+#: jobs/templates/jobs/profitability.html:47
+#: payroll/templates/payroll/employee_salary.html:53
+msgid "Total"
+msgstr "الإجمالي"
+
+#: payroll/templates/payroll/employee_salary.html:19
+msgid "Total (SAR)"
+msgstr "الإجمالي (ريال)"
+
+#: expenses/templates/expenses/expense_list.html:16
+msgid "Total (incl. VAT)"
+msgstr "الإجمالي (شامل الضريبة)"
+
+#: jobs/templates/jobs/job_detail.html:95
+#: jobs/templates/jobs/profitability.html:17
+msgid "Total cost"
+msgstr "إجمالي التكلفة"
+
+#: payroll/templates/payroll/payslip_detail.html:47
+msgid "Total deductions"
+msgstr "إجمالي الاستقطاعات"
+
+#: invoicing/templates/invoicing/receivables.html:13
+msgid "Total owed"
+msgstr "إجمالي المستحقات"
+
+#: payroll/templates/payroll/employee_salary.html:17
+#: payroll/templates/payroll/employee_salary.html:51
+#: payroll/templates/payroll/payslip_detail.html:34
+msgid "Transport"
+msgstr "النقل"
+
+#: hr/templates/hr/partials/employee_table.html:39
+msgid "Try a different name, number or job title."
+msgstr "جرّب اسمًا أو رقمًا أو مسمى وظيفيًا مختلفًا."
+
+#: hr/templates/hr/expiring_documents.html:53
+msgid "Try a longer window to plan ahead."
+msgstr "جرّب فترة أطول للتخطيط مسبقًا."
+
+#: customers/templates/customers/customer_list.html:24
+#: invoicing/templates/invoicing/vat_return.html:66
+msgid "Type"
+msgstr "النوع"
+
+#: hr/constants.py:22
+msgid "Uganda"
+msgstr "أوغندا"
+
+#: jobs/templates/jobs/job_detail.html:113
+msgid "Unit"
+msgstr "سعر الوحدة"
+
+#: jobs/forms.py:49
+msgid "Unit cost"
+msgstr "تكلفة الوحدة"
+
+#: invoicing/templates/invoicing/invoice_form.html:34
+msgid "Unit price (excl. VAT)"
+msgstr "سعر الوحدة (غير شامل الضريبة)"
+
+#: jobs/services.py:19
+msgid "Unknown status."
+msgstr "حالة غير معروفة."
+
+#: invoicing/templates/invoicing/invoice_detail.html:118
+msgid "Unpaid"
+msgstr "غير مدفوع"
+
+#: expenses/validators.py:27
+msgid "Upload a PDF, JPG or PNG receipt."
+msgstr "ارفع إيصالًا بصيغة PDF أو JPG أو PNG."
+
+#: jobs/models.py:53 jobs/templates/jobs/job_detail.html:12
+#: jobs/templates/jobs/job_list.html:31 jobs/templates/jobs/job_list.html:44
+msgid "Urgent"
+msgstr "عاجل"
+
+#: expenses/models.py:105 expenses/templates/expenses/expense_detail.html:43
+#: expenses/templates/expenses/expense_list.html:47 invoicing/models.py:77
+#: invoicing/models.py:184 invoicing/templates/invoicing/invoice_form.html:34
+#: invoicing/templates/invoicing/vat_return.html:66
+msgid "VAT"
+msgstr "ضريبة القيمة المضافة"
+
+#: expenses/templates/expenses/expense_list.html:17
+msgid "VAT (input)"
+msgstr "ضريبة المدخلات"
+
+#: invoicing/models.py:187
+msgid "VAT amount"
+msgstr "مبلغ الضريبة"
+
+#: expenses/models.py:155
+msgid "VAT can only be claimed with the vendor's VAT number. Enter it or choose 0% VAT."
+msgstr "لا يمكن المطالبة بالضريبة إلا مع الرقم الضريبي للمورد. أدخله أو اختر نسبة 0%."
+
+#: customers/models.py:42 customers/templates/customers/customer_list.html:24
+#: expenses/templates/expenses/expense_detail.html:52
+msgid "VAT number"
+msgstr "الرقم الضريبي"
+
+#: core/templates/core/dashboard.html:47
+msgid "VAT payable"
+msgstr "الضريبة المستحقة"
+
+#: expenses/models.py:103
+msgid "VAT rate"
+msgstr "نسبة الضريبة"
+
+#: core/templates/core/dashboard.html:47
+msgid "VAT refundable"
+msgstr "الضريبة القابلة للاسترداد"
+
+#: invoicing/templates/invoicing/vat_return.html:3
+#: invoicing/templates/invoicing/vat_return.html:7 templates/base.html:51
+msgid "VAT return"
+msgstr "إقرار ضريبة القيمة المضافة"
+
+#: expenses/templates/expenses/expense_detail.html:49
+#: expenses/templates/expenses/expense_detail.html:51
+#: expenses/templates/expenses/expense_list.html:46
+msgid "Vendor"
+msgstr "المورد"
+
+#: core/templates/core/dashboard.html:116
+msgid "View all"
+msgstr "عرض الكل"
+
+#: templates/registration/login.html:5
+msgid "Welcome back"
+msgstr "مرحبًا بعودتك"
+
+#: core/templates/core/dashboard.html:7
+#, python-format
+msgid "Welcome, %(name)s"
+msgstr "مرحبًا، %(name)s"
+
+#: invoicing/templates/invoicing/receivables.html:8
+#, python-format
+msgid "What customers owe, by how late it is (as of %(d)s)."
+msgstr "مستحقات العملاء حسب مدة التأخير (حتى تاريخ %(d)s)."
+
+#: jobs/forms.py:28
+msgid "Where & when"
+msgstr "المكان والموعد"
+
+#: hr/templates/hr/expiring_documents.html:11
+msgid "Within"
+msgstr "خلال"
+
+#: jobs/templates/jobs/job_list.html:8
+msgid "Work orders from request to completion."
+msgstr "أوامر العمل من الطلب حتى الإنجاز."
+
+#: templates/registration/login.html:8
+msgid "Wrong username or password."
+msgstr "اسم المستخدم أو كلمة المرور غير صحيحة."
+
+#: hr/constants.py:23
+msgid "Yemen"
+msgstr "اليمن"
+
+#: expenses/services.py:17
+msgid "You cannot approve or reject your own expense."
+msgstr "لا يمكنك اعتماد أو رفض مصروفك الخاص."
+
+#: core/templates/core/dashboard.html:27
+msgid "Your account has no modules assigned. Ask an administrator for access."
+msgstr "لم تُخصص لحسابك أي وحدات. اطلب الصلاحية من مسؤول النظام."
+
+#: invoicing/templates/invoicing/invoice_list.html:8
+msgid "ZATCA-compliant tax invoices. Issued invoices cannot be changed."
+msgstr "فواتير ضريبية متوافقة مع هيئة الزكاة والضريبة والجمارك. لا يمكن تعديل الفواتير الصادرة."
+
+#: payroll/models.py:210
+msgid "absence days"
+msgstr "أيام الغياب"
+
+#: payroll/models.py:225
+msgid "absence deduction"
+msgstr "خصم الغياب"
+
+#: customers/models.py:56 expenses/models.py:27
+msgid "active"
+msgstr "نشط"
+
+#: invoicing/models.py:186 invoicing/models.py:224
+msgid "amount"
+msgstr "المبلغ"
+
+#: expenses/models.py:107
+msgid "amount excl. VAT"
+msgstr "المبلغ غير شامل الضريبة"
+
+#: hr/models.py:126 payroll/models.py:231
+msgid "bank name"
+msgstr "اسم البنك"
+
+#: payroll/models.py:219
+msgid "basic"
+msgstr "الأساسي"
+
+#: payroll/models.py:49
+msgid "basic salary"
+msgstr "الراتب الأساسي"
+
+#: customers/models.py:47
+msgid "building no."
+msgstr "رقم المبنى"
+
+#: hr/templates/hr/employee_detail.html:81
+msgid "by"
+msgstr "بواسطة"
+
+#: jobs/models.py:86
+msgid "cancel reason"
+msgstr "سبب الإلغاء"
+
+#: expenses/models.py:89 payroll/models.py:83
+msgid "category"
+msgstr "الفئة"
+
+#: customers/models.py:51
+msgid "city"
+msgstr "المدينة"
+
+#: expenses/models.py:24 hr/models.py:25
+msgid "code"
+msgstr "الرمز"
+
+#: core/templates/core/dashboard.html:39
+msgid "collected this month"
+msgstr "تم تحصيله هذا الشهر"
+
+#: payroll/models.py:87
+msgid "contribution salary cap"
+msgstr "الحد الأعلى للأجر الخاضع للاشتراك"
+
+#: expenses/models.py:122 jobs/models.py:89
+msgid "created by"
+msgstr "أنشأه"
+
+#: customers/models.py:73 invoicing/models.py:61 jobs/models.py:67
+msgid "customer"
+msgstr "العميل"
+
+#: customers/models.py:74
+msgid "customers"
+msgstr "العملاء"
+
+#: expenses/models.py:87 invoicing/models.py:222 jobs/models.py:173
+msgid "date"
+msgstr "التاريخ"
+
+#: hr/models.py:89
+msgid "date of birth"
+msgstr "تاريخ الميلاد"
+
+#: hr/templates/hr/expiring_documents.html:17
+#: payroll/templates/payroll/payslip_detail.html:44
+msgid "days"
+msgstr "أيام"
+
+#: hr/models.py:31 hr/models.py:110
+msgid "department"
+msgstr "القسم"
+
+#: hr/models.py:32
+msgid "departments"
+msgstr "الأقسام"
+
+#: expenses/models.py:91 invoicing/models.py:174 jobs/models.py:71
+#: jobs/models.py:139
+msgid "description"
+msgstr "الوصف"
+
+#: customers/models.py:50
+msgid "district"
+msgstr "الحي"
+
+#: invoicing/models.py:67
+msgid "due date"
+msgstr "تاريخ الاستحقاق"
+
+#: payroll/models.py:48 payroll/models.py:84
+msgid "effective from"
+msgstr "ساري من"
+
+#: customers/models.py:40 hr/models.py:123
+msgid "email"
+msgstr "البريد الإلكتروني"
+
+#: hr/models.py:139 payroll/models.py:46 payroll/models.py:201
+msgid "employee"
+msgstr "الموظف"
+
+#: payroll/models.py:85
+msgid "employee %"
+msgstr "نسبة الموظف %"
+
+#: hr/models.py:79
+msgid "employee no."
+msgstr "الرقم الوظيفي"
+
+#: hr/models.py:140
+msgid "employees"
+msgstr "الموظفون"
+
+#: payroll/models.py:86
+msgid "employer %"
+msgstr "نسبة صاحب العمل %"
+
+#: expenses/models.py:138
+msgid "expense"
+msgstr "مصروف"
+
+#: expenses/models.py:32
+msgid "expense categories"
+msgstr "فئات المصروفات"
+
+#: expenses/models.py:31
+msgid "expense category"
+msgstr "فئة المصروف"
+
+#: expenses/models.py:139
+msgid "expenses"
+msgstr "المصروفات"
+
+#: hr/models.py:83
+msgid "first name"
+msgstr "الاسم الأول"
+
+#: payroll/models.py:223
+msgid "fixed salary"
+msgstr "الراتب الثابت"
+
+#: payroll/templates/payroll/employee_salary.html:13
+msgid "from"
+msgstr "من"
+
+#: hr/models.py:85
+msgid "full name (Arabic)"
+msgstr "الاسم الكامل (بالعربية)"
+
+#: hr/models.py:90
+msgid "gender"
+msgstr "الجنس"
+
+#: payroll/models.py:228
+msgid "gross pay"
+msgstr "إجمالي الراتب"
+
+#: hr/models.py:113
+msgid "hire date"
+msgstr "تاريخ التعيين"
+
+#: jobs/models.py:175
+msgid "hours"
+msgstr "الساعات"
+
+#: payroll/models.py:220
+msgid "housing"
+msgstr "السكن"
+
+#: payroll/models.py:50
+msgid "housing allowance"
+msgstr "بدل السكن"
+
+#: invoicing/models.py:104 invoicing/models.py:220
+msgid "invoice"
+msgstr "فاتورة"
+
+#: invoicing/models.py:192
+msgid "invoice line"
+msgstr "بند الفاتورة"
+
+#: invoicing/models.py:193
+msgid "invoice lines"
+msgstr "بنود الفاتورة"
+
+#: invoicing/models.py:56
+msgid "invoice no."
+msgstr "رقم الفاتورة"
+
+#: invoicing/models.py:105
+msgid "invoices"
+msgstr "الفواتير"
+
+#: invoicing/models.py:66
+msgid "issue date"
+msgstr "تاريخ الإصدار"
+
+#: expenses/models.py:114 invoicing/models.py:64 jobs/models.py:101
+#: jobs/models.py:138 jobs/models.py:169
+msgid "job"
+msgstr "أمر العمل"
+
+#: jobs/models.py:154
+msgid "job material"
+msgstr "مادة أمر العمل"
+
+#: jobs/models.py:155
+msgid "job materials"
+msgstr "مواد أمر العمل"
+
+#: jobs/models.py:65
+msgid "job no."
+msgstr "رقم أمر العمل"
+
+#: hr/models.py:112
+msgid "job title"
+msgstr "المسمى الوظيفي"
+
+#: jobs/models.py:102
+msgid "jobs"
+msgstr "أوامر العمل"
+
+#: invoicing/models.py:55
+msgid "kind"
+msgstr "النوع"
+
+#: jobs/models.py:189
+msgid "labour entries"
+msgstr "سجلات العمالة"
+
+#: jobs/models.py:188
+msgid "labour entry"
+msgstr "سجل عمالة"
+
+#: hr/models.py:84
+msgid "last name"
+msgstr "اسم العائلة"
+
+#: jobs/templates/jobs/job_detail.html:100
+msgid "margin"
+msgstr "هامش الربح"
+
+#: invoicing/models.py:226
+msgid "method"
+msgstr "طريقة الدفع"
+
+#: customers/models.py:39 hr/models.py:121
+msgid "mobile"
+msgstr "الجوال"
+
+#: payroll/models.py:131
+msgid "month"
+msgstr "الشهر"
+
+#: customers/models.py:36
+msgid "name"
+msgstr "الاسم"
+
+#: customers/models.py:37 expenses/models.py:26 hr/models.py:27
+msgid "name (Arabic)"
+msgstr "الاسم (بالعربية)"
+
+#: expenses/models.py:25 hr/models.py:26
+msgid "name (English)"
+msgstr "الاسم (بالإنجليزية)"
+
+#: hr/models.py:94
+msgid "national ID / iqama no."
+msgstr "رقم الهوية / الإقامة"
+
+#: hr/models.py:87
+msgid "nationality"
+msgstr "الجنسية"
+
+#: payroll/models.py:230
+msgid "net pay"
+msgstr "صافي الراتب"
+
+#: expenses/templates/expenses/expense_list.html:55
+msgid "no receipt"
+msgstr "بدون إيصال"
+
+#: payroll/templates/payroll/payslip_detail.html:44
+msgid "not employed"
+msgstr "خارج فترة التوظيف"
+
+#: invoicing/models.py:228 jobs/models.py:180 payroll/models.py:215
+msgid "note"
+msgstr "ملاحظة"
+
+#: invoicing/models.py:68
+msgid "notes"
+msgstr "ملاحظات"
+
+#: expenses/models.py:86
+msgid "number"
+msgstr "الرقم"
+
+#: invoicing/models.py:72
+msgid "original invoice"
+msgstr "الفاتورة الأصلية"
+
+#: payroll/models.py:213
+msgid "other additions"
+msgstr "إضافات أخرى"
+
+#: payroll/models.py:52 payroll/models.py:222
+msgid "other allowances"
+msgstr "بدلات أخرى"
+
+#: payroll/models.py:214
+msgid "other deductions"
+msgstr "استقطاعات أخرى"
+
+#: core/templates/core/dashboard.html:38
+msgid "overdue"
+msgstr "متأخرة"
+
+#: payroll/models.py:224
+msgid "overtime"
+msgstr "العمل الإضافي"
+
+#: payroll/models.py:206
+msgid "overtime hours"
+msgstr "ساعات العمل الإضافي"
+
+#: expenses/models.py:110
+msgid "paid by"
+msgstr "طريقة الدفع"
+
+#: hr/models.py:101
+msgid "passport expiry"
+msgstr "انتهاء جواز السفر"
+
+#: hr/models.py:100
+msgid "passport no."
+msgstr "رقم جواز السفر"
+
+#: invoicing/models.py:238
+msgid "payment"
+msgstr "دفعة"
+
+#: invoicing/models.py:239
+msgid "payments"
+msgstr "المدفوعات"
+
+#: payroll/models.py:156 payroll/models.py:198
+msgid "payroll run"
+msgstr "مسير رواتب"
+
+#: payroll/models.py:157
+msgid "payroll runs"
+msgstr "مسيرات الرواتب"
+
+#: payroll/models.py:241
+msgid "payslip"
+msgstr "قسيمة راتب"
+
+#: payroll/models.py:242
+msgid "payslips"
+msgstr "قسائم الرواتب"
+
+#: customers/models.py:53
+msgid "postal code"
+msgstr "الرمز البريدي"
+
+#: jobs/models.py:76
+msgid "priority"
+msgstr "الأولوية"
+
+#: invoicing/models.py:176
+msgid "qty"
+msgstr "الكمية"
+
+#: jobs/models.py:141
+msgid "quantity"
+msgstr "الكمية"
+
+#: jobs/templates/jobs/job_detail.html:97
+msgid "quote"
+msgstr "عرض السعر"
+
+#: jobs/models.py:83
+msgid "quoted amount (excl. VAT)"
+msgstr "مبلغ عرض السعر (غير شامل الضريبة)"
+
+#: invoicing/models.py:74
+msgid "reason"
+msgstr "السبب"
+
+#: expenses/models.py:117
+msgid "receipt"
+msgstr "الإيصال"
+
+#: invoicing/models.py:227
+msgid "reference"
+msgstr "المرجع"
+
+#: expenses/models.py:130
+msgid "rejection reason"
+msgstr "سبب الرفض"
+
+#: payroll/models.py:64
+msgid "salary structure"
+msgstr "هيكل الراتب"
+
+#: payroll/models.py:65
+msgid "salary structures"
+msgstr "هياكل الرواتب"
+
+#: jobs/models.py:78
+msgid "scheduled date"
+msgstr "تاريخ الموعد"
+
+#: jobs/models.py:69
+msgid "service"
+msgstr "الخدمة"
+
+#: jobs/models.py:73
+msgid "site address"
+msgstr "عنوان الموقع"
+
+#: expenses/models.py:120 hr/models.py:116 invoicing/models.py:57
+#: jobs/models.py:77 payroll/models.py:134
+msgid "status"
+msgstr "الحالة"
+
+#: customers/models.py:49
+msgid "street"
+msgstr "الشارع"
+
+#: invoicing/models.py:76
+msgid "subtotal (excl. VAT)"
+msgstr "المجموع الفرعي (غير شامل الضريبة)"
+
+#: jobs/models.py:171
+msgid "technician"
+msgstr "الفني"
+
+#: jobs/models.py:80
+msgid "technicians"
+msgstr "الفنيون"
+
+#: hr/models.py:114
+msgid "termination date"
+msgstr "تاريخ انتهاء الخدمة"
+
+#: jobs/models.py:70
+msgid "title"
+msgstr "العنوان"
+
+#: invoicing/models.py:188 jobs/models.py:146
+msgid "total"
+msgstr "الإجمالي"
+
+#: invoicing/models.py:78
+msgid "total (incl. VAT)"
+msgstr "الإجمالي (شامل الضريبة)"
+
+#: payroll/models.py:229
+msgid "total deductions"
+msgstr "إجمالي الاستقطاعات"
+
+#: expenses/models.py:99
+msgid "total incl. VAT"
+msgstr "الإجمالي شامل الضريبة"
+
+#: payroll/models.py:221
+msgid "transport"
+msgstr "النقل"
+
+#: payroll/models.py:51
+msgid "transport allowance"
+msgstr "بدل النقل"
+
+#: customers/models.py:38 invoicing/models.py:58
+msgid "type"
+msgstr "النوع"
+
+#: jobs/models.py:144
+msgid "unit cost"
+msgstr "تكلفة الوحدة"
+
+#: invoicing/models.py:180
+msgid "unit price (excl. VAT)"
+msgstr "سعر الوحدة (غير شامل الضريبة)"
+
+#: expenses/models.py:92
+msgid "vendor"
+msgstr "المورد"
+
+#: expenses/models.py:94
+msgid "vendor VAT number"
+msgstr "الرقم الضريبي للمورد"
+
+#: expenses/models.py:96
+msgid "vendor invoice no."
+msgstr "رقم فاتورة المورد"
+
+#: payroll/models.py:128
+msgid "year"
+msgstr "السنة"
+

@@ -155,3 +155,31 @@ MUTATIONS += [
     ("seed_demo: job invoices not paid", SEED,
      "            for amount, days_ago in JOB_INVOICE_PAYMENTS[job.title]:", "            for amount, days_ago in []:"),
 ]
+
+I18N = "tools/i18n.py"
+PO_FILE = "locale/ar/LC_MESSAGES/django.po"
+
+MUTATIONS += [
+    # --- extraction tool ---
+    ("i18n: _() calls not extracted", I18N, '    "_": None,\n', ""),
+    ("i18n: plural strings not extracted", I18N, '    "ngettext": (1, 2),\n', ""),
+    ("i18n: templates not scanned", I18N,
+     'if path.suffix in {".py", ".html", ".txt"}:', 'if path.suffix in {".py"}:'),
+    ("i18n: template code not de-indented", I18N,
+     'code = "\\n".join(line.lstrip() for line in templatize(text, origin=str(path)).splitlines())',
+     "code = templatize(text, origin=str(path))"),
+    # --- the catalogue itself ---
+    ("po: a string left in English", PO_FILE,
+     'msgid "Employees"\nmsgstr "الموظفون"', 'msgid "Employees"\nmsgstr "Employees"'),
+    ("po: Babel's wrong Arabic plural rule", PO_FILE,
+     "n%100>=11 && n%100<=99 ? 4", "n%100>=0 && n%100<=2 ? 4"),
+    ("po: placeholder dropped from a translation", PO_FILE,
+     'msgstr "تم إصدار الفاتورة %(no)s."', 'msgstr "تم إصدار الفاتورة."'),
+    ("translation source drifts from the .po", "tools/ar_translations.py",
+     '"Employees": "الموظفون",', '"Employees": "الموظفين",'),
+    # --- wiring ---
+    ("settings: project translations not loaded", "config/settings.py",
+     'LOCALE_PATHS = [BASE_DIR / "locale"]', "LOCALE_PATHS = []"),
+    ("settings: browser language ignored", "config/settings.py",
+     '    "django.middleware.locale.LocaleMiddleware",\n', ""),
+]
