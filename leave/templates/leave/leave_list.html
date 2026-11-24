@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% translate "Leave" %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{% translate "Leave" %}</h1>
+    <p class="muted">{% translate "Annual, sick and other leave, with approvals and balances." %}</p>
+  </div>
+  {% if perms.leave.add_leaverequest %}<a class="btn" href="{% url 'leave:create' %}">{% icon "plus" %}{% translate "Request leave" %}</a>{% endif %}
+</div>
+
+<div class="card card-flush">
+  <form method="get" class="toolbar filters">
+    <select name="status" class="filter-input" aria-label="{% translate 'Status' %}">
+      <option value="">{% translate "All statuses" %}</option>
+      {% for value, label in statuses %}<option value="{{ value }}" {% if f.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+    <select name="type" class="filter-input" aria-label="{% translate 'Leave type' %}">
+      <option value="">{% translate "All leave types" %}</option>
+      {% for t in types %}<option value="{{ t.code }}" {% if f.type == t.code %}selected{% endif %}>{{ t }}</option>{% endfor %}
+    </select>
+    <select name="employee" class="filter-input" aria-label="{% translate 'Employee' %}">
+      <option value="">{% translate "All employees" %}</option>
+      {% for e in employees %}<option value="{{ e.pk }}" {% if f.employee == e.pk|stringformat:"d" %}selected{% endif %}>{{ e.full_name }}</option>{% endfor %}
+    </select>
+    <button class="btn btn-secondary" type="submit">{% translate "Filter" %}</button>
+  </form>
+  {% if requests %}
+  <div class="table-scroll">
+  <table class="table">
+    <thead><tr><th>{% translate "Employee" %}</th><th>{% translate "Leave type" %}</th><th>{% translate "From" %}</th><th>{% translate "To" %}</th><th class="num">{% translate "Days" %}</th><th>{% translate "Status" %}</th></tr></thead>
+    <tbody>
+      {% for r in requests %}
+      <tr>
+        <td><a class="person" href="{{ r.get_absolute_url }}"><span class="avatar">{{ r.employee.full_name|initials }}</span><span><span class="person-name">{{ r.employee.full_name }}</span><span class="muted">{{ r.employee.employee_no }}</span></span></a></td>
+        <td>{{ r.leave_type }}{% if r.leave_type.deducts_salary %} <span class="badge badge-on_leave">{% translate "Unpaid" %}</span>{% endif %}</td>
+        <td>{{ r.start_date }}</td>
+        <td>{{ r.end_date }}</td>
+        <td class="num">{{ r.days }}</td>
+        <td><span class="badge badge-{{ r.status }}">{{ r.get_status_display }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">{% icon "calendar" 28 %}</div>
+    <h2>{% translate "No leave requests found" %}</h2>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

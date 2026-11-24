@@ -70,6 +70,30 @@
   </section>
 </div>
 
+{% if leave_balance %}
+<section class="card">
+  <div class="card-head">
+    <h2>{% icon "calendar" %} {% translate "Leave" %}</h2>
+    {% if perms.leave.add_leaverequest %}<a class="btn btn-secondary" href="{% url 'leave:create' %}?employee={{ employee.pk }}">{% icon "plus" 16 %}{% translate "Request leave" %}</a>{% endif %}
+  </div>
+  <div class="kpi-grid kpi-compact">
+    <div class="kpi"><span class="kpi-label">{% translate "Annual leave earned" %}</span><span class="kpi-value">{{ leave_balance.accrued }}</span></div>
+    <div class="kpi"><span class="kpi-label">{% translate "Taken" %}</span><span class="kpi-value">{{ leave_balance.taken }}</span></div>
+    <div class="kpi"><span class="kpi-label">{% translate "Pending" %}</span><span class="kpi-value">{{ leave_balance.pending }}</span></div>
+    <div class="kpi kpi-highlight"><span class="kpi-label">{% translate "Available" %}</span><span class="kpi-value">{{ leave_balance.available }}</span></div>
+  </div>
+  <ul class="list">
+    {% for r in leaves %}
+    <li><div class="list-main"><a href="{{ r.get_absolute_url }}">{{ r.leave_type }}</a> · {{ r.days }} {% translate "days" %}
+      <div class="muted">{{ r.start_date }} → {{ r.end_date }}</div></div>
+      <span class="badge badge-{{ r.status }}">{{ r.get_status_display }}</span></li>
+    {% empty %}
+    <li class="muted">{% translate "No leave requests yet." %}</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
 <section class="card">
   <h2>{% icon "history" %} {% translate "Change history" %}</h2>
   <ul class="timeline">

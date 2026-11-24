@@ -1,10 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from hr.forms import EmployeeForm
 from hr.models import Employee
+from leave.services import annual_balance
 
 DEFAULT_EXPIRY_WINDOW = 30
 MAX_EXPIRY_WINDOW = 365
@@ -30,8 +32,14 @@ def employee_list(request):
 def employee_detail(request, pk):
     employee = get_object_or_404(Employee.objects.select_related("department"), pk=pk)
     history = employee.history.select_related("history_user").all()[:20]
+    leave_balance, leaves = None, []
+    if request.user.has_perm("leave.view_leaverequest"):
+        leave_balance = annual_balance(employee, timezone.localdate())
+        leaves = employee.leave_requests.select_related("leave_type")[:10]
     return render(
-        request, "hr/employee_detail.html", {"employee": employee, "history": list(history)}
+        request,
+        "hr/employee_detail.html",
+        {"employee": employee, "history": list(history), "leave_balance": leave_balance, "leaves": leaves},
     )
 
 

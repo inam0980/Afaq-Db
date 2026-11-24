@@ -116,8 +116,8 @@ MUTATIONS = [
     (
         "Detail page history not passed",
         "hr/views.py",
-        '{"employee": employee, "history": list(history)}',
-        '{"employee": employee, "history": []}',
+        '{"employee": employee, "history": list(history), "leave_balance"',
+        '{"employee": employee, "history": [], "leave_balance"',
     ),
     # --- admin / forms / templates ---
     (

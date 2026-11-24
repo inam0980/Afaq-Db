@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% translate "Leave" %} · {{ req.employee.full_name }} · Afaq ERP{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'leave:list' %}">{% icon "arrow-left" 16 %}{% translate "All leave" %}</a>
+
+<section class="card profile">
+  <span class="avatar avatar-lg">{{ req.employee.full_name|initials }}</span>
+  <div class="profile-main">
+    <h1>{{ req.leave_type }} <span class="badge badge-{{ req.status }}">{{ req.get_status_display }}</span></h1>
+    <div class="profile-meta">
+      <span>{% if perms.hr.view_employee %}<a href="{{ req.employee.get_absolute_url }}">{{ req.employee.full_name }}</a>{% else %}{{ req.employee.full_name }}{% endif %}</span>
+      <span>{% icon "calendar" 16 %}{{ req.start_date }} → {{ req.end_date }}</span>
+      <span><strong>{{ req.days }}</strong> {% translate "days" %}</span>
+    </div>
+  </div>
+  <div class="actions">
+    {% if req.status == "pending" and perms.leave.approve_leaverequest %}
+      <form method="post" action="{% url 'leave:approve' req.pk %}" class="inline">{% csrf_token %}
+        <button class="btn">{% icon "check-circle" %}{% translate "Approve" %}</button></form>
+    {% endif %}
+    {% if perms.leave.change_leaverequest %}{% if req.status == "pending" or req.status == "approved" %}
+      <form method="post" action="{% url 'leave:cancel' req.pk %}" class="inline">{% csrf_token %}
+        <button class="btn btn-ghost">{% translate "Cancel leave" %}</button></form>
+    {% endif %}{% endif %}
+  </div>
+</section>
+
+{% if req.status == "rejected" %}<div class="alert alert-error">{% translate "Rejected" %}: {{ req.decision_note }}</div>{% endif %}
+
+<div class="grid">
+  <section class="card">
+    <h2>{% icon "file-text" %} {% translate "Details" %}</h2>
+    <dl>
+      <dt>{% translate "Reason" %}</dt><dd>{{ req.reason|default:"—" }}</dd>
+      <dt>{% translate "Paid" %}</dt><dd>{% if req.leave_type.deducts_salary %}{% translate "No — deducted from salary" %}{% else %}{% translate "Yes" %}{% endif %}</dd>
+      <dt>{% translate "Document" %}</dt>
+      <dd>{% if req.attachment %}<a href="{% url 'leave:attachment' req.pk %}" target="_blank" rel="noopener">{% icon "file-text" 16 %} {% translate "Open document" %}</a>{% elif req.leave_type.requires_attachment %}<span class="text-warn">{% translate "Required before approval" %}</span>{% else %}—{% endif %}</dd>
+      <dt>{% translate "Entered by" %}</dt><dd>{{ req.created_by|default:"—" }} · {{ req.created_at|date:"Y-m-d H:i" }}</dd>
+      <dt>{% translate "Decided by" %}</dt><dd>{{ req.decided_by|default:"—" }}{% if req.decided_at %} · {{ req.decided_at|date:"Y-m-d H:i" }}{% endif %}</dd>
+    </dl>
+  </section>
+  {% if balance %}
+  <section class="card">
+    <h2>{% icon "calendar" %} {% translate "Annual leave balance" %}</h2>
+    <dl>
+      <dt>{% translate "Annual leave earned" %}</dt><dd>{{ balance.accrued }}</dd>
+      <dt>{% translate "Taken" %}</dt><dd>{{ balance.taken }}</dd>
+      <dt>{% translate "Pending" %}</dt><dd>{{ balance.pending }}</dd>
+      <dt><strong>{% translate "Available" %}</strong></dt><dd><strong>{{ balance.available }}</strong></dd>
+    </dl>
+  </section>
+  {% endif %}
+</div>
+
+{% if req.status == "pending" and perms.leave.approve_leaverequest %}
+<section class="card">
+  <h2>{% icon "x-circle" %} {% translate "Reject" %}</h2>
+  <form method="post" action="{% url 'leave:reject' req.pk %}" class="reject-form">{% csrf_token %}
+    <input type="text" name="note" required maxlength="300" class="filter-input grow" placeholder="{% translate 'Reason for rejecting' %}">
+    <button class="btn btn-danger">{% translate "Reject" %}</button>
+  </form>
+</section>
+{% endif %}
+{% endblock %}

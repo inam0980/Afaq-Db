@@ -5,6 +5,7 @@ _SECTIONS = {
     (None, "home"): "home",
     ("hr", "expiring_documents"): "expiring",
     ("hr", None): "employees",
+    ("leave", None): "leave",
     ("payroll", "employee_salary"): "employees",
     ("payroll", None): "payroll",
     ("expenses", None): "expenses",

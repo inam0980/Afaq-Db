@@ -20,7 +20,7 @@
   </div>
 </div>
 
-{% if not show_employees and not show_payroll and not show_expenses and not show_jobs and not show_receivables and not show_vat %}
+{% if not show_employees and not show_payroll and not show_expenses and not show_jobs and not show_receivables and not show_vat and not show_leave %}
   <div class="empty-state card">
     <div class="empty-icon">{% icon "dashboard" 28 %}</div>
     <h2>{% translate "Nothing to show yet" %}</h2>
@@ -68,6 +68,15 @@
     <span class="kpi-label">{% translate "Job profit" %} {{ today|date:"F Y" }}</span>
     <span class="kpi-value{% if month_job_profit < 0 %} text-loss{% endif %}">{{ month_job_profit }} <small>SAR</small></span>
     <span class="muted">{% blocktranslate count n=month_jobs_done %}{{ n }} completed job{% plural %}{{ n }} completed jobs{% endblocktranslate %}</span>
+  </a>
+  {% endif %}
+
+  {% if show_leave %}
+  <a class="kpi" href="{% url 'leave:list' %}?status=pending">
+    <span class="kpi-icon tone-blue">{% icon "calendar" 20 %}</span>
+    <span class="kpi-label">{% translate "On leave today" %}</span>
+    <span class="kpi-value">{{ on_leave_today }}</span>
+    {% if pending_leave %}<span class="badge badge-draft">{% blocktranslate count n=pending_leave %}{{ n }} leave request waiting{% plural %}{{ n }} leave requests waiting{% endblocktranslate %}</span>{% endif %}
   </a>
   {% endif %}
 

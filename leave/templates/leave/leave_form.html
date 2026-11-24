@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% translate "Request leave" %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <a class="back-link" href="{% url 'leave:list' %}">{% icon "arrow-left" 16 %}{% translate "Back" %}</a>
+    <h1>{% translate "Request leave" %}</h1>
+    <p class="muted">{% translate "Annual leave counts working days (Sunday to Thursday); sick, unpaid and maternity leave count calendar days." %}</p>
+  </div>
+</div>
+<form method="post" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="alert alert-error">{% for e in form.non_field_errors %}{{ e }} {% endfor %}</div>{% endif %}
+  <section class="card form-section">
+    <h2>{% icon "calendar" %} {% translate "Leave details" %}</h2>
+    <div class="form-grid">
+      {% for field in form %}
+        <label class="field{% if field.errors %} has-error{% endif %}{% if field.name == 'reason' %} field-wide{% endif %}">
+          <span>{{ field.label }}{% if field.field.required %} <em class="req">*</em>{% endif %}</span>
+          {{ field }}
+          {% if field.help_text %}<small class="muted">{{ field.help_text }}</small>{% endif %}
+          {% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}
+        </label>
+      {% endfor %}
+    </div>
+  </section>
+  <div class="form-actions">
+    <a href="{% url 'leave:list' %}" class="btn btn-ghost">{% translate "Cancel" %}</a>
+    <button type="submit" class="btn">{% icon "send" %}{% translate "Submit request" %}</button>
+  </div>
+</form>
+{% endblock %}

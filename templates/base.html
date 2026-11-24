@@ -24,6 +24,9 @@
       <a href="{% url 'hr:employee_list' %}" {% if nav_section == "employees" %}aria-current="page"{% endif %}>{% icon "users" %}<span>{% translate "Employees" %}</span></a>
       <a href="{% url 'hr:expiring_documents' %}" {% if nav_section == "expiring" %}aria-current="page"{% endif %}>{% icon "file-warning" %}<span>{% translate "Expiring documents" %}</span></a>
       {% endif %}
+      {% if perms.leave.view_leaverequest %}
+      <a href="{% url 'leave:list' %}" {% if nav_section == "leave" %}aria-current="page"{% endif %}>{% icon "calendar" %}<span>{% translate "Leave" %}</span></a>
+      {% endif %}
 
       {% if perms.jobs.view_job or perms.customers.view_customer or perms.jobs.view_job_costing %}
       <div class="nav-label">{% translate "Operations" %}</div>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Afaq ERP VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-25 00:49+0530\n"
+"POT-Creation-Date: 2026-11-25 01:04+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ar\n"
@@ -95,6 +95,17 @@ msgstr[3] "%(n)s مصروفات غير معتمدة"
 msgstr[4] "%(n)s مصروفًا غير معتمد"
 msgstr[5] "%(n)s مصروف غير معتمد"
 
+#: core/templates/core/dashboard.html:79
+#, python-format
+msgid "%(n)s leave request waiting"
+msgid_plural "%(n)s leave requests waiting"
+msgstr[0] "لا توجد طلبات إجازة بانتظار الاعتماد"
+msgstr[1] "طلب إجازة واحد بانتظار الاعتماد"
+msgstr[2] "طلبا إجازة بانتظار الاعتماد"
+msgstr[3] "%(n)s طلبات إجازة بانتظار الاعتماد"
+msgstr[4] "%(n)s طلب إجازة بانتظار الاعتماد"
+msgstr[5] "%(n)s طلب إجازة بانتظار الاعتماد"
+
 #: core/templates/core/dashboard.html:59
 #, python-format
 msgid "%(n)s urgent"
@@ -106,7 +117,7 @@ msgstr[3] "%(n)s عاجلة"
 msgstr[4] "%(n)s عاجلًا"
 msgstr[5] "%(n)s عاجل"
 
-#: core/templates/core/dashboard.html:106
+#: core/templates/core/dashboard.html:115
 #, python-format
 msgid "%(n)s waiting for approval"
 msgid_plural "%(n)s waiting for approval"
@@ -127,6 +138,11 @@ msgstr "لا يوجد راتب مسجل لـ %(name)s في ذلك التاريخ
 #, python-format
 msgid "%(no)s is %(status)s and can't be edited"
 msgstr "%(no)s حالته %(status)s ولا يمكن تعديله"
+
+#: leave/services.py:95
+#, python-format
+msgid "%(type)s allows at most %(max)s days per request."
+msgstr "تسمح %(type)s بحد أقصى %(max)s يومًا لكل طلب."
 
 #: invoicing/models.py:171
 msgid "0%"
@@ -182,7 +198,7 @@ msgstr "أيام الغياب"
 msgid "Active"
 msgstr "نشط"
 
-#: core/templates/core/dashboard.html:77
+#: core/templates/core/dashboard.html:86
 msgid "Active employees"
 msgstr "الموظفون النشطون"
 
@@ -221,7 +237,7 @@ msgstr "أضف أول موظف"
 msgid "Additions"
 msgstr "الإضافات"
 
-#: templates/base.html:62
+#: templates/base.html:65
 msgid "Admin"
 msgstr "لوحة الإدارة"
 
@@ -237,11 +253,12 @@ msgstr "جميع الفئات"
 msgid "All customers"
 msgstr "جميع العملاء"
 
-#: core/templates/core/dashboard.html:132
+#: core/templates/core/dashboard.html:141
 msgid "All documents are valid for the next 30 days."
 msgstr "جميع الوثائق سارية خلال الثلاثين يومًا القادمة."
 
 #: hr/templates/hr/employee_detail.html:5
+#: leave/templates/leave/leave_list.html:24
 msgid "All employees"
 msgstr "جميع الموظفين"
 
@@ -257,11 +274,20 @@ msgstr "جميع الفواتير"
 msgid "All jobs"
 msgstr "جميع أوامر العمل"
 
+#: leave/templates/leave/leave_detail.html:5
+msgid "All leave"
+msgstr "جميع الإجازات"
+
+#: leave/templates/leave/leave_list.html:20
+msgid "All leave types"
+msgstr "جميع أنواع الإجازات"
+
 #: jobs/templates/jobs/job_list.html:22
 msgid "All services"
 msgstr "جميع الخدمات"
 
 #: expenses/templates/expenses/expense_list.html:32
+#: leave/templates/leave/leave_list.html:16
 msgid "All statuses"
 msgstr "جميع الحالات"
 
@@ -290,6 +316,23 @@ msgstr "لا يمكن إصدار فاتورة بتاريخ مستقبلي."
 msgid "An invoice total must be more than zero."
 msgstr "يجب أن يكون إجمالي الفاتورة أكبر من صفر."
 
+#: leave/templates/leave/leave_detail.html:45
+msgid "Annual leave balance"
+msgstr "رصيد الإجازة السنوية"
+
+#: leave/templates/leave/leave_form.html:9
+msgid "Annual leave counts working days (Sunday to Thursday); sick, unpaid and maternity leave count calendar days."
+msgstr "تُحتسب الإجازة السنوية بأيام العمل (من الأحد إلى الخميس)؛ وتُحتسب الإجازة المرضية وبدون راتب وإجازة الوضع بالأيام التقويمية."
+
+#: hr/templates/hr/employee_detail.html:80
+#: leave/templates/leave/leave_detail.html:47
+msgid "Annual leave earned"
+msgstr "الإجازة السنوية المستحقة"
+
+#: leave/templates/leave/leave_list.html:8
+msgid "Annual, sick and other leave, with approvals and balances."
+msgstr "الإجازات السنوية والمرضية وغيرها، مع الاعتمادات والأرصدة."
+
 #: customers/models.py:70
 msgid "Another customer already has this VAT number."
 msgstr "هذا الرقم الضريبي مسجل لعميل آخر."
@@ -307,6 +350,7 @@ msgid "Approval"
 msgstr "الاعتماد"
 
 #: expenses/templates/expenses/expense_detail.html:28
+#: leave/templates/leave/leave_detail.html:20
 #: payroll/templates/payroll/run_detail.html:19
 msgid "Approve"
 msgstr "اعتماد"
@@ -315,7 +359,7 @@ msgstr "اعتماد"
 msgid "Approve and lock this payroll? It cannot be changed afterwards."
 msgstr "اعتماد مسير الرواتب وقفله؟ لا يمكن تعديله بعد ذلك."
 
-#: expenses/models.py:74 payroll/models.py:124
+#: expenses/models.py:74 leave/models.py:51 payroll/models.py:124
 msgid "Approved"
 msgstr "معتمد"
 
@@ -324,7 +368,7 @@ msgstr "معتمد"
 msgid "Approved by"
 msgstr "اعتمده"
 
-#: core/templates/core/dashboard.html:103
+#: core/templates/core/dashboard.html:112
 msgid "Approved expenses"
 msgstr "المصروفات المعتمدة"
 
@@ -340,11 +384,20 @@ msgstr "عيّن فنيين لتسجيل ساعات عملهم."
 msgid "Attach the receipt before submitting."
 msgstr "أرفق الإيصال قبل التقديم."
 
+#: leave/services.py:147
+msgid "Attach the supporting document (e.g. medical certificate) first."
+msgstr "أرفق المستند الداعم (مثل التقرير الطبي) أولًا."
+
+#: hr/templates/hr/employee_detail.html:83
+#: leave/templates/leave/leave_detail.html:50
+msgid "Available"
+msgstr "المتاح"
+
 #: customers/templates/customers/customer_form.html:7
 #: expenses/templates/expenses/expense_form.html:7
 #: hr/templates/hr/employee_form.html:7
 #: invoicing/templates/invoicing/invoice_form.html:7
-#: jobs/templates/jobs/job_form.html:7
+#: jobs/templates/jobs/job_form.html:7 leave/templates/leave/leave_form.html:7
 msgid "Back"
 msgstr "رجوع"
 
@@ -425,6 +478,7 @@ msgstr "منشأة"
 #: hr/templates/hr/employee_form.html:30
 #: invoicing/templates/invoicing/invoice_form.html:52
 #: jobs/templates/jobs/job_form.html:30
+#: leave/templates/leave/leave_form.html:29
 #: payroll/templates/payroll/partials/payslip_form_row.html:19
 #: templates/registration/password_change_form.html:21
 msgid "Cancel"
@@ -434,7 +488,11 @@ msgstr "إلغاء"
 msgid "Cancel job"
 msgstr "إلغاء أمر العمل"
 
-#: jobs/models.py:40 jobs/templates/jobs/job_detail.html:58
+#: leave/templates/leave/leave_detail.html:24
+msgid "Cancel leave"
+msgstr "إلغاء الإجازة"
+
+#: jobs/models.py:40 jobs/templates/jobs/job_detail.html:58 leave/models.py:53
 msgid "Cancelled"
 msgstr "ملغى"
 
@@ -460,11 +518,11 @@ msgstr "نقدًا"
 msgid "Category"
 msgstr "الفئة"
 
-#: hr/templates/hr/employee_detail.html:74
+#: hr/templates/hr/employee_detail.html:98
 msgid "Change history"
 msgstr "سجل التغييرات"
 
-#: templates/base.html:86 templates/registration/password_change_form.html:3
+#: templates/base.html:89 templates/registration/password_change_form.html:3
 #: templates/registration/password_change_form.html:7
 #: templates/registration/password_change_form.html:22
 msgid "Change password"
@@ -579,7 +637,7 @@ msgid "Customer & dates"
 msgstr "العميل والتواريخ"
 
 #: customers/templates/customers/customer_list.html:3
-#: customers/templates/customers/customer_list.html:7 templates/base.html:38
+#: customers/templates/customers/customer_list.html:7 templates/base.html:41
 msgid "Customers"
 msgstr "العملاء"
 
@@ -609,11 +667,16 @@ msgstr "تاريخ الميلاد"
 msgid "Date of birth must be before the hire date."
 msgstr "يجب أن يكون تاريخ الميلاد قبل تاريخ التعيين."
 
+#: leave/templates/leave/leave_list.html:32
+msgid "Days"
+msgstr "الأيام"
+
 #: expenses/templates/expenses/expense_detail.html:65
 msgid "Decided at"
 msgstr "تاريخ القرار"
 
 #: expenses/templates/expenses/expense_detail.html:64
+#: leave/templates/leave/leave_detail.html:40
 msgid "Decided by"
 msgstr "صاحب القرار"
 
@@ -634,14 +697,19 @@ msgid "Description"
 msgstr "الوصف"
 
 #: jobs/templates/jobs/job_detail.html:62
+#: leave/templates/leave/leave_detail.html:33
 msgid "Details"
 msgstr "التفاصيل"
+
+#: leave/templates/leave/leave_detail.html:37
+msgid "Document"
+msgstr "المستند"
 
 #: hr/templates/hr/employee_detail.html:44
 msgid "Documents"
 msgstr "الوثائق"
 
-#: core/templates/core/dashboard.html:82
+#: core/templates/core/dashboard.html:91
 #, python-format
 msgid "Documents expiring in %(expiry_window)s days"
 msgstr "وثائق تنتهي خلال %(expiry_window)s يومًا"
@@ -740,17 +808,19 @@ msgstr "البريد الإلكتروني"
 
 #: hr/templates/hr/expiring_documents.html:28
 #: hr/templates/hr/partials/employee_table.html:7
+#: leave/templates/leave/leave_list.html:23
+#: leave/templates/leave/leave_list.html:32
 #: payroll/templates/payroll/payslip_detail.html:20
 #: payroll/templates/payroll/run_detail.html:52
 msgid "Employee"
 msgstr "الموظف"
 
-#: hr/views.py:44
+#: hr/views.py:52
 #, python-format
 msgid "Employee %(no)s created."
 msgstr "تم إنشاء الموظف %(no)s."
 
-#: hr/views.py:56
+#: hr/views.py:64
 #, python-format
 msgid "Employee %(no)s updated."
 msgstr "تم تحديث بيانات الموظف %(no)s."
@@ -785,6 +855,7 @@ msgid "Enter a valid Saudi IBAN (SA followed by 22 characters)."
 msgstr "أدخل رقم آيبان سعودي صحيح (SA متبوعًا بـ 22 خانة)."
 
 #: expenses/templates/expenses/expense_detail.html:62
+#: leave/templates/leave/leave_detail.html:39
 msgid "Entered by"
 msgstr "أدخله"
 
@@ -840,7 +911,7 @@ msgstr "تفاصيل المصروف"
 
 #: expenses/templates/expenses/expense_list.html:3
 #: expenses/templates/expenses/expense_list.html:7
-#: jobs/templates/jobs/profitability.html:29 templates/base.html:57
+#: jobs/templates/jobs/profitability.html:29 templates/base.html:60
 msgid "Expenses"
 msgstr "المصروفات"
 
@@ -848,7 +919,7 @@ msgstr "المصروفات"
 msgid "Expenses (approved, excl. VAT)"
 msgstr "المصروفات (المعتمدة، غير شاملة الضريبة)"
 
-#: core/templates/core/dashboard.html:127
+#: core/templates/core/dashboard.html:136
 msgid "Expired"
 msgstr "منتهية"
 
@@ -872,7 +943,7 @@ msgstr "تنتهي اليوم"
 msgid "Expiring documents"
 msgstr "الوثائق قاربت على الانتهاء"
 
-#: core/templates/core/dashboard.html:115
+#: core/templates/core/dashboard.html:124
 msgid "Expiring soon"
 msgstr "تنتهي قريبًا"
 
@@ -887,10 +958,11 @@ msgstr "الأرقام وفق نموذج إقرار ضريبة القيمة ال
 #: expenses/templates/expenses/expense_list.html:35
 #: invoicing/templates/invoicing/invoice_list.html:26
 #: jobs/templates/jobs/job_list.html:34
+#: leave/templates/leave/leave_list.html:27
 msgid "Filter"
 msgstr "تصفية"
 
-#: templates/base.html:42
+#: templates/base.html:45
 msgid "Finance"
 msgstr "المالية"
 
@@ -899,6 +971,7 @@ msgid "Fixed"
 msgstr "الثابت"
 
 #: invoicing/templates/invoicing/statement.html:8
+#: leave/templates/leave/leave_list.html:32
 msgid "From"
 msgstr "من"
 
@@ -929,6 +1002,10 @@ msgstr "الجنس"
 #: jobs/services.py:40
 msgid "Give a reason for cancelling."
 msgstr "اذكر سبب الإلغاء."
+
+#: leave/services.py:162
+msgid "Give a reason for rejecting."
+msgstr "اذكر سبب الرفض."
 
 #: expenses/services.py:57
 msgid "Give a reason so the submitter can fix it."
@@ -1052,7 +1129,7 @@ msgid "Invoice total"
 msgstr "إجمالي الفاتورة"
 
 #: invoicing/templates/invoicing/invoice_list.html:3
-#: invoicing/templates/invoicing/invoice_list.html:7 templates/base.html:45
+#: invoicing/templates/invoicing/invoice_list.html:7 templates/base.html:48
 msgid "Invoices"
 msgstr "الفواتير"
 
@@ -1107,7 +1184,7 @@ msgid "Job profit"
 msgstr "ربح أوامر العمل"
 
 #: jobs/templates/jobs/profitability.html:3
-#: jobs/templates/jobs/profitability.html:7 templates/base.html:35
+#: jobs/templates/jobs/profitability.html:7 templates/base.html:38
 msgid "Job profitability"
 msgstr "ربحية أوامر العمل"
 
@@ -1119,7 +1196,7 @@ msgstr "المسمى الوظيفي"
 
 #: customers/templates/customers/customer_detail.html:33
 #: jobs/templates/jobs/job_list.html:3 jobs/templates/jobs/job_list.html:7
-#: templates/base.html:32
+#: templates/base.html:35
 msgid "Jobs"
 msgstr "أوامر العمل"
 
@@ -1136,9 +1213,41 @@ msgstr "كينيا"
 msgid "Labour"
 msgstr "العمالة"
 
+#: hr/templates/hr/employee_detail.html:76
+#: leave/templates/leave/leave_detail.html:3
+#: leave/templates/leave/leave_list.html:3
+#: leave/templates/leave/leave_list.html:7 templates/base.html:28
+msgid "Leave"
+msgstr "الإجازات"
+
+#: leave/views.py:88
+msgid "Leave approved."
+msgstr "تم اعتماد الإجازة."
+
+#: leave/views.py:103
+msgid "Leave cancelled."
+msgstr "تم إلغاء الإجازة."
+
+#: leave/templates/leave/leave_form.html:16
+msgid "Leave details"
+msgstr "تفاصيل الإجازة"
+
 #: jobs/models.py:74
 msgid "Leave empty to use the customer's address."
 msgstr "اتركه فارغًا لاستخدام عنوان العميل."
+
+#: leave/views.py:96
+msgid "Leave rejected."
+msgstr "تم رفض الإجازة."
+
+#: leave/views.py:56
+msgid "Leave request saved and waiting for approval."
+msgstr "تم حفظ طلب الإجازة وهو بانتظار الاعتماد."
+
+#: leave/templates/leave/leave_list.html:19
+#: leave/templates/leave/leave_list.html:32
+msgid "Leave type"
+msgstr "نوع الإجازة"
 
 #: invoicing/templates/invoicing/invoice_form.html:29
 msgid "Lines"
@@ -1164,7 +1273,7 @@ msgstr "تسجيل"
 msgid "Log in"
 msgstr "تسجيل الدخول"
 
-#: templates/base.html:89
+#: templates/base.html:92
 msgid "Log out"
 msgstr "تسجيل الخروج"
 
@@ -1202,7 +1311,11 @@ msgstr "تم حذف المادة."
 msgid "Materials"
 msgstr "المواد"
 
-#: templates/base.html:71
+#: leave/models.py:67
+msgid "Medical certificate or other supporting document (PDF, JPG or PNG)."
+msgstr "تقرير طبي أو مستند داعم آخر (PDF أو JPG أو PNG)."
+
+#: templates/base.html:74
 msgid "Menu"
 msgstr "القائمة"
 
@@ -1332,6 +1445,14 @@ msgstr "لم يكتمل أي أمر عمل في هذا الشهر."
 msgid "No jobs yet for this customer."
 msgstr "لا توجد أوامر عمل لهذا العميل بعد."
 
+#: leave/templates/leave/leave_list.html:50
+msgid "No leave requests found"
+msgstr "لم يتم العثور على طلبات إجازة"
+
+#: hr/templates/hr/employee_detail.html:91
+msgid "No leave requests yet."
+msgstr "لا توجد طلبات إجازة بعد."
+
 #: invoicing/templates/invoicing/invoice_detail.html:91
 msgid "No lines yet."
 msgstr "لا توجد بنود بعد."
@@ -1356,6 +1477,10 @@ msgstr "لم يُحدد هيكل راتب لهذا الموظف بعد."
 msgid "No technician assigned yet."
 msgstr "لم يُعيَّن أي فني بعد."
 
+#: leave/templates/leave/leave_detail.html:36
+msgid "No — deducted from salary"
+msgstr "لا — تُخصم من الراتب"
+
 #: invoicing/templates/invoicing/receivables.html:50
 msgid "Nobody owes you anything right now."
 msgstr "لا توجد مستحقات على أي عميل حاليًا."
@@ -1379,6 +1504,11 @@ msgstr "عادي"
 #: expenses/templates/expenses/expense_detail.html:56
 msgid "Not attached"
 msgstr "غير مرفق"
+
+#: leave/services.py:109
+#, python-format
+msgid "Not enough annual leave balance: %(days)s days requested, %(left)s available."
+msgstr "رصيد الإجازة السنوية غير كافٍ: المطلوب %(days)s يومًا، والمتاح %(left)s."
 
 #: invoicing/templates/invoicing/vat_return.html:24
 msgid "Not included yet — finish these before filing:"
@@ -1412,6 +1542,10 @@ msgstr "ساعات إضافية"
 msgid "On leave"
 msgstr "في إجازة"
 
+#: core/templates/core/dashboard.html:77
+msgid "On leave today"
+msgstr "في إجازة اليوم"
+
 #: invoicing/services.py:184
 #, python-format
 msgid "Only %(bal)s is still owed on this invoice."
@@ -1441,6 +1575,18 @@ msgstr "لا يمكن تعديل إلا المصروفات المسودة أو �
 msgid "Only draft or rejected expenses can be submitted."
 msgstr "لا يمكن تقديم إلا المصروفات المسودة أو المرفوضة."
 
+#: leave/services.py:177
+msgid "Only pending leave, or approved leave that has not started, can be cancelled."
+msgstr "لا يمكن إلغاء إلا الإجازات المعلقة، أو الإجازات المعتمدة التي لم تبدأ بعد."
+
+#: leave/services.py:145
+msgid "Only pending requests can be approved."
+msgstr "لا يمكن اعتماد إلا الطلبات المعلقة."
+
+#: leave/services.py:159
+msgid "Only pending requests can be rejected."
+msgstr "لا يمكن رفض إلا الطلبات المعلقة."
+
 #: expenses/services.py:40
 msgid "Only submitted expenses can be approved."
 msgstr "لا يمكن اعتماد إلا المصروفات المقدّمة."
@@ -1453,6 +1599,10 @@ msgstr "لا يمكن رفض إلا المصروفات المقدّمة."
 msgid "Only technicians assigned to this job can log hours on it."
 msgstr "يمكن فقط للفنيين المعيّنين على أمر العمل تسجيل ساعات عليه."
 
+#: leave/templates/leave/leave_detail.html:38
+msgid "Open document"
+msgstr "فتح المستند"
+
 #: core/templates/core/dashboard.html:56 jobs/templates/jobs/job_list.html:17
 msgid "Open jobs"
 msgstr "أوامر العمل المفتوحة"
@@ -1461,7 +1611,7 @@ msgstr "أوامر العمل المفتوحة"
 msgid "Open receipt"
 msgstr "فتح الإيصال"
 
-#: templates/base.html:29
+#: templates/base.html:32
 msgid "Operations"
 msgstr "العمليات"
 
@@ -1482,6 +1632,10 @@ msgstr "بدلات أخرى"
 #: payroll/templates/payroll/payslip_detail.html:46
 msgid "Other deductions"
 msgstr "استقطاعات أخرى"
+
+#: leave/models.py:21
+msgid "Otherwise only working days (Sunday to Thursday) are counted."
+msgstr "وإلا تُحتسب أيام العمل فقط (من الأحد إلى الخميس)."
 
 #: invoicing/templates/invoicing/vat_return.html:31
 msgid "Output VAT (sales)"
@@ -1516,7 +1670,8 @@ msgstr "ملف PDF أو JPG أو PNG بحد أقصى 5 ميجابايت. مطل�
 #: invoicing/templates/invoicing/invoice_detail.html:115
 #: invoicing/templates/invoicing/invoice_detail.html:122
 #: invoicing/templates/invoicing/invoice_list.html:24
-#: invoicing/templates/invoicing/invoice_list.html:40 payroll/models.py:125
+#: invoicing/templates/invoicing/invoice_list.html:40
+#: leave/templates/leave/leave_detail.html:36 payroll/models.py:125
 #: payroll/templates/payroll/run_detail.html:31
 msgid "Paid"
 msgstr "مدفوع"
@@ -1583,10 +1738,10 @@ msgstr "المدفوعات"
 msgid "Payments can only be recorded against issued invoices."
 msgstr "لا يمكن تسجيل المدفوعات إلا على فواتير صادرة."
 
-#: core/templates/core/dashboard.html:90
+#: core/templates/core/dashboard.html:99
 #: payroll/templates/payroll/run_detail.html:3
 #: payroll/templates/payroll/run_detail.html:6
-#: payroll/templates/payroll/run_list.html:3 templates/base.html:54
+#: payroll/templates/payroll/run_list.html:3 templates/base.html:57
 msgid "Payroll"
 msgstr "مسير الرواتب"
 
@@ -1631,6 +1786,11 @@ msgstr "قسيمة الراتب"
 #: payroll/templates/payroll/payslip_detail.html:14
 msgid "Payslip for"
 msgstr "قسيمة راتب شهر"
+
+#: hr/templates/hr/employee_detail.html:82 leave/models.py:50
+#: leave/templates/leave/leave_detail.html:49
+msgid "Pending"
+msgstr "معلّق"
 
 #: templates/base.html:23
 msgid "People"
@@ -1693,6 +1853,10 @@ msgstr "عرض السعر (غير شامل الضريبة)"
 msgid "Rate"
 msgstr "النسبة"
 
+#: leave/templates/leave/leave_detail.html:35
+msgid "Reason"
+msgstr "السبب"
+
 #: invoicing/templates/invoicing/invoice_detail.html:160
 msgid "Reason (printed on the credit note)"
 msgstr "السبب (يُطبع على الإشعار الدائن)"
@@ -1700,6 +1864,10 @@ msgstr "السبب (يُطبع على الإشعار الدائن)"
 #: expenses/templates/expenses/expense_detail.html:74
 msgid "Reason (the submitter will see this)"
 msgstr "السبب (سيظهر لمقدم الطلب)"
+
+#: leave/templates/leave/leave_detail.html:60
+msgid "Reason for rejecting"
+msgstr "سبب الرفض"
 
 #: jobs/templates/jobs/job_detail.html:50
 msgid "Reason to cancel"
@@ -1719,7 +1887,7 @@ msgid "Receipt must be 5 MB or smaller."
 msgstr "يجب ألا يتجاوز حجم الإيصال 5 ميجابايت."
 
 #: invoicing/templates/invoicing/receivables.html:3
-#: invoicing/templates/invoicing/receivables.html:7 templates/base.html:48
+#: invoicing/templates/invoicing/receivables.html:7 templates/base.html:51
 msgid "Receivables"
 msgstr "الذمم المدينة"
 
@@ -1737,10 +1905,13 @@ msgstr "المرجع"
 
 #: expenses/templates/expenses/expense_detail.html:72
 #: expenses/templates/expenses/expense_detail.html:75
+#: leave/templates/leave/leave_detail.html:58
+#: leave/templates/leave/leave_detail.html:61
 msgid "Reject"
 msgstr "رفض"
 
 #: expenses/models.py:75 expenses/templates/expenses/expense_detail.html:35
+#: leave/models.py:52 leave/templates/leave/leave_detail.html:29
 msgid "Rejected"
 msgstr "مرفوض"
 
@@ -1754,6 +1925,17 @@ msgstr "حذف"
 #: invoicing/templates/invoicing/invoice_detail.html:132
 msgid "Remove this payment?"
 msgstr "حذف هذه الدفعة؟"
+
+#: hr/templates/hr/employee_detail.html:77
+#: leave/templates/leave/leave_form.html:3
+#: leave/templates/leave/leave_form.html:8
+#: leave/templates/leave/leave_list.html:10
+msgid "Request leave"
+msgstr "طلب إجازة"
+
+#: leave/templates/leave/leave_detail.html:38
+msgid "Required before approval"
+msgstr "مطلوب قبل الاعتماد"
 
 #: customers/templates/customers/customer_form.html:17
 msgid "Required for VAT-registered businesses — it is printed on tax invoices."
@@ -1872,6 +2054,11 @@ msgstr "حدد مبلغ عرض السعر لأمر العمل قبل إصدار 
 msgid "Show"
 msgstr "عرض"
 
+#: leave/services.py:116
+#, python-format
+msgid "Sick leave is limited to %(max)s days a year; %(used)s already used."
+msgstr "الإجازة المرضية محدودة بـ %(max)s يومًا في السنة؛ تم استخدام %(used)s يومًا."
+
 #: templates/registration/login.html:6
 msgid "Sign in to continue to your workspace."
 msgstr "سجّل الدخول للمتابعة إلى مساحة عملك."
@@ -1914,6 +2101,8 @@ msgstr "كشف الحساب"
 #: invoicing/templates/invoicing/invoice_list.html:31
 #: jobs/templates/jobs/job_detail.html:173 jobs/templates/jobs/job_list.html:16
 #: jobs/templates/jobs/job_list.html:40
+#: leave/templates/leave/leave_list.html:15
+#: leave/templates/leave/leave_list.html:32
 #: payroll/templates/payroll/run_list.html:31
 msgid "Status"
 msgstr "الحالة"
@@ -1921,6 +2110,10 @@ msgstr "الحالة"
 #: expenses/templates/expenses/expense_detail.html:23
 msgid "Submit for approval"
 msgstr "تقديم للاعتماد"
+
+#: leave/templates/leave/leave_form.html:30
+msgid "Submit request"
+msgstr "تقديم الطلب"
 
 #: expenses/models.py:73 expenses/templates/expenses/expense_detail.html:63
 msgid "Submitted"
@@ -1934,9 +2127,14 @@ msgstr "السودان"
 msgid "Syria"
 msgstr "سوريا"
 
-#: templates/base.html:61
+#: templates/base.html:64
 msgid "System"
 msgstr "النظام"
+
+#: hr/templates/hr/employee_detail.html:81
+#: leave/templates/leave/leave_detail.html:48
+msgid "Taken"
+msgstr "المستخدم"
 
 #: invoicing/models.py:52
 msgid "Tax invoice (B2B)"
@@ -1973,9 +2171,29 @@ msgstr "لا يمكن أن يكون تاريخ انتهاء الخدمة قبل 
 msgid "The credit note (%(cn)s) exceeds what is still owed on %(no)s (%(bal)s)."
 msgstr "الإشعار الدائن (%(cn)s) يتجاوز المبلغ المتبقي على %(no)s (%(bal)s)."
 
+#: leave/services.py:86
+msgid "The employee had not joined yet on that date."
+msgstr "لم يكن الموظف قد التحق بالعمل في ذلك التاريخ."
+
+#: leave/services.py:88
+msgid "The employee's service ends before that date."
+msgstr "تنتهي خدمة الموظف قبل ذلك التاريخ."
+
 #: jobs/costing.py:56
 msgid "The job did not exist yet on that date."
 msgstr "لم يكن أمر العمل موجودًا في ذلك التاريخ."
+
+#: leave/services.py:84
+msgid "The leave cannot end before it starts."
+msgstr "لا يمكن أن تنتهي الإجازة قبل بدايتها."
+
+#: leave/services.py:92
+msgid "These dates contain no working days."
+msgstr "لا تتضمن هذه التواريخ أي أيام عمل."
+
+#: leave/services.py:103
+msgid "These dates overlap another leave of this employee."
+msgstr "تتداخل هذه التواريخ مع إجازة أخرى لهذا الموظف."
 
 #: payroll/templates/payroll/run_detail.html:36
 msgid "These employees have no salary structure and were skipped:"
@@ -1989,7 +2207,11 @@ msgstr "هذه الفاتورة صادرة بالفعل."
 msgid "This job already has an invoice."
 msgstr "يوجد لأمر العمل هذا فاتورة بالفعل."
 
-#: core/templates/core/dashboard.html:95
+#: leave/services.py:90
+msgid "This leave type is no longer in use."
+msgstr "نوع الإجازة هذا لم يعد مستخدمًا."
+
+#: core/templates/core/dashboard.html:104
 msgid "This month's payroll has not been created yet."
 msgstr "لم يُنشأ مسير رواتب هذا الشهر بعد."
 
@@ -1998,6 +2220,7 @@ msgid "Timeline"
 msgstr "التسلسل الزمني"
 
 #: invoicing/templates/invoicing/statement.html:9
+#: leave/templates/leave/leave_list.html:32
 msgid "To"
 msgstr "إلى"
 
@@ -2092,6 +2315,7 @@ msgid "Unknown status."
 msgstr "حالة غير معروفة."
 
 #: invoicing/templates/invoicing/invoice_detail.html:118
+#: leave/templates/leave/leave_list.html:37
 msgid "Unpaid"
 msgstr "غير مدفوع"
 
@@ -2145,7 +2369,7 @@ msgid "VAT refundable"
 msgstr "الضريبة القابلة للاسترداد"
 
 #: invoicing/templates/invoicing/vat_return.html:3
-#: invoicing/templates/invoicing/vat_return.html:7 templates/base.html:51
+#: invoicing/templates/invoicing/vat_return.html:7 templates/base.html:54
 msgid "VAT return"
 msgstr "إقرار ضريبة القيمة المضافة"
 
@@ -2155,7 +2379,7 @@ msgstr "إقرار ضريبة القيمة المضافة"
 msgid "Vendor"
 msgstr "المورد"
 
-#: core/templates/core/dashboard.html:116
+#: core/templates/core/dashboard.html:125
 msgid "View all"
 msgstr "عرض الكل"
 
@@ -2193,6 +2417,10 @@ msgstr "اسم المستخدم أو كلمة المرور غير صحيحة."
 msgid "Yemen"
 msgstr "اليمن"
 
+#: leave/templates/leave/leave_detail.html:36
+msgid "Yes"
+msgstr "نعم"
+
 #: expenses/services.py:17
 msgid "You cannot approve or reject your own expense."
 msgstr "لا يمكنك اعتماد أو رفض مصروفك الخاص."
@@ -2226,7 +2454,7 @@ msgstr "أيام الغياب"
 msgid "absence deduction"
 msgstr "خصم الغياب"
 
-#: customers/models.py:56 expenses/models.py:27
+#: customers/models.py:56 expenses/models.py:27 leave/models.py:25
 msgid "active"
 msgstr "نشط"
 
@@ -2258,7 +2486,7 @@ msgstr "المتصفح"
 msgid "building no."
 msgstr "رقم المبنى"
 
-#: hr/templates/hr/employee_detail.html:81
+#: hr/templates/hr/employee_detail.html:105
 msgid "by"
 msgstr "بواسطة"
 
@@ -2274,7 +2502,7 @@ msgstr "الفئة"
 msgid "city"
 msgstr "المدينة"
 
-#: expenses/models.py:24 hr/models.py:25
+#: expenses/models.py:24 hr/models.py:25 leave/models.py:13
 msgid "code"
 msgstr "الرمز"
 
@@ -2285,6 +2513,10 @@ msgstr "تم تحصيله هذا الشهر"
 #: payroll/models.py:87
 msgid "contribution salary cap"
 msgstr "الحد الأعلى للأجر الخاضع للاشتراك"
+
+#: leave/models.py:20
+msgid "counts calendar days"
+msgstr "يحتسب الأيام التقويمية"
 
 #: expenses/models.py:122 jobs/models.py:89
 msgid "created by"
@@ -2306,10 +2538,20 @@ msgstr "التاريخ"
 msgid "date of birth"
 msgstr "تاريخ الميلاد"
 
-#: hr/templates/hr/expiring_documents.html:17
+#: hr/templates/hr/employee_detail.html:87
+#: hr/templates/hr/expiring_documents.html:17 leave/models.py:63
+#: leave/templates/leave/leave_detail.html:14
 #: payroll/templates/payroll/payslip_detail.html:44
 msgid "days"
 msgstr "أيام"
+
+#: leave/models.py:78
+msgid "decision note"
+msgstr "ملاحظة القرار"
+
+#: leave/models.py:17
+msgid "deducted from salary"
+msgstr "يُخصم من الراتب"
 
 #: hr/models.py:31 hr/models.py:110
 msgid "department"
@@ -2328,6 +2570,10 @@ msgstr "الوصف"
 msgid "district"
 msgstr "الحي"
 
+#: leave/models.py:66
+msgid "document"
+msgstr "المستند"
+
 #: invoicing/models.py:67
 msgid "due date"
 msgstr "تاريخ الاستحقاق"
@@ -2340,7 +2586,8 @@ msgstr "ساري من"
 msgid "email"
 msgstr "البريد الإلكتروني"
 
-#: hr/models.py:139 payroll/models.py:46 payroll/models.py:201
+#: hr/models.py:139 leave/models.py:56 payroll/models.py:46
+#: payroll/models.py:201
 msgid "employee"
 msgstr "الموظف"
 
@@ -2384,7 +2631,7 @@ msgstr "الاسم الأول"
 msgid "fixed salary"
 msgstr "الراتب الثابت"
 
-#: payroll/templates/payroll/employee_salary.html:13
+#: leave/models.py:61 payroll/templates/payroll/employee_salary.html:13
 msgid "from"
 msgstr "من"
 
@@ -2481,6 +2728,22 @@ msgstr "سجل عمالة"
 msgid "last name"
 msgstr "اسم العائلة"
 
+#: leave/models.py:86
+msgid "leave request"
+msgstr "طلب إجازة"
+
+#: leave/models.py:87
+msgid "leave requests"
+msgstr "طلبات الإجازة"
+
+#: leave/models.py:29 leave/models.py:59
+msgid "leave type"
+msgstr "نوع الإجازة"
+
+#: leave/models.py:30
+msgid "leave types"
+msgstr "أنواع الإجازات"
+
 #: security/models.py:20
 msgid "login event"
 msgstr "عملية دخول"
@@ -2492,6 +2755,10 @@ msgstr "سجل عمليات الدخول"
 #: jobs/templates/jobs/job_detail.html:100
 msgid "margin"
 msgstr "هامش الربح"
+
+#: leave/models.py:23
+msgid "max days per request"
+msgstr "الحد الأقصى للأيام لكل طلب"
 
 #: invoicing/models.py:226
 msgid "method"
@@ -2510,10 +2777,11 @@ msgid "name"
 msgstr "الاسم"
 
 #: customers/models.py:37 expenses/models.py:26 hr/models.py:27
+#: leave/models.py:15
 msgid "name (Arabic)"
 msgstr "الاسم (بالعربية)"
 
-#: expenses/models.py:25 hr/models.py:26
+#: expenses/models.py:25 hr/models.py:26 leave/models.py:14
 msgid "name (English)"
 msgstr "الاسم (بالإنجليزية)"
 
@@ -2524,6 +2792,10 @@ msgstr "رقم الهوية / الإقامة"
 #: hr/models.py:87
 msgid "nationality"
 msgstr "الجنسية"
+
+#: leave/models.py:24
+msgid "needs a document"
+msgstr "يتطلب مستندًا"
 
 #: payroll/models.py:230
 msgid "net pay"
@@ -2576,6 +2848,10 @@ msgstr "العمل الإضافي"
 #: payroll/models.py:206
 msgid "overtime hours"
 msgstr "ساعات العمل الإضافي"
+
+#: leave/models.py:16
+msgid "paid"
+msgstr "مدفوعة الأجر"
 
 #: expenses/models.py:110
 msgid "paid by"
@@ -2637,7 +2913,7 @@ msgstr "عرض السعر"
 msgid "quoted amount (excl. VAT)"
 msgstr "مبلغ عرض السعر (غير شامل الضريبة)"
 
-#: invoicing/models.py:74
+#: invoicing/models.py:74 leave/models.py:64
 msgid "reason"
 msgstr "السبب"
 
@@ -2674,7 +2950,7 @@ msgid "site address"
 msgstr "عنوان الموقع"
 
 #: expenses/models.py:120 hr/models.py:116 invoicing/models.py:57
-#: jobs/models.py:77 payroll/models.py:134
+#: jobs/models.py:77 leave/models.py:69 payroll/models.py:134
 msgid "status"
 msgstr "الحالة"
 
@@ -2709,6 +2985,10 @@ msgstr "الوقت"
 #: jobs/models.py:70
 msgid "title"
 msgstr "العنوان"
+
+#: leave/models.py:62
+msgid "to"
+msgstr "إلى"
 
 #: invoicing/models.py:188 jobs/models.py:146
 msgid "total"
@@ -2749,6 +3029,10 @@ msgstr "سعر الوحدة (غير شامل الضريبة)"
 #: security/models.py:9
 msgid "username"
 msgstr "اسم المستخدم"
+
+#: leave/models.py:18
+msgid "uses annual leave balance"
+msgstr "يُخصم من رصيد الإجازة السنوية"
 
 #: expenses/models.py:92
 msgid "vendor"

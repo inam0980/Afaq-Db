@@ -15,6 +15,7 @@ from invoicing.vat_return import parse_period, vat_return
 from hr.models import Employee
 from jobs.costing import profitability
 from jobs.models import Job
+from leave.models import LeaveRequest
 from payroll.models import PayrollRun
 
 EXPIRY_WINDOW_DAYS = 30
@@ -74,6 +75,13 @@ def dashboard(request):
                 completed_at__year=today.year,
                 completed_at__month=today.month,
             ).count(),
+        )
+
+    context["show_leave"] = user.has_perm("leave.view_leaverequest")
+    if context["show_leave"]:
+        context.update(
+            on_leave_today=LeaveRequest.objects.on_leave(today).count(),
+            pending_leave=LeaveRequest.objects.filter(status=LeaveRequest.Status.PENDING).count(),
         )
 
     context["show_receivables"] = user.has_perm("invoicing.view_invoice")
