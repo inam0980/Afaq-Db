@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     "invoicing",
     "security",
     "leave",
+    "dataimport",
+    "backups",
+    "loans",
 ]
 
 MIDDLEWARE = [
@@ -137,6 +140,15 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # Uploaded files (receipts). Deliberately NOT served under a public URL;
 # downloads go through permission-checked views.
 MEDIA_ROOT = Path(env("MEDIA_ROOT", default=str(BASE_DIR / "media")))
+
+# Backups (`manage.py backup`). Copy BACKUP_DIR to another disk / NAS / cloud.
+BACKUP_DIR = Path(env("BACKUP_DIR", default="") or BASE_DIR / "backups_data")
+BACKUP_KEEP = env.int("BACKUP_KEEP", default=14)
+BACKUP_WARN_HOURS = env.int("BACKUP_WARN_HOURS", default=36)   # dashboard warning for staff
+PG_BIN_DIR = env("PG_BIN_DIR", default="")
+
+# Loans: all loan deductions in one payslip are capped at this % of the fixed wage (Art. 92).
+LOAN_MAX_DEDUCTION_PERCENT = env.int("LOAN_MAX_DEDUCTION_PERCENT", default=10)   # e.g. C:/Program Files/PostgreSQL/18/bin (blank = PATH)
 
 
 # Authentication

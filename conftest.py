@@ -14,6 +14,7 @@ def _fast_password_hashing(settings):
 def _isolated_media_root(settings, tmp_path):
     # Uploaded files (receipts) go to a throw-away folder per test.
     settings.MEDIA_ROOT = tmp_path / "media"
+    settings.BACKUP_DIR = tmp_path / "backups"
 
 
 def _user_with_perms(django_user_model, username, codenames):

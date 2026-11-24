@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views.decorators.http import require_GET
 
+from backups.services import backup_overdue, latest_backup
 from core.health import check_database
 from expenses.models import Expense
 from invoicing.balances import aging
@@ -104,5 +105,8 @@ def dashboard(request):
     if context["show_job_profit"]:
         report = profitability(today.year, today.month)
         context.update(month_job_profit=report.profit, month_jobs_done=len(report.rows))
+
+    if user.is_staff and backup_overdue():
+        context["backup_warning"] = {"latest": latest_backup()}
 
     return render(request, "core/dashboard.html", context)

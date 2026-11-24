@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% translate "Data import" %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{% translate "Data import" %}</h1>
+    <p class="muted">{% translate "Bring existing records in from Excel or CSV. Download the template, fill it in, upload it, check the preview, then confirm." %}</p>
+  </div>
+</div>
+<div class="grid">
+  {% for importer in importers %}
+  <section class="card">
+    <h2>{% icon "upload" %} {{ importer.title }}</h2>
+    <p class="muted">{% translate "Columns" %}: {{ importer.columns|join:", " }}</p>
+    <div class="form-actions">
+      <a class="btn btn-ghost" href="{% url 'dataimport:template' importer.kind %}">{% icon "file-text" %}{% translate "Download template" %}</a>
+      <a class="btn" href="{% url 'dataimport:upload' importer.kind %}">{% icon "upload" %}{% translate "Import" %}</a>
+    </div>
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}

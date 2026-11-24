@@ -42,8 +42,10 @@
       <thead><tr><th>{% translate "Deductions" %}</th><th>SAR</th></tr></thead>
       <tbody>
         <tr><td>{% translate "Absence" %} ({{ slip.absence_days }} {% translate "days" %}{% if slip.days_not_employed %} + {{ slip.days_not_employed }} {% translate "not employed" %}{% endif %})</td><td>{{ slip.absence }}</td></tr>
+        {% if slip.leave_days %}<tr><td class="muted">↳ {% translate "Unpaid leave" %}: {{ slip.leave_days }} {% translate "days" %}</td><td></td></tr>{% endif %}
         <tr><td>{% translate "GOSI (employee)" %}</td><td>{{ slip.gosi_employee }}</td></tr>
         <tr><td>{% translate "Other deductions" %}</td><td>{{ slip.deductions }}</td></tr>
+        {% if slip.loan_deduction %}<tr><td>{% translate "Loan / advance repayment" %}</td><td>{{ slip.loan_deduction }}</td></tr>{% endif %}
         <tr><th>{% translate "Total deductions" %}</th><th>{{ slip.total_deductions }}</th></tr>
       </tbody>
     </table>

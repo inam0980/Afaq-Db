@@ -6,7 +6,7 @@
   </td>
   <td>{{ slip.gross_fixed }}</td>
   <td>{{ slip.overtime_hours }}{% if slip.overtime %} <span class="muted">({{ slip.overtime }})</span>{% endif %}</td>
-  <td>{{ slip.absence_days }}{% if slip.absence %} <span class="muted">(−{{ slip.absence }})</span>{% endif %}</td>
+  <td>{{ slip.absence_days }}{% if slip.leave_days %} <span class="muted">+ {{ slip.leave_days }} {% translate "leave" %}</span>{% endif %}{% if slip.absence %} <span class="muted">(−{{ slip.absence }})</span>{% endif %}</td>
   <td>{{ slip.additions }}</td>
   <td>{{ slip.deductions }}</td>
   <td>{{ slip.gosi_employee }}</td>

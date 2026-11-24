@@ -654,6 +654,13 @@ AR = {
     "to": "إلى",
     "uses annual leave balance": "يُخصم من رصيد الإجازة السنوية",
 
+    # --- leave in payroll ---------------------------------------------------------------
+    "Unpaid leave": "إجازة بدون راتب",
+    "Unpaid leave and reduced-pay sick days from approved leave (Art. 117).":
+        "أيام الإجازة بدون راتب وأيام الإجازة المرضية بأجر مخفّض من الإجازات المعتمدة (المادة 117).",
+    "leave": "إجازة",
+    "unpaid leave days": "أيام الإجازة غير المدفوعة",
+
     # --- model field names (lower case in source) ---------------------------------------
     "absence days": "أيام الغياب",
     "absence deduction": "خصم الغياب",
@@ -785,4 +792,107 @@ AR = {
     "vendor VAT number": "الرقم الضريبي للمورد",
     "vendor invoice no.": "رقم فاتورة المورد",
     "year": "السنة",
+
+    # --- data import -----------------------------------------------------------------
+    "A customer with this mobile already exists.": "يوجد عميل بهذا الجوال مسبقًا.",
+    "Bring existing records in from Excel or CSV. Download the template, fill it in, upload it, check the preview, then confirm.":
+        "أدخل السجلات الحالية من ملف Excel أو CSV: نزّل النموذج واملأه ثم ارفعه وراجع المعاينة ثم أكّد.",
+    "Check file": "فحص الملف",
+    "Columns": "الأعمدة",
+    "Data import": "استيراد البيانات",
+    "Download template": "تنزيل النموذج",
+    "Excel (.xlsx) or CSV, up to 2 MB. Use the template so the column names match.":
+        "ملف Excel ‏(.xlsx) أو CSV بحد أقصى 2 ميجابايت. استخدم النموذج حتى تتطابق أسماء الأعمدة.",
+    "File": "الملف",
+    "Import": "استيراد",
+    "Import %(title)s": "استيراد %(title)s",
+    "Missing column(s): %(columns)s": "أعمدة ناقصة: %(columns)s",
+    "No department with code or name “%(value)s”.": "لا يوجد قسم بالرمز أو الاسم «%(value)s».",
+    "No employee with this ID / iqama number.": "لا يوجد موظف بهذا الرقم (الهوية / الإقامة).",
+    "Not a date. Use YYYY-MM-DD or DD/MM/YYYY.": "ليس تاريخًا. استخدم الصيغة YYYY-MM-DD أو DD/MM/YYYY.",
+    "Not a number.": "ليس رقمًا.",
+    "Nothing is saved until you confirm. A file with any error is not imported at all; existing records are never changed.":
+        "لا يُحفظ شيء قبل التأكيد. الملف الذي يحتوي على أي خطأ لا يُستورد إطلاقًا، ولا تُعدَّل السجلات الموجودة أبدًا.",
+    "Nothing to import. Upload a file and check the preview first.": "لا يوجد ما يُستورد. ارفع ملفًا وراجع المعاينة أولًا.",
+    "Nothing was imported: the data changed since the preview. Upload the file again to see the problems.":
+        "لم يُستورد شيء: تغيّرت البيانات منذ المعاينة. ارفع الملف مرة أخرى لعرض المشكلات.",
+    "Preview": "معاينة",
+    "Row": "الصف",
+    "Row %(row)s: %(column)s — %(message)s": "الصف %(row)s: %(column)s — %(message)s",
+    "Row %(row)s: %(message)s": "الصف %(row)s: %(message)s",
+    "Salary structures": "هياكل الرواتب",
+    "Same as row %(row)s in this file.": "مكرر مع الصف %(row)s في هذا الملف.",
+    "The file has no data rows.": "لا يحتوي الملف على صفوف بيانات.",
+    "The file is larger than 2 MB.": "حجم الملف أكبر من 2 ميجابايت.",
+    "The first row must contain the column names.": "يجب أن يحتوي الصف الأول على أسماء الأعمدة.",
+    "This is not a readable Excel (.xlsx) file.": "هذا ليس ملف Excel ‏(.xlsx) قابلًا للقراءة.",
+    "Too many rows: the limit is %(limit)s per file. Split the file and import it in parts.":
+        "عدد الصفوف كبير جدًا: الحد الأقصى %(limit)s صف لكل ملف. قسّم الملف واستورده على أجزاء.",
+    "Unknown value “%(value)s”.": "قيمة غير معروفة «%(value)s».",
+    "Upload an Excel (.xlsx) or CSV file.": "ارفع ملف Excel ‏(.xlsx) أو CSV.",
+    "Upload file": "رفع الملف",
+    ("%(counter)s problem found — fix the file and upload it again.",
+     "%(counter)s problems found — fix the file and upload it again."): [
+        "لا توجد مشكلات", "توجد مشكلة واحدة — صحّح الملف وارفعه مرة أخرى.",
+        "توجد مشكلتان — صحّح الملف وارفعه مرة أخرى.", "توجد %(counter)s مشكلات — صحّح الملف وارفعه مرة أخرى.",
+        "توجد %(counter)s مشكلة — صحّح الملف وارفعه مرة أخرى.", "توجد %(counter)s مشكلة — صحّح الملف وارفعه مرة أخرى.",
+    ],
+    ("%(counter)s row", "%(counter)s rows"): [
+        "لا توجد صفوف", "صف واحد", "صفان", "%(counter)s صفوف", "%(counter)s صفًا", "%(counter)s صف",
+    ],
+    ("Import %(counter)s record", "Import %(counter)s records"): [
+        "لا توجد سجلات للاستيراد", "استيراد سجل واحد", "استيراد سجلين",
+        "استيراد %(counter)s سجلات", "استيراد %(counter)s سجلًا", "استيراد %(counter)s سجل",
+    ],
+    ("Imported %(count)s record.", "Imported %(count)s records."): [
+        "لم يُستورد أي سجل.", "تم استيراد سجل واحد.", "تم استيراد سجلين.",
+        "تم استيراد %(count)s سجلات.", "تم استيراد %(count)s سجلًا.", "تم استيراد %(count)s سجل.",
+    ],
+
+    # --- backups -----------------------------------------------------------------------
+    "Backups": "النسخ الاحتياطية",
+    "No backup has been made yet. Set up the nightly backup task on the server (see the installation guide).":
+        "لم تُنشأ أي نسخة احتياطية بعد. اضبط مهمة النسخ الاحتياطي الليلية على الخادم (راجع دليل التثبيت).",
+    "The last backup is %(when)s old. Check the scheduled backup task on the server.":
+        "مضى على آخر نسخة احتياطية %(when)s. تحقق من مهمة النسخ الاحتياطي المجدولة على الخادم.",
+
+    # --- loans & advances ----------------------------------------------------------------
+    "%(emp)s has left the company.": "%(emp)s ترك الشركة.",
+    "All loans & advances": "جميع القروض والسلف",
+    "Any day in the month; deductions start with that month's payroll.": "أي يوم في الشهر؛ يبدأ الخصم من مسير رواتب ذلك الشهر.",
+    "Decision note": "ملاحظة القرار",
+    "Decision saved.": "تم حفظ القرار.",
+    "Deductions start with this month's payroll.": "يبدأ الخصم من مسير رواتب هذا الشهر.",
+    "Enter the monthly installment.": "أدخل القسط الشهري.",
+    "First deduction month": "شهر أول خصم",
+    "Leave empty for an advance repaid in one payroll.": "اتركه فارغًا للسلفة التي تُسدَّد في مسير رواتب واحد.",
+    "Loan": "قرض",
+    "Loan / advance repayment": "سداد قرض / سلفة",
+    "Loans & advances": "القروض والسلف",
+    "Loans and advances": "القروض والسلف",
+    "Monthly installment": "القسط الشهري",
+    "New loan / advance": "قرض / سلفة جديدة",
+    "New request": "طلب جديد",
+    "No loans or advances found": "لا توجد قروض أو سلف",
+    "Nothing repaid yet. Repayments appear here when a payroll is approved.": "لم يُسدَّد شيء بعد. تظهر الأقساط المسددة هنا عند اعتماد مسير الرواتب.",
+    "Payroll deducts at most %(limit)s%% of the monthly wage for loans (Labour Law Art. 92); a larger installment simply takes more months.":
+        "يخصم مسير الرواتب للقروض %(limit)s%% كحد أقصى من الأجر الشهري (المادة 92 من نظام العمل)؛ والقسط الأكبر يستغرق أشهرًا أكثر فقط.",
+    "Pending approval": "بانتظار الاعتماد",
+    "Planned installments": "عدد الأقساط المخطط",
+    "Repaid": "مُسدَّد",
+    "Repaid by monthly payroll deductions once approved.": "تُسدَّد بخصم شهري من الراتب بعد الاعتماد.",
+    "Repayments": "الأقساط المسددة",
+    "Request": "الطلب",
+    "Request saved and waiting for approval.": "تم حفظ الطلب وهو بانتظار الاعتماد.",
+    "Salary advance": "سلفة على الراتب",
+    "The installment cannot be more than the amount.": "لا يمكن أن يكون القسط أكبر من المبلغ.",
+    "This request has already been decided.": "تم البت في هذا الطلب مسبقًا.",
+    "You cannot approve a request you entered yourself.": "لا يمكنك اعتماد طلب أدخلته بنفسك.",
+    "first deduction month": "شهر أول خصم",
+    "loan / advance": "قرض / سلفة",
+    "loan / advance repayment": "سداد قرض / سلفة",
+    "loan repayment": "سداد قرض",
+    "loan repayments": "أقساط القروض المسددة",
+    "loans and advances": "القروض والسلف",
+    "monthly installment": "القسط الشهري",
 }

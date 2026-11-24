@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{{ loan.get_kind_display }} · {{ loan.employee.full_name }} · Afaq ERP{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'loans:list' %}">{% icon "arrow-left" 16 %}{% translate "All loans & advances" %}</a>
+
+<section class="card profile">
+  <span class="avatar avatar-lg">{{ loan.employee.full_name|initials }}</span>
+  <div class="profile-main">
+    <h1>{{ loan.get_kind_display }} · {{ loan.amount }}
+      {% if loan.is_settled %}<span class="badge badge-paid">{% translate "Repaid" %}</span>{% else %}<span class="badge badge-{{ loan.status }}">{{ loan.get_status_display }}</span>{% endif %}</h1>
+    <div class="profile-meta">
+      <span>{% if perms.hr.view_employee %}<a href="{{ loan.employee.get_absolute_url }}">{{ loan.employee.full_name }}</a>{% else %}{{ loan.employee.full_name }}{% endif %}</span>
+      <span>{% icon "calendar" 16 %}{{ loan.first_month|date:"M Y" }} → {{ loan.last_month|date:"M Y" }}</span>
+      <span><strong>{{ loan.installment }}</strong> / {% translate "month" %}</span>
+    </div>
+  </div>
+  {% if can_decide %}
+  <div class="actions">
+    <form method="post" action="{% url 'loans:approve' loan.pk %}" class="inline">{% csrf_token %}
+      <button class="btn">{% icon "check-circle" %}{% translate "Approve" %}</button></form>
+  </div>
+  {% endif %}
+</section>
+
+{% if loan.status == "rejected" %}<div class="alert alert-error">{% translate "Rejected" %}: {{ loan.decision_note }}</div>{% endif %}
+
+<div class="grid">
+  <section class="card">
+    <h2>{% icon "file-text" %} {% translate "Details" %}</h2>
+    <dl>
+      <dt>{% translate "Reason" %}</dt><dd>{{ loan.reason|default:"—" }}</dd>
+      <dt>{% translate "Planned installments" %}</dt><dd>{{ loan.months }}</dd>
+      <dt>{% translate "Entered by" %}</dt><dd>{{ loan.requested_by }} · {{ loan.created_at|date:"Y-m-d H:i" }}</dd>
+      <dt>{% translate "Decided by" %}</dt><dd>{{ loan.decided_by|default:"—" }}{% if loan.decided_at %} · {{ loan.decided_at|date:"Y-m-d H:i" }}{% endif %}</dd>
+      {% if loan.decision_note and loan.status != "rejected" %}<dt>{% translate "Decision note" %}</dt><dd>{{ loan.decision_note }}</dd>{% endif %}
+    </dl>
+  </section>
+  <section class="card">
+    <h2>{% icon "banknote" %} {% translate "Balance" %}</h2>
+    <dl>
+      <dt>{% translate "Amount" %}</dt><dd>{{ loan.amount }}</dd>
+      <dt>{% translate "Repaid" %}</dt><dd>{{ loan.repaid }}</dd>
+      <dt><strong>{% translate "Outstanding" %}</strong></dt><dd><strong>{{ loan.outstanding }}</strong></dd>
+    </dl>
+  </section>
+</div>
+
+<section class="card card-flush">
+  <div class="card-head"><h2>{% translate "Repayments" %}</h2></div>
+  {% if repayments %}
+  <table class="table">
+    <thead><tr><th>{% translate "Payroll" %}</th><th class="num">{% translate "Amount" %}</th></tr></thead>
+    <tbody>
+      {% for r in repayments %}
+      <tr><td>{% if perms.payroll.view_payrollrun %}<a href="{% url 'payroll:payslip_detail' r.payslip.pk %}">{{ r.payslip.run }}</a>{% else %}{{ r.payslip.run }}{% endif %}</td><td class="num">{{ r.amount }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted empty-note">{% translate "Nothing repaid yet. Repayments appear here when a payroll is approved." %}</p>
+  {% endif %}
+</section>
+
+{% if can_decide %}
+<section class="card">
+  <h2>{% icon "x-circle" %} {% translate "Reject" %}</h2>
+  <form method="post" action="{% url 'loans:reject' loan.pk %}" class="reject-form">{% csrf_token %}
+    <input type="text" name="note" required maxlength="200" class="filter-input grow" placeholder="{% translate 'Reason for rejecting' %}">
+    <button class="btn btn-danger">{% translate "Reject" %}</button>
+  </form>
+</section>
+{% endif %}
+{% endblock %}

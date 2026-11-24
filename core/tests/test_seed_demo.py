@@ -266,3 +266,57 @@ def test_vat_return_roles(seeded):
     assert User.objects.get(username="accountant_demo").has_perm("invoicing.view_vat_return")
     assert User.objects.get(username="manager_demo").has_perm("invoicing.view_vat_return")
     assert not User.objects.get(username="hr_demo").has_perm("invoicing.view_vat_return")
+
+
+def test_demo_leave_covers_statuses_and_reaches_payroll(seeded):
+    from leave.models import LeaveRequest
+
+    statuses = set(LeaveRequest.objects.values_list("status", flat=True))
+    assert {"approved", "pending", "rejected"} <= statuses
+    assert LeaveRequest.objects.filter(leave_type__code="UNPAID", status="approved").exists()
+
+    today = timezone.localdate()
+    run = PayrollRun.objects.get(year=today.year, month=today.month)
+    assert run.payslips.filter(leave_days__gt=0).exists()     # unpaid leave shows in this month's payroll
+
+
+def test_leave_roles(seeded):
+    User = get_user_model()
+    hr = User.objects.get(username="hr_demo")
+    manager = User.objects.get(username="manager_demo")
+    assert hr.has_perm("leave.add_leaverequest") and not hr.has_perm("leave.approve_leaverequest")
+    assert manager.has_perm("leave.approve_leaverequest")
+
+
+def test_demo_leave_is_not_duplicated(seeded):
+    from leave.models import LeaveRequest
+
+    before = LeaveRequest.objects.count()
+    call_command("seed_demo", verbosity=0)
+    assert LeaveRequest.objects.count() == before
+
+
+def test_demo_loans_reach_this_months_payroll(seeded):
+    from loans.models import Loan
+
+    assert set(Loan.objects.values_list("status", flat=True)) == {"approved", "pending"}
+    today = timezone.localdate()
+    run = PayrollRun.objects.get(year=today.year, month=today.month)
+    slip = run.payslips.get(employee__id_number="2045678904")
+    assert slip.loan_deduction > 0
+
+
+def test_loan_roles(seeded):
+    User = get_user_model()
+    hr = User.objects.get(username="hr_demo")
+    manager = User.objects.get(username="manager_demo")
+    assert hr.has_perm("loans.add_loan") and not hr.has_perm("loans.approve_loan")
+    assert manager.has_perm("loans.approve_loan")
+
+
+def test_demo_loans_are_not_duplicated(seeded):
+    from loans.models import Loan
+
+    before = Loan.objects.count()
+    call_command("seed_demo", verbosity=0)
+    assert Loan.objects.count() == before

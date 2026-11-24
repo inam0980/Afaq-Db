@@ -29,7 +29,11 @@ from jobs.costing import add_labour, add_material
 from jobs.models import Job
 from jobs.services import change_status
 from payroll.models import PayrollRun, SalaryStructure
-from payroll.services import approve_run, generate_payslips, mark_paid, update_payslip_inputs
+from payroll.services import approve_run, generate_payslips, mark_paid, regenerate, update_payslip_inputs
+from leave import services as leave_services
+from leave.models import LeaveRequest, LeaveType
+from loans import services as loan_services
+from loans.models import Loan
 
 DEMO_PASSWORD = "Demo@12345"
 
@@ -119,10 +123,27 @@ JOB_INVOICE_PAYMENTS = {
     "Classroom lighting rewiring": [("2000", 0)],            # partly paid
 }
 
+# marker (kept in `reason`), employee id, leave type, starts N days from today (None = 2nd of
+# this month), length in days, final status
+DEMO_LEAVE = [
+    ("DEMO-LEAVE-UNPAID", "2090123459", "UNPAID", None, 2, "approved"),
+    ("DEMO-LEAVE-ANNUAL", "2045678904", "ANNUAL", 7, 5, "approved"),
+    ("DEMO-LEAVE-SICK", "2056789015", "SICK", -3, 2, "pending"),
+    ("DEMO-LEAVE-REJECTED", "2101234560", "ANNUAL", 20, 2, "rejected"),
+]
+
+# marker (kept in `reason`), employee id, kind, amount, installment (None = advance in one go), final status
+DEMO_LOANS = [
+    ("DEMO-LOAN-CAR", "2045678904", "loan", "6000", "500", "approved"),
+    ("DEMO-ADVANCE", "2056789015", "advance", "1500", None, "pending"),
+]
+
 HR_PERMS = [
     "view_employee", "add_employee", "change_employee",
     "view_department", "add_department", "change_department",
+    "view_leaverequest", "add_leaverequest", "change_leaverequest",
     "view_salarystructure", "add_salarystructure", "change_salarystructure",
+    "view_loan", "add_loan",
 ]
 ACCOUNTANT_PERMS = [
     "view_employee", "view_salarystructure",
@@ -139,6 +160,8 @@ COORDINATOR_PERMS = [
 MANAGER_PERMS = sorted(set(
     HR_PERMS + ACCOUNTANT_PERMS + COORDINATOR_PERMS
     + ["approve_payrollrun", "approve_expense", "view_job_costing", "issue_invoice"]
+    + ["approve_leaverequest"]
+    + ["approve_loan"]
 ))
 
 ROLES = [
@@ -199,6 +222,8 @@ class Command(BaseCommand):
             employees = self._employees(departments)
             self._salaries(employees)
             self._payroll(users)
+            self._loans(users)
+            self._leave(users)
             customers = self._customers()
             self._jobs(users, customers)
             self._expenses(users)
@@ -443,6 +468,44 @@ class Command(BaseCommand):
             invoice, user, amount=D(amount), date=self.today - dt.timedelta(days=days_ago),
             method="bank", reference=f"TRX-{invoice.pk:04d}",
         )
+
+    # --- loans (deducted by the current draft payroll, regenerated in _leave) ---------
+
+    def _loans(self, users):
+        hr, manager = users["HR"], users["Manager"]
+        for marker, id_number, kind, amount, installment, final in DEMO_LOANS:
+            if Loan.objects.filter(reason__startswith=marker).exists():
+                continue
+            loan = loan_services.request_loan(
+                Employee.objects.get(id_number=id_number), kind, D(amount),
+                D(installment) if installment else None, self.today, hr, reason=f"{marker}: demo",
+            )
+            if final == "approved":
+                loan_services.approve(loan, manager)
+
+    # --- leave ---------------------------------------------------------------------
+
+    def _leave(self, users):
+        hr, manager = users["HR"], users["Manager"]
+        for marker, id_number, code, starts_in, length, final in DEMO_LEAVE:
+            if LeaveRequest.objects.filter(reason__startswith=marker).exists():
+                continue
+            start = (
+                self.today.replace(day=1) + dt.timedelta(days=1)
+                if starts_in is None else self.today + dt.timedelta(days=starts_in)
+            )
+            req = leave_services.request_leave(
+                Employee.objects.get(id_number=id_number), LeaveType.objects.get(code=code),
+                start, start + dt.timedelta(days=length - 1), hr, reason=f"{marker}: demo",
+            )
+            if final == "approved":
+                leave_services.approve(req, manager)
+            elif final == "rejected":
+                leave_services.reject(req, manager, note="Peak season - please choose other dates.")
+
+        current = PayrollRun.objects.filter(year=self.today.year, month=self.today.month).first()
+        if current and not current.is_locked:
+            regenerate(current)            # pick up the unpaid leave above and the demo loan
 
     # --- output --------------------------------------------------------------------
 

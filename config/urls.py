@@ -18,5 +18,7 @@ urlpatterns = [
     path("jobs/", include("jobs.urls")),
     path("invoices/", include("invoicing.urls")),
     path("leave/", include("leave.urls")),
+    path("import/", include("dataimport.urls")),
+    path("loans/", include("loans.urls")),
     path("", include("core.urls")),
 ]

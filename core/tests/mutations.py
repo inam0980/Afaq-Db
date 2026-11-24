@@ -112,8 +112,8 @@ MUTATIONS += [
     ("seed_demo: no overtime inputs", SEED,
      "            if inputs:", "            if False:"),
     ("seed_demo: HR role can see expenses", SEED,
-     '    "view_salarystructure", "add_salarystructure", "change_salarystructure",\n]',
-     '    "view_salarystructure", "add_salarystructure", "change_salarystructure", "view_expense",\n]'),
+     '    "view_loan", "add_loan",\n]',
+     '    "view_loan", "add_loan", "view_expense",\n]'),
 ]
 
 MUTATIONS += [
@@ -182,4 +182,42 @@ MUTATIONS += [
      'LOCALE_PATHS = [BASE_DIR / "locale"]', "LOCALE_PATHS = []"),
     ("settings: browser language ignored", "config/settings.py",
      '    "django.middleware.locale.LocaleMiddleware",\n', ""),
+]
+
+MUTATIONS += [
+    ("seed_demo: demo leave duplicated on rerun", SEED,
+     "            if LeaveRequest.objects.filter(reason__startswith=marker).exists():\n                continue\n", ""),
+    ("seed_demo: payroll not refreshed after leave", SEED,
+     "            regenerate(current)            # pick up the unpaid leave above", "            pass"),
+    ("seed_demo: HR can approve leave", SEED,
+     '    "view_leaverequest", "add_leaverequest", "change_leaverequest",\n',
+     '    "view_leaverequest", "add_leaverequest", "change_leaverequest", "approve_leaverequest",\n'),
+    ("seed_demo: manager cannot approve leave", SEED, '    + ["approve_leaverequest"]\n', ""),
+    # --- deployment files ---
+    ("deploy: upload limit below receipt size", "deploy/nginx.conf",
+     "    client_max_body_size 10m;                    # receipts", "    client_max_body_size 1m;                    # receipts"),
+    ("deploy: X-Forwarded-Proto not passed", "deploy/nginx.conf",
+     "    location / {\n        proxy_pass http://web:8000;\n        proxy_set_header Host $host;\n        proxy_set_header X-Forwarded-Proto $scheme;",
+     "    location / {\n        proxy_pass http://web:8000;\n        proxy_set_header Host $host;"),
+    ("deploy: uploads served publicly", "deploy/nginx.conf",
+     "    location /static/ {\n        alias /app/staticfiles/;\n        expires 7d;\n        add_header Cache-Control \"public\";\n        access_log off;\n    }\n\n    location / {",
+     "    location /static/ {\n        alias /app/staticfiles/;\n        expires 7d;\n        add_header Cache-Control \"public\";\n        access_log off;\n    }\n\n    location /media/ {\n        alias /app/media/;\n    }\n\n    location / {"),
+    ("deploy: Debian's old pg_dump", "Dockerfile", "postgresql-client-18", "postgresql-client-17"),
+    ("deploy: web cannot reach the db container", "docker-compose.yml", "      DB_HOST: db\n", ""),
+    ("deploy: media not in a volume", "docker-compose.yml", "      - media:/app/media\n", ""),
+    ("deploy: .env baked into the image", ".dockerignore", ".env\n.git\n", ".git\n"),
+    ("deploy: migrations not applied on start", "deploy/entrypoint.sh",
+     "python manage.py migrate --noinput\n", ""),
+    ("deploy: DEBUG forced on", "config/settings.py",
+     'SESSION_IDLE_MINUTES = env.int("SESSION_IDLE_MINUTES", default=30)',
+     'SESSION_IDLE_MINUTES = env.int("SESSION_IDLE_MINUTES", default=30)\nDEBUG = True'),
+    ("seed_demo: no demo loans", SEED, "            self._loans(users)\n", ""),
+    ("seed_demo: demo loan never approved", SEED,
+     "            if final == \"approved\":\n                loan_services.approve(loan, manager)",
+     "            if False:\n                loan_services.approve(loan, manager)"),
+    ("seed_demo: loans duplicated on re-run", SEED,
+     "            if Loan.objects.filter(reason__startswith=marker).exists():\n                continue",
+     "            if False:\n                continue"),
+    ("seed_demo: HR can approve loans", SEED, '    "view_loan", "add_loan",\n', '    "view_loan", "add_loan", "approve_loan",\n'),
+    ("seed_demo: manager cannot approve loans", SEED, '    + ["approve_loan"]\n', ""),
 ]

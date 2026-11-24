@@ -121,7 +121,7 @@ MUTATIONS += [
     ("Empty run can be approved", SERVICES,
      "    if not run.payslips.exists():", "    if False:"),
     ("Approve does not recalculate", SERVICES,
-     "    for slip in run.payslips.select_related(\"employee\", \"run\"):\n        recalculate(slip).save()\n    run.status = PayrollRun.Status.APPROVED",
+     "    for slip in run.payslips.select_related(\"employee\", \"run\"):\n        recalculate(slip).save()\n        record_repayments(slip)\n    run.status = PayrollRun.Status.APPROVED",
      "    run.status = PayrollRun.Status.APPROVED"),
     ("Approver not recorded", SERVICES,
      "    run.approved_by = user\n", ""),

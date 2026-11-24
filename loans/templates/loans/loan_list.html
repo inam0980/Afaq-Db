@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% translate "Loans & advances" %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{% translate "Loans & advances" %}</h1>
+    <p class="muted">{% translate "Repaid by monthly payroll deductions once approved." %}</p>
+  </div>
+  {% if perms.loans.add_loan %}<a class="btn" href="{% url 'loans:create' %}">{% icon "plus" %}{% translate "New request" %}</a>{% endif %}
+</div>
+
+<div class="card card-flush">
+  <form method="get" class="toolbar filters">
+    <select name="status" class="filter-input" aria-label="{% translate 'Status' %}">
+      <option value="">{% translate "All statuses" %}</option>
+      {% for value, label in statuses %}<option value="{{ value }}" {% if f.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+    <select name="employee" class="filter-input" aria-label="{% translate 'Employee' %}">
+      <option value="">{% translate "All employees" %}</option>
+      {% for e in employees %}<option value="{{ e.pk }}" {% if f.employee == e.pk|stringformat:"d" %}selected{% endif %}>{{ e.full_name }}</option>{% endfor %}
+    </select>
+    <button class="btn btn-secondary" type="submit">{% translate "Filter" %}</button>
+  </form>
+  {% if loans %}
+  <div class="table-scroll">
+  <table class="table">
+    <thead><tr><th>{% translate "Employee" %}</th><th>{% translate "Type" %}</th><th class="num">{% translate "Amount" %}</th><th class="num">{% translate "Monthly installment" %}</th><th class="num">{% translate "Outstanding" %}</th><th>{% translate "From" %}</th><th>{% translate "Status" %}</th></tr></thead>
+    <tbody>
+      {% for loan in loans %}
+      <tr>
+        <td><a class="person" href="{{ loan.get_absolute_url }}"><span class="avatar">{{ loan.employee.full_name|initials }}</span><span><span class="person-name">{{ loan.employee.full_name }}</span><span class="muted">{{ loan.employee.employee_no }}</span></span></a></td>
+        <td>{{ loan.get_kind_display }}</td>
+        <td class="num">{{ loan.amount }}</td>
+        <td class="num">{{ loan.installment }}</td>
+        <td class="num">{% if loan.status == "approved" %}{{ loan.outstanding }}{% else %}—{% endif %}</td>
+        <td>{{ loan.first_month|date:"M Y" }}</td>
+        <td>{% if loan.is_settled %}<span class="badge badge-paid">{% translate "Repaid" %}</span>{% else %}<span class="badge badge-{{ loan.status }}">{{ loan.get_status_display }}</span>{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">{% icon "banknote" 28 %}</div>
+    <h2>{% translate "No loans or advances found" %}</h2>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

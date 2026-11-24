@@ -460,3 +460,7 @@ td.expired { color: var(--red); font-weight: 600; }
 .vat-form td:first-child { color: var(--muted); width: 56px; }
 .vat-section td { background: var(--surface-2); font-weight: 600; color: var(--brand); }
 .vat-form .grand td { background: var(--brand-50); font-size: 15px; }
+.table tr.row-error td { background: var(--red-50); }
+.card-flush > .card-head { padding: 16px 16px 0; }
+.card-flush > .alert { margin: 16px; }
+.badge-pending { background: var(--amber-50); color: var(--amber); }

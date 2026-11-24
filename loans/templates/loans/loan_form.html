@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% translate "New loan / advance" %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <a class="back-link" href="{% url 'loans:list' %}">{% icon "arrow-left" 16 %}{% translate "Back" %}</a>
+    <h1>{% translate "New loan / advance" %}</h1>
+    <p class="muted">{% blocktranslate %}Payroll deducts at most {{ limit }}% of the monthly wage for loans (Labour Law Art. 92); a larger installment simply takes more months.{% endblocktranslate %}</p>
+  </div>
+</div>
+<form method="post" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="alert alert-error">{% for e in form.non_field_errors %}{{ e }} {% endfor %}</div>{% endif %}
+  <section class="card form-section">
+    <h2>{% icon "banknote" %} {% translate "Request" %}</h2>
+    <div class="form-grid">
+      {% for field in form %}
+        <label class="field{% if field.errors %} has-error{% endif %}{% if field.name == 'reason' %} field-wide{% endif %}">
+          <span>{{ field.label }}{% if field.field.required %} <em class="req">*</em>{% endif %}</span>
+          {{ field }}
+          {% if field.help_text %}<small class="muted">{{ field.help_text }}</small>{% endif %}
+          {% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}
+        </label>
+      {% endfor %}
+    </div>
+  </section>
+  <div class="form-actions">
+    <a href="{% url 'loans:list' %}" class="btn btn-ghost">{% translate "Cancel" %}</a>
+    <button type="submit" class="btn">{% icon "send" %}{% translate "Submit request" %}</button>
+  </div>
+</form>
+{% endblock %}

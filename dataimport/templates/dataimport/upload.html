@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+{% block title %}{% blocktranslate with title=importer.title %}Import {{ title }}{% endblocktranslate %} · Afaq ERP{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <a class="back-link" href="{% url 'dataimport:index' %}">{% icon "arrow-left" 16 %}{% translate "Back" %}</a>
+    <h1>{% blocktranslate with title=importer.title %}Import {{ title }}{% endblocktranslate %}</h1>
+    <p class="muted">{% translate "Nothing is saved until you confirm. A file with any error is not imported at all; existing records are never changed." %}</p>
+  </div>
+  <a class="btn btn-ghost" href="{% url 'dataimport:template' importer.kind %}">{% icon "file-text" %}{% translate "Download template" %}</a>
+</div>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+  <section class="card form-section">
+    <h2>{% icon "upload" %} {% translate "Upload file" %}</h2>
+    <div class="form-grid">
+      {% for field in form %}
+        <label class="field field-wide{% if field.errors %} has-error{% endif %}">
+          <span>{{ field.label }} <em class="req">*</em></span>
+          {{ field }}
+          <small class="muted">{{ field.help_text }}</small>
+          {% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}
+        </label>
+      {% endfor %}
+    </div>
+  </section>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-secondary">{% icon "check-circle" %}{% translate "Check file" %}</button>
+  </div>
+</form>
+
+{% if report %}
+<section class="card card-flush">
+  <div class="card-head">
+    <h2>{% translate "Preview" %}</h2>
+    <span class="muted">{% blocktranslate count counter=report.rows|length %}{{ counter }} row{% plural %}{{ counter }} rows{% endblocktranslate %}</span>
+  </div>
+  {% if report.errors %}
+  <div class="alert alert-error">
+    <strong>{% blocktranslate count counter=report.errors|length %}{{ counter }} problem found — fix the file and upload it again.{% plural %}{{ counter }} problems found — fix the file and upload it again.{% endblocktranslate %}</strong>
+    <ul>{% for error in report.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+  {% if report.rows %}
+  <div class="table-scroll">
+    <table class="table">
+      <thead><tr><th>{% translate "Row" %}</th>{% for column in report.columns %}<th>{{ column }}</th>{% endfor %}</tr></thead>
+      <tbody>
+        {% for number, values, bad in report.table %}
+        <tr{% if bad %} class="row-error"{% endif %}><td>{{ number }}</td>{% for value in values %}<td>{{ value }}</td>{% endfor %}</tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</section>
+{% if report.ok %}
+<form method="post" action="{% url 'dataimport:confirm' importer.kind %}" class="form-actions">
+  {% csrf_token %}
+  <a href="{% url 'dataimport:index' %}" class="btn btn-ghost">{% translate "Cancel" %}</a>
+  <button type="submit" class="btn">{% icon "check-circle" %}{% blocktranslate count counter=report.rows|length %}Import {{ counter }} record{% plural %}Import {{ counter }} records{% endblocktranslate %}</button>
+</form>
+{% endif %}
+{% endif %}
+{% endblock %}

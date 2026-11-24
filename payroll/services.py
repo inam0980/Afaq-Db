@@ -10,8 +10,10 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from hr.models import Employee
+from leave.payroll import leave_deduction_days
+from loans.payroll import deduction_limit, deduction_plan, record_repayments
 from payroll.calculations import compute_payslip
-from payroll.models import GosiRate, PayrollLocked, PayrollRun, Payslip, SalaryStructure
+from payroll.models import ZERO, GosiRate, PayrollLocked, PayrollRun, Payslip, SalaryStructure
 
 FULL_MONTH_DAYS = 30
 INPUT_FIELDS = ("overtime_hours", "absence_days", "additions", "deductions", "note")
@@ -69,17 +71,18 @@ def recalculate(slip: Payslip) -> Payslip:
             {"absence_days": _("Absence plus days not employed (%(d)s) cannot exceed 30.")
              % {"d": slip.days_not_employed}}
         )
+    slip.leave_days = leave_deduction_days(emp, run.period_start, run.period_end)
+    unpaid = min(unpaid + slip.leave_days, FULL_MONTH_DAYS)
+    inputs = {"overtime_hours": slip.overtime_hours, "absence_days": unpaid, "additions": slip.additions}
     try:
-        result = compute_payslip(
-            structure,
-            rate,
-            overtime_hours=slip.overtime_hours,
-            absence_days=unpaid,
-            additions=slip.additions,
-            deductions=slip.deductions,
-        )
+        result = compute_payslip(structure, rate, deductions=slip.deductions, **inputs)
     except ValueError as exc:
         raise ValidationError({"deductions": str(exc)}) from exc
+    # Loans come last: they only take what the payslip can still pay (loans.payroll).
+    room = min(deduction_limit(result.gross_fixed), result.net)
+    slip.loan_deduction = sum((amount for _loan, amount in deduction_plan(slip, room)), ZERO)
+    if slip.loan_deduction:
+        result = compute_payslip(structure, rate, deductions=slip.deductions + slip.loan_deduction, **inputs)
 
     for name in (
         "basic", "housing", "transport", "other", "gross_fixed", "overtime", "absence",
@@ -137,6 +140,7 @@ def approve_run(run: PayrollRun, user) -> PayrollRun:
         raise ValidationError(_("Cannot approve a payroll with no payslips."))
     for slip in run.payslips.select_related("employee", "run"):
         recalculate(slip).save()
+        record_repayments(slip)
     run.status = PayrollRun.Status.APPROVED
     run.approved_by = user
     run.approved_at = timezone.now()

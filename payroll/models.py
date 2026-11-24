@@ -216,6 +216,10 @@ class Payslip(models.Model):
 
     # Snapshot of the calculation (kept as-is once the run is approved)
     days_not_employed = models.PositiveSmallIntegerField(default=0)
+    leave_days = models.DecimalField(
+        _("unpaid leave days"), max_digits=5, decimal_places=2, default=ZERO, editable=False,
+        help_text=_("Unpaid leave and reduced-pay sick days from approved leave (Art. 117)."),
+    )
     basic = money_field(_("basic"), default=ZERO)
     housing = money_field(_("housing"), default=ZERO)
     transport = money_field(_("transport"), default=ZERO)
@@ -223,6 +227,7 @@ class Payslip(models.Model):
     gross_fixed = money_field(_("fixed salary"), default=ZERO)
     overtime = money_field(_("overtime"), default=ZERO)
     absence = money_field(_("absence deduction"), default=ZERO)
+    loan_deduction = money_field(_("loan / advance repayment"), default=ZERO, editable=False)
     gosi_employee = money_field(_("GOSI (employee)"), default=ZERO)
     gosi_employer = money_field(_("GOSI (employer)"), default=ZERO)
     gross = money_field(_("gross pay"), default=ZERO)

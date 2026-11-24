@@ -74,3 +74,35 @@ MUTATIONS = [
      '("MARRIAGE", "Marriage leave", "إجازة زواج", True, False, False, False, 5, False)',
      '("MARRIAGE", "Marriage leave", "إجازة زواج", True, False, False, False, 7, False)'),
 ]
+
+LP = "leave/payroll.py"
+
+MUTATIONS += [
+    # --- leave -> payroll ---
+    ("Unpaid leave not deducted", LP,
+     "    for r in approved.filter(leave_type__deducts_salary=True).overlapping(start, end):",
+     "    for r in approved.filter(leave_type__deducts_salary=True).none():"),
+    ("Pending leave deducted", LP,
+     "    approved = LeaveRequest.objects.filter(employee=employee, status=LeaveRequest.Status.APPROVED)",
+     "    approved = LeaveRequest.objects.filter(employee=employee)"),
+    ("Other employees' leave deducted", LP,
+     "    approved = LeaveRequest.objects.filter(employee=employee, status=LeaveRequest.Status.APPROVED)",
+     "    approved = LeaveRequest.objects.filter(status=LeaveRequest.Status.APPROVED)"),
+    ("Days outside the month deducted", LP,
+     "    first, last = max(r.start_date, start), min(r.end_date, end)",
+     "    first, last = r.start_date, r.end_date"),
+    ("60 sick days on full pay", LP, "SICK_FULL_PAY_DAYS = 30", "SICK_FULL_PAY_DAYS = 60"),
+    ("Reduced sick pay until day 120", LP, "SICK_REDUCED_PAY_UNTIL = 90", "SICK_REDUCED_PAY_UNTIL = 120"),
+    ("Reduced sick pay is half, not three quarters", LP,
+     'SICK_REDUCED_DEDUCTION = Decimal("0.25")', 'SICK_REDUCED_DEDUCTION = Decimal("0.5")'),
+    ("Sick days never expire", LP, "YEAR = dt.timedelta(days=364)", "YEAR = dt.timedelta(days=3650)"),
+    ("Later sick days counted in the rank", LP,
+     "        rank = sum(1 for d in sick_days if day - YEAR <= d <= day)",
+     "        rank = sum(1 for d in sick_days if day - YEAR <= d)"),
+    ("Payroll ignores leave", "payroll/services.py",
+     "    unpaid = min(unpaid + slip.leave_days, FULL_MONTH_DAYS)\n", ""),
+    ("Unpaid days not capped at 30", "payroll/services.py",
+     "    unpaid = min(unpaid + slip.leave_days, FULL_MONTH_DAYS)", "    unpaid = unpaid + slip.leave_days"),
+    ("Leave line hidden on the payslip", "payroll/templates/payroll/payslip_detail.html",
+     '{% if slip.leave_days %}<tr><td class="muted">', '{% if False %}<tr><td class="muted">'),
+]

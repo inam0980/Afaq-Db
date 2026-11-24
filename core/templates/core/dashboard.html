@@ -20,6 +20,17 @@
   </div>
 </div>
 
+{% if backup_warning %}
+  <div class="alert alert-error backup-warning">
+    {% icon "alert" %}
+    {% if backup_warning.latest %}
+      {% blocktranslate with when=backup_warning.latest.created|timesince %}The last backup is {{ when }} old. Check the scheduled backup task on the server.{% endblocktranslate %}
+    {% else %}
+      {% translate "No backup has been made yet. Set up the nightly backup task on the server (see the installation guide)." %}
+    {% endif %}
+  </div>
+{% endif %}
+
 {% if not show_employees and not show_payroll and not show_expenses and not show_jobs and not show_receivables and not show_vat and not show_leave %}
   <div class="empty-state card">
     <div class="empty-icon">{% icon "dashboard" 28 %}</div>

@@ -17,6 +17,7 @@ htmlcov/
 # Django
 db.sqlite3
 /media/
+/backups_data/
 /staticfiles/
 
 # Editors / OS

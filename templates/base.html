@@ -27,6 +27,9 @@
       {% if perms.leave.view_leaverequest %}
       <a href="{% url 'leave:list' %}" {% if nav_section == "leave" %}aria-current="page"{% endif %}>{% icon "calendar" %}<span>{% translate "Leave" %}</span></a>
       {% endif %}
+      {% if perms.loans.view_loan %}
+      <a href="{% url 'loans:list' %}" {% if nav_section == "loans" %}aria-current="page"{% endif %}>{% icon "banknote" %}<span>{% translate "Loans & advances" %}</span></a>
+      {% endif %}
 
       {% if perms.jobs.view_job or perms.customers.view_customer or perms.jobs.view_job_costing %}
       <div class="nav-label">{% translate "Operations" %}</div>
@@ -60,8 +63,13 @@
       <a href="{% url 'expenses:list' %}" {% if nav_section == "expenses" %}aria-current="page"{% endif %}>{% icon "receipt" %}<span>{% translate "Expenses" %}</span></a>
       {% endif %}
 
-      {% if user.is_staff %}
+      {% if user.is_staff or perms.hr.add_employee or perms.customers.add_customer or perms.payroll.add_salarystructure %}
       <div class="nav-label">{% translate "System" %}</div>
+      {% endif %}
+      {% if perms.hr.add_employee or perms.customers.add_customer or perms.payroll.add_salarystructure %}
+      <a href="{% url 'dataimport:index' %}" {% if nav_section == "import" %}aria-current="page"{% endif %}>{% icon "upload" %}<span>{% translate "Data import" %}</span></a>
+      {% endif %}
+      {% if user.is_staff %}
       <a href="{% url 'admin:index' %}">{% icon "sliders" %}<span>{% translate "Admin" %}</span></a>
       {% endif %}
     </nav>
