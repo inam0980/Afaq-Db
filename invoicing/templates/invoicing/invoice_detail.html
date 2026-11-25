@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n ui %}
+{% load i18n ui zatca_tags %}
 {% block title %}{{ invoice }} · Afaq ERP{% endblock %}
 {% block content %}
 <div class="page-head no-print">
@@ -106,6 +106,8 @@
 
   {% if invoice.notes %}<p class="muted">{{ invoice.notes|linebreaksbr }}</p>{% endif %}
 </article>
+
+<div class="no-print">{% zatca_panel invoice %}</div>
 
 {% if not invoice.is_draft and not invoice.is_credit_note %}
 <div class="grid no-print">

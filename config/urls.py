@@ -20,5 +20,6 @@ urlpatterns = [
     path("leave/", include("leave.urls")),
     path("import/", include("dataimport.urls")),
     path("loans/", include("loans.urls")),
+    path("zatca/", include("zatca.urls")),
     path("", include("core.urls")),
 ]

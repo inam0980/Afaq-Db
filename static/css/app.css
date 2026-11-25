@@ -464,3 +464,6 @@ td.expired { color: var(--red); font-weight: 600; }
 .card-flush > .card-head { padding: 16px 16px 0; }
 .card-flush > .alert { margin: 16px; }
 .badge-pending { background: var(--amber-50); color: var(--amber); }
+.zatca-panel .break { word-break: break-all; }
+.badge-generated { background: var(--amber-50); color: var(--amber); }
+.badge-cleared, .badge-reported { background: var(--green-50); color: var(--green); }

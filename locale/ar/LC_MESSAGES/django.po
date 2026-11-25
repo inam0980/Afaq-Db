@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Afaq ERP VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-25 02:08+0530\n"
+"POT-Creation-Date: 2026-11-25 04:28+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ar\n"
@@ -483,7 +483,7 @@ msgid "Balance"
 msgstr "الرصيد"
 
 #: customers/templates/customers/customer_detail.html:20
-#: invoicing/templates/invoicing/invoice_detail.html:124
+#: invoicing/templates/invoicing/invoice_detail.html:126
 msgid "Balance due"
 msgstr "الرصيد المستحق"
 
@@ -599,6 +599,10 @@ msgstr "المدينة"
 msgid "Cleaning"
 msgstr "التنظيف"
 
+#: zatca/models.py:79
+msgid "Cleared by ZATCA"
+msgstr "معتمدة من الهيئة (Cleared)"
+
 #: dataimport/templates/dataimport/index.html:15
 msgid "Columns"
 msgstr "الأعمدة"
@@ -632,6 +636,10 @@ msgstr "التكاليف"
 msgid "Costs of a cancelled job cannot be changed."
 msgstr "لا يمكن تعديل تكاليف أمر عمل ملغى."
 
+#: zatca/templates/zatca/panel.html:10
+msgid "Counter"
+msgstr "العداد"
+
 #: jobs/templates/jobs/job_list.html:59
 msgid "Create a job"
 msgstr "إنشاء أمر عمل"
@@ -644,7 +652,7 @@ msgstr "إنشاء فاتورة"
 msgid "Create and generate payslips"
 msgstr "إنشاء وتوليد قسائم الرواتب"
 
-#: invoicing/templates/invoicing/invoice_detail.html:161
+#: invoicing/templates/invoicing/invoice_detail.html:163
 msgid "Create credit note"
 msgstr "إنشاء إشعار دائن"
 
@@ -665,7 +673,7 @@ msgstr "أنشأه"
 msgid "Credit note"
 msgstr "إشعار دائن"
 
-#: invoicing/templates/invoicing/invoice_detail.html:148
+#: invoicing/templates/invoicing/invoice_detail.html:150
 msgid "Credit notes"
 msgstr "الإشعارات الدائنة"
 
@@ -673,7 +681,7 @@ msgstr "الإشعارات الدائنة"
 msgid "Credit notes can only be raised against issued invoices."
 msgstr "لا يمكن إصدار إشعار دائن إلا على فواتير صادرة."
 
-#: invoicing/templates/invoicing/invoice_detail.html:123
+#: invoicing/templates/invoicing/invoice_detail.html:125
 msgid "Credited"
 msgstr "المبلغ المخصوم بإشعار دائن"
 
@@ -771,6 +779,10 @@ msgstr "الاستقطاعات"
 msgid "Deductions start with this month's payroll."
 msgstr "يبدأ الخصم من مسير رواتب هذا الشهر."
 
+#: zatca/models.py:39
+msgid "Demo"
+msgstr "تجريبي"
+
 #: hr/templates/hr/employee_detail.html:57
 #: hr/templates/hr/partials/employee_table.html:8
 #: payroll/templates/payroll/payslip_detail.html:23
@@ -787,6 +799,10 @@ msgstr "الوصف"
 #: loans/templates/loans/loan_detail.html:30
 msgid "Details"
 msgstr "التفاصيل"
+
+#: zatca/models.py:40
+msgid "Developer sandbox"
+msgstr "بيئة المطورين التجريبية"
 
 #: leave/templates/leave/leave_detail.html:37
 msgid "Document"
@@ -809,6 +825,10 @@ msgstr "المستندات المشمولة"
 msgid "Download CSV"
 msgstr "تنزيل ملف CSV"
 
+#: zatca/templates/zatca/panel.html:20
+msgid "Download XML"
+msgstr "تنزيل XML"
+
 #: dataimport/templates/dataimport/index.html:17
 #: dataimport/templates/dataimport/upload.html:11
 msgid "Download template"
@@ -818,11 +838,11 @@ msgstr "تنزيل النموذج"
 msgid "Draft"
 msgstr "مسودة"
 
-#: invoicing/views.py:201
+#: invoicing/views.py:203
 msgid "Draft credit note created. Reduce the lines to the amount to credit, then issue."
 msgstr "تم إنشاء مسودة إشعار دائن. خفّض البنود إلى المبلغ المراد خصمه ثم أصدره."
 
-#: invoicing/views.py:150
+#: invoicing/views.py:152
 #, python-format
 msgid "Draft invoice created from %(job)s. Review it, then issue."
 msgstr "تم إنشاء مسودة فاتورة من %(job)s. راجعها ثم أصدرها."
@@ -1113,6 +1133,14 @@ msgstr "نسب التأمينات الاجتماعية"
 msgid "Gender"
 msgstr "الجنس"
 
+#: zatca/templates/zatca/panel.html:28
+msgid "Generate ZATCA XML"
+msgstr "إنشاء ملف XML للهيئة"
+
+#: zatca/templates/zatca/panel.html:25
+msgid "Generate the signed UBL XML with the Phase 2 QR code. Invoices are numbered and chained in the order they are generated."
+msgstr "أنشئ ملف UBL XML موقّعًا مع رمز QR للمرحلة الثانية. تُرقَّم الفواتير وتُسلسَل بترتيب إنشائها."
+
 #: jobs/services.py:40
 msgid "Give a reason for cancelling."
 msgstr "اذكر سبب الإلغاء."
@@ -1261,16 +1289,20 @@ msgstr "الفاتورة"
 msgid "Invoice %(no)s is issued and can't be changed"
 msgstr "الفاتورة %(no)s صادرة ولا يمكن تعديلها"
 
-#: invoicing/views.py:136
+#: invoicing/views.py:138
 #, python-format
 msgid "Invoice %(no)s issued."
 msgstr "تم إصدار الفاتورة %(no)s."
+
+#: zatca/templates/zatca/panel.html:11
+msgid "Invoice hash"
+msgstr "بصمة الفاتورة (Hash)"
 
 #: expenses/templates/expenses/expense_detail.html:53
 msgid "Invoice no."
 msgstr "رقم الفاتورة"
 
-#: invoicing/templates/invoicing/invoice_detail.html:121
+#: invoicing/templates/invoicing/invoice_detail.html:123
 msgid "Invoice total"
 msgstr "إجمالي الفاتورة"
 
@@ -1294,6 +1326,10 @@ msgstr "تاريخ الإصدار"
 #: invoicing/templates/invoicing/invoice_detail.html:13
 msgid "Issue invoice"
 msgstr "إصدار الفاتورة"
+
+#: zatca/services.py:39
+msgid "Issue the invoice before generating its ZATCA XML."
+msgstr "أصدر الفاتورة قبل إنشاء ملف XML الخاص بها."
 
 #: invoicing/templates/invoicing/invoice_detail.html:12
 msgid "Issue this invoice? It gets a number and can no longer be changed."
@@ -1427,6 +1463,10 @@ msgstr "القروض والسلف"
 #: loans/apps.py:7
 msgid "Loans and advances"
 msgstr "القروض والسلف"
+
+#: zatca/templates/zatca/panel.html:15
+msgid "Local check"
+msgstr "الفحص المحلي"
 
 #: jobs/templates/jobs/job_detail.html:64
 msgid "Location"
@@ -1586,6 +1626,10 @@ msgstr "مسير رواتب جديد"
 msgid "New request"
 msgstr "طلب جديد"
 
+#: zatca/services.py:44
+msgid "No ZATCA e-invoicing unit is set up. Run: python manage.py zatca_demo_setup"
+msgstr "لم يتم إعداد وحدة فوترة إلكترونية. نفّذ: python manage.py zatca_demo_setup"
+
 #: core/templates/core/dashboard.html:29
 msgid "No backup has been made yet. Set up the nightly backup task on the server (see the installation guide)."
 msgstr "لم تُنشأ أي نسخة احتياطية بعد. اضبط مهمة النسخ الاحتياطي الليلية على الخادم (راجع دليل التثبيت)."
@@ -1598,6 +1642,10 @@ msgstr "لم يتم العثور على عملاء"
 #, python-format
 msgid "No department with code or name “%(value)s”."
 msgstr "لا يوجد قسم بالرمز أو الاسم «%(value)s»."
+
+#: zatca/templates/zatca/panel.html:23
+msgid "No e-invoicing unit is set up yet. For a demo, run on the server:"
+msgstr "لم يتم إعداد وحدة فوترة إلكترونية بعد. للعرض التجريبي نفّذ على الخادم:"
 
 #: dataimport/importers.py:268
 msgid "No employee with this ID / iqama number."
@@ -1695,7 +1743,7 @@ msgstr "غير سعودي"
 msgid "Non-Saudi employees must have an Iqama number starting with 2."
 msgstr "يجب أن يبدأ رقم إقامة الموظف غير السعودي بالرقم 2."
 
-#: invoicing/templates/invoicing/invoice_detail.html:154
+#: invoicing/templates/invoicing/invoice_detail.html:156
 msgid "None."
 msgstr "لا يوجد."
 
@@ -1719,6 +1767,10 @@ msgstr "غير مرفق"
 #, python-format
 msgid "Not enough annual leave balance: %(days)s days requested, %(left)s available."
 msgstr "رصيد الإجازة السنوية غير كافٍ: المطلوب %(days)s يومًا، والمتاح %(left)s."
+
+#: zatca/templates/zatca/panel.html:31
+msgid "Not generated yet."
+msgstr "لم يُنشأ بعد."
 
 #: invoicing/templates/invoicing/vat_return.html:24
 msgid "Not included yet — finish these before filing:"
@@ -1877,7 +1929,7 @@ msgstr "غير مسددة"
 msgid "Over 90 days"
 msgstr "أكثر من 90 يومًا"
 
-#: invoicing/templates/invoicing/invoice_detail.html:116
+#: invoicing/templates/invoicing/invoice_detail.html:118
 #: invoicing/templates/invoicing/invoice_list.html:23
 #: invoicing/templates/invoicing/receivables.html:14
 msgid "Overdue"
@@ -1895,8 +1947,8 @@ msgstr "نظرة عامة"
 msgid "PDF, JPG or PNG, up to 5 MB. Required before submitting for approval."
 msgstr "ملف PDF أو JPG أو PNG بحد أقصى 5 ميجابايت. مطلوب قبل التقديم للاعتماد."
 
-#: invoicing/templates/invoicing/invoice_detail.html:115
-#: invoicing/templates/invoicing/invoice_detail.html:122
+#: invoicing/templates/invoicing/invoice_detail.html:117
+#: invoicing/templates/invoicing/invoice_detail.html:124
 #: invoicing/templates/invoicing/invoice_list.html:24
 #: invoicing/templates/invoicing/invoice_list.html:40
 #: leave/templates/leave/leave_detail.html:36 payroll/models.py:125
@@ -1916,7 +1968,7 @@ msgstr "الدهانات"
 msgid "Pakistan"
 msgstr "باكستان"
 
-#: invoicing/templates/invoicing/invoice_detail.html:117
+#: invoicing/templates/invoicing/invoice_detail.html:119
 msgid "Partially paid"
 msgstr "مدفوع جزئيًا"
 
@@ -1949,16 +2001,16 @@ msgstr "لا يمكن أن يكون تاريخ الدفع قبل تاريخ ال
 msgid "Payment date cannot be in the future."
 msgstr "لا يمكن أن يكون تاريخ الدفع في المستقبل."
 
-#: invoicing/views.py:176
+#: invoicing/views.py:178
 #, python-format
 msgid "Payment of %(amt)s recorded."
 msgstr "تم تسجيل دفعة بمبلغ %(amt)s."
 
-#: invoicing/views.py:187
+#: invoicing/views.py:189
 msgid "Payment removed."
 msgstr "تم حذف الدفعة."
 
-#: invoicing/templates/invoicing/invoice_detail.html:114
+#: invoicing/templates/invoicing/invoice_detail.html:116
 msgid "Payments"
 msgstr "المدفوعات"
 
@@ -2062,6 +2114,10 @@ msgstr "الرمز البريدي يجب أن يتكوّن من 5 أرقام."
 msgid "Preview"
 msgstr "معاينة"
 
+#: zatca/templates/zatca/panel.html:12
+msgid "Previous invoice hash"
+msgstr "بصمة الفاتورة السابقة"
+
 #: invoicing/templates/invoicing/statement.html:11
 #: invoicing/templates/invoicing/vat_return.html:18
 msgid "Print"
@@ -2075,6 +2131,10 @@ msgstr "طباعة / حفظ كملف PDF"
 #: jobs/templates/jobs/job_list.html:29
 msgid "Priority"
 msgstr "الأولوية"
+
+#: zatca/models.py:42
+msgid "Production"
+msgstr "الإنتاج"
 
 #: jobs/templates/jobs/job_detail.html:97
 #: jobs/templates/jobs/profitability.html:18
@@ -2104,7 +2164,7 @@ msgstr "النسبة"
 msgid "Reason"
 msgstr "السبب"
 
-#: invoicing/templates/invoicing/invoice_detail.html:160
+#: invoicing/templates/invoicing/invoice_detail.html:162
 msgid "Reason (printed on the credit note)"
 msgstr "السبب (يُطبع على الإشعار الدائن)"
 
@@ -2143,7 +2203,7 @@ msgstr "الذمم المدينة"
 msgid "Record an expense"
 msgstr "تسجيل مصروف"
 
-#: invoicing/templates/invoicing/invoice_detail.html:142
+#: invoicing/templates/invoicing/invoice_detail.html:144
 msgid "Record payment"
 msgstr "تسجيل دفعة"
 
@@ -2166,14 +2226,18 @@ msgstr "رفض"
 msgid "Rejected"
 msgstr "مرفوض"
 
-#: invoicing/templates/invoicing/invoice_detail.html:133
+#: zatca/models.py:81
+msgid "Rejected by ZATCA"
+msgstr "مرفوضة من الهيئة"
+
+#: invoicing/templates/invoicing/invoice_detail.html:135
 #: invoicing/templates/invoicing/invoice_form.html:34
 #: jobs/templates/jobs/job_detail.html:120
 #: jobs/templates/jobs/job_detail.html:147
 msgid "Remove"
 msgstr "حذف"
 
-#: invoicing/templates/invoicing/invoice_detail.html:132
+#: invoicing/templates/invoicing/invoice_detail.html:134
 msgid "Remove this payment?"
 msgstr "حذف هذه الدفعة؟"
 
@@ -2190,6 +2254,10 @@ msgstr "تُسدَّد بخصم شهري من الراتب بعد الاعتما
 #: loans/templates/loans/loan_detail.html:50
 msgid "Repayments"
 msgstr "الأقساط المسددة"
+
+#: zatca/models.py:80
+msgid "Reported to ZATCA"
+msgstr "مُبلَّغ عنها للهيئة"
 
 #: loans/templates/loans/loan_form.html:16
 msgid "Request"
@@ -2363,9 +2431,25 @@ msgstr "الإجازة المرضية محدودة بـ %(max)s يومًا في 
 msgid "Sign in to continue to your workspace."
 msgstr "سجّل الدخول للمتابعة إلى مساحة عملك."
 
+#: zatca/templates/zatca/panel.html:16
+msgid "Signature and hash verified locally"
+msgstr "تم التحقق من التوقيع والبصمة محليًا"
+
+#: zatca/templates/zatca/panel.html:18
+msgid "Signed with a DEMO certificate: valid for testing only. Real invoices need the certificate ZATCA issues at onboarding."
+msgstr "موقّعة بشهادة تجريبية: صالحة للاختبار فقط. تحتاج الفواتير الفعلية إلى الشهادة التي تصدرها الهيئة عند التسجيل."
+
+#: zatca/models.py:78
+msgid "Signed, not sent"
+msgstr "موقّعة، لم تُرسل"
+
 #: invoicing/models.py:53
 msgid "Simplified tax invoice (B2C)"
 msgstr "فاتورة ضريبية مبسطة (للأفراد)"
+
+#: zatca/models.py:41
+msgid "Simulation"
+msgstr "بيئة المحاكاة"
 
 #: hr/templates/hr/employee_detail.html:18
 msgid "Since"
@@ -2468,6 +2552,10 @@ msgstr "تاريخ انتهاء الخدمة"
 #: hr/models.py:172
 msgid "Termination date cannot be before the hire date."
 msgstr "لا يمكن أن يكون تاريخ انتهاء الخدمة قبل تاريخ التعيين."
+
+#: zatca/services.py:41
+msgid "The ZATCA XML for this invoice has already been generated."
+msgstr "تم إنشاء ملف XML لهذه الفاتورة مسبقًا."
 
 #: invoicing/services.py:77
 #, python-format
@@ -2636,7 +2724,7 @@ msgstr "النوع"
 msgid "Uganda"
 msgstr "أوغندا"
 
-#: jobs/templates/jobs/job_detail.html:113
+#: jobs/templates/jobs/job_detail.html:113 zatca/templates/zatca/panel.html:14
 msgid "Unit"
 msgstr "سعر الوحدة"
 
@@ -2657,7 +2745,7 @@ msgstr "حالة غير معروفة."
 msgid "Unknown value “%(value)s”."
 msgstr "قيمة غير معروفة «%(value)s»."
 
-#: invoicing/templates/invoicing/invoice_detail.html:118
+#: invoicing/templates/invoicing/invoice_detail.html:120
 #: leave/templates/leave/leave_list.html:37
 msgid "Unpaid"
 msgstr "غير مدفوع"
@@ -2805,6 +2893,34 @@ msgstr "يجب أن تحتوي كلمة المرور على حروف وأرقا�
 msgid "Your password was changed."
 msgstr "تم تغيير كلمة المرور بنجاح."
 
+#: zatca/views.py:24
+msgid "ZATCA XML generated and signed."
+msgstr "تم إنشاء ملف XML وتوقيعه."
+
+#: zatca/models.py:98
+msgid "ZATCA document"
+msgstr "مستند الهيئة"
+
+#: zatca/models.py:99
+msgid "ZATCA documents"
+msgstr "مستندات الهيئة"
+
+#: zatca/templates/zatca/panel.html:5
+msgid "ZATCA e-invoice (Phase 2)"
+msgstr "الفاتورة الإلكترونية - المرحلة الثانية"
+
+#: zatca/apps.py:7
+msgid "ZATCA e-invoicing"
+msgstr "الفوترة الإلكترونية (الهيئة)"
+
+#: zatca/models.py:53
+msgid "ZATCA e-invoicing unit"
+msgstr "وحدة الفوترة الإلكترونية"
+
+#: zatca/models.py:54
+msgid "ZATCA e-invoicing units"
+msgstr "وحدات الفوترة الإلكترونية"
+
 #: invoicing/templates/invoicing/invoice_list.html:8
 msgid "ZATCA-compliant tax invoices. Issued invoices cannot be changed."
 msgstr "فواتير ضريبية متوافقة مع هيئة الزكاة والضريبة والجمارك. لا يمكن تعديل الفواتير الصادرة."
@@ -2861,6 +2977,10 @@ msgstr "سبب الإلغاء"
 #: expenses/models.py:89 payroll/models.py:83
 msgid "category"
 msgstr "الفئة"
+
+#: zatca/models.py:47
+msgid "certificate (PEM)"
+msgstr "الشهادة (PEM)"
 
 #: customers/models.py:51
 msgid "city"
@@ -2972,6 +3092,10 @@ msgstr "الموظفون"
 msgid "employer %"
 msgstr "نسبة صاحب العمل %"
 
+#: zatca/models.py:45
+msgid "environment"
+msgstr "البيئة"
+
 #: expenses/models.py:138
 msgid "expense"
 msgstr "مصروف"
@@ -3036,6 +3160,14 @@ msgstr "بدل السكن"
 msgid "invoice"
 msgstr "فاتورة"
 
+#: zatca/models.py:86
+msgid "invoice counter (ICV)"
+msgstr "عداد الفاتورة (ICV)"
+
+#: zatca/models.py:88
+msgid "invoice hash"
+msgstr "بصمة الفاتورة"
+
 #: invoicing/models.py:192
 msgid "invoice line"
 msgstr "بند الفاتورة"
@@ -3092,6 +3224,14 @@ msgstr "سجلات العمالة"
 #: jobs/models.py:188
 msgid "labour entry"
 msgstr "سجل عمالة"
+
+#: zatca/models.py:48
+msgid "last invoice counter"
+msgstr "آخر عداد فاتورة"
+
+#: zatca/models.py:49
+msgid "last invoice hash"
+msgstr "بصمة آخر فاتورة"
 
 #: hr/models.py:84
 msgid "last name"
@@ -3169,7 +3309,7 @@ msgstr "الشهر"
 msgid "monthly installment"
 msgstr "القسط الشهري"
 
-#: customers/models.py:36
+#: customers/models.py:36 zatca/models.py:44
 msgid "name"
 msgstr "الاسم"
 
@@ -3290,6 +3430,10 @@ msgstr "قسائم الرواتب"
 msgid "postal code"
 msgstr "الرمز البريدي"
 
+#: zatca/models.py:87
+msgid "previous invoice hash"
+msgstr "بصمة الفاتورة السابقة"
+
 #: jobs/models.py:76
 msgid "priority"
 msgstr "الأولوية"
@@ -3348,7 +3492,7 @@ msgstr "عنوان الموقع"
 
 #: expenses/models.py:120 hr/models.py:116 invoicing/models.py:57
 #: jobs/models.py:77 leave/models.py:69 loans/models.py:51
-#: payroll/models.py:134
+#: payroll/models.py:134 zatca/models.py:91
 msgid "status"
 msgstr "الحالة"
 

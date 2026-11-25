@@ -101,7 +101,8 @@ def invoice_detail(request, pk):
         with_balances(Invoice.objects.select_related("customer", "job", "original", "created_by", "issued_by")),
         pk=pk,
     )
-    payload = services.qr_for(invoice)
+    zatca_doc = getattr(invoice, "zatca_document", None)
+    payload = zatca_doc.qr if zatca_doc else services.qr_for(invoice)
     return render(
         request,
         "invoicing/invoice_detail.html",
@@ -112,6 +113,7 @@ def invoice_detail(request, pk):
             "credit_notes": invoice.credit_notes.all(),
             "payment_form": PaymentForm(initial={"date": timezone.localdate(), "amount": invoice.balance}),
             "qr": qr_svg(payload) if payload else None,
+            "qr_payload": payload,
             "company": {
                 "name": settings.COMPANY_NAME,
                 "name_ar": settings.COMPANY_NAME_AR,

@@ -25,6 +25,15 @@ COMPANY_NAME_AR = env("COMPANY_NAME_AR", default="مؤسسة آفاق الصيا
 COMPANY_VAT_NUMBER = env("COMPANY_VAT_NUMBER", default="300000000000003")
 COMPANY_CR_NUMBER = env("COMPANY_CR_NUMBER", default="")
 COMPANY_ADDRESS = env("COMPANY_ADDRESS", default="Riyadh, Saudi Arabia")
+# Structured Saudi National Address of the seller, required in ZATCA Phase 2 XML (BR-KSA-09/37/66).
+COMPANY_STREET = env("COMPANY_STREET", default="")
+COMPANY_BUILDING_NO = env("COMPANY_BUILDING_NO", default="")
+COMPANY_DISTRICT = env("COMPANY_DISTRICT", default="")
+COMPANY_CITY = env("COMPANY_CITY", default="Riyadh")
+COMPANY_POSTAL_CODE = env("COMPANY_POSTAL_CODE", default="")
+# ZATCA Phase 2: signing-key curve (to confirm with ZATCA's SDK) and the reason code for 0% VAT lines (§11.2.4).
+ZATCA_CURVE = env("ZATCA_CURVE", default="secp256k1")
+ZATCA_ZERO_RATE_REASON = env("ZATCA_ZERO_RATE_REASON", default="VATEX-SA-33")
 INVOICE_PAYMENT_TERMS_DAYS = env.int("INVOICE_PAYMENT_TERMS_DAYS", default=30)
 DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
@@ -54,6 +63,7 @@ INSTALLED_APPS = [
     "dataimport",
     "backups",
     "loans",
+    "zatca",
 ]
 
 MIDDLEWARE = [

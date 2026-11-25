@@ -1,0 +1,34 @@
+{% load i18n ui %}
+{% if not invoice.is_draft %}
+<section class="card zatca-panel">
+  <div class="card-head">
+    <h2>{% icon "receipt" %} {% translate "ZATCA e-invoice (Phase 2)" %}</h2>
+    {% if doc %}<span class="badge badge-{{ doc.status }}">{{ doc.get_status_display }}</span>{% endif %}
+  </div>
+  {% if doc %}
+    <dl>
+      <dt>{% translate "Counter" %}</dt><dd>ICV {{ doc.icv }}</dd>
+      <dt>{% translate "Invoice hash" %}</dt><dd class="mono break">{{ doc.invoice_hash }}</dd>
+      <dt>{% translate "Previous invoice hash" %}</dt><dd class="mono break">{{ doc.previous_hash }}</dd>
+      <dt>UUID</dt><dd class="mono">{{ doc.uuid }}</dd>
+      <dt>{% translate "Unit" %}</dt><dd>{{ doc.egs }}</dd>
+      <dt>{% translate "Local check" %}</dt>
+      <dd>{% if problems %}<span class="text-warn">{% for p in problems %}{{ p }} {% endfor %}</span>{% else %}{% icon "check-circle" 16 %} {% translate "Signature and hash verified locally" %}{% endif %}</dd>
+    </dl>
+    {% if doc.egs.is_demo %}<p class="muted">{% translate "Signed with a DEMO certificate: valid for testing only. Real invoices need the certificate ZATCA issues at onboarding." %}</p>{% endif %}
+    <div class="form-actions">
+      <a class="btn btn-secondary" href="{% url 'zatca:download' doc.pk %}">{% icon "file-text" %}{% translate "Download XML" %}</a>
+    </div>
+  {% elif not egs_ready %}
+    <p class="muted">{% translate "No e-invoicing unit is set up yet. For a demo, run on the server:" %} <code>python manage.py zatca_demo_setup</code></p>
+  {% elif can_generate %}
+    <p class="muted">{% translate "Generate the signed UBL XML with the Phase 2 QR code. Invoices are numbered and chained in the order they are generated." %}</p>
+    <form method="post" action="{% url 'zatca:generate' invoice.pk %}" class="form-actions">
+      <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+      <button class="btn">{% icon "check-circle" %}{% translate "Generate ZATCA XML" %}</button>
+    </form>
+  {% else %}
+    <p class="muted">{% translate "Not generated yet." %}</p>
+  {% endif %}
+</section>
+{% endif %}
