@@ -26,3 +26,8 @@ db.sqlite3
 Thumbs.db
 .DS_Store
 .break_check_journal.json
+
+# Client documents (private: owner ID, certificates) - never commit
+/company files/
+# ZATCA SDK + developer manual (large downloads, kept locally)
+/zatca_sdk/

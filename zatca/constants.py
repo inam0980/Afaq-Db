@@ -40,7 +40,7 @@ HASH_TRANSFORMS = (
     "not(//ancestor-or-self::cac:Signature)",
     "not(//ancestor-or-self::cac:AdditionalDocumentReference[cbc:ID='QR'])",
 )
-SIGNED_PROPERTIES_TYPE = "http://uri.etsi.org/01903#SignedProperties"
+SIGNED_PROPERTIES_TYPE = "http://www.w3.org/2000/09/xmldsig#SignatureProperties"   # as in the official SDK samples
 ECDSA_SHA256 = "http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"
 SHA256 = "http://www.w3.org/2001/04/xmlenc#sha256"
 

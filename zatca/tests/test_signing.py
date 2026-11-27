@@ -2,6 +2,7 @@
 
 import base64
 import hashlib
+import re
 
 import pytest
 from cryptography import x509
@@ -71,7 +72,7 @@ def test_signature_block_structure(keys):
         "not(//ancestor-or-self::cac:AdditionalDocumentReference[cbc:ID='QR'])",
     ]
     assert transforms[3].get("Algorithm") == "http://www.w3.org/2006/12/xml-c14n11"
-    props_ref = ds(root, sig + "ds:SignedInfo/ds:Reference[@Type='http://uri.etsi.org/01903#SignedProperties']")
+    props_ref = ds(root, sig + "ds:SignedInfo/ds:Reference[@Type='http://www.w3.org/2000/09/xmldsig#SignatureProperties']")
     assert props_ref and props_ref[0].get("URI") == "#xadesSignedProperties"
     # the UBLExtensions block must come first in the invoice
     assert root[0].tag == f"{{{NS['ext']}}}UBLExtensions"
@@ -92,16 +93,28 @@ def test_signature_verifies_with_the_certificate(keys):
     assert base64.b64decode(embedded) == cert.public_bytes(serialization.Encoding.DER)
 
 
+def hex_b64(data: bytes) -> str:
+    return base64.b64encode(hashlib.sha256(data).hexdigest().encode()).decode()
+
+
 def test_signed_properties_digest_and_certificate_digest(keys):
     result = signed(issued_invoice(customer=BusinessCustomerFactory()), keys)
-    props = ds(result.root, "//xades:SignedProperties")[0]
-    expected = base64.b64encode(hashlib.sha256(etree.tostring(props, method="c14n")).digest()).decode()
+    # The SDK hashes the SignedProperties text as written, with xades declared on it and ds on each ds element.
+    text = result.xml.decode()
+    start = text.index("<xades:SignedProperties ")
+    block = text[start:text.index("</xades:SignedProperties>") + len("</xades:SignedProperties>")]
+    assert block.startswith('<xades:SignedProperties Id="xadesSignedProperties">')
+    declared = block.replace("<xades:SignedProperties ", f'<xades:SignedProperties xmlns:xades="{NS["xades"]}" ', 1)
+    declared = re.sub(r"<ds:(\w+)", lambda m: f'<ds:{m.group(1)} xmlns:ds="{NS["ds"]}"', declared)
     ref = ds(result.root, "//ds:Reference[@URI='#xadesSignedProperties']/ds:DigestValue")[0].text
-    assert ref == expected
+    assert ref == hex_b64(declared.encode())
     cert = x509.load_pem_x509_certificate(keys[1].encode())
+    props = ds(result.root, "//xades:SignedProperties")[0]
     cert_digest = ds(props, ".//xades:CertDigest/ds:DigestValue")[0].text
-    assert cert_digest == base64.b64encode(hashlib.sha256(cert.public_bytes(serialization.Encoding.DER)).digest()).decode()
+    assert cert_digest == hex_b64(base64.b64encode(cert.public_bytes(serialization.Encoding.DER)))
     assert ds(props, ".//ds:X509SerialNumber")[0].text == str(cert.serial_number)
+    assert ds(props, ".//ds:X509IssuerName")[0].text == ", ".join(
+        rdn.rfc4514_string() for rdn in reversed(cert.issuer.rdns))
 
 
 def test_qr_carries_hash_signature_and_key(keys):
@@ -112,9 +125,9 @@ def test_qr_carries_hash_signature_and_key(keys):
     fields = decode_tlv(qr)
     assert fields[2] == b"399999999900003"
     assert fields[4] == f"{inv.total:.2f}".encode() and fields[5] == f"{inv.vat_amount:.2f}".encode()
-    assert fields[6] == base64.b64decode(result.invoice_hash)
-    signature = base64.b64decode(ds(result.root, "//ds:SignatureValue")[0].text)
-    assert fields[7] == signature
+    assert fields[3] == f"{inv.issue_date:%Y-%m-%d}T{ds(result.root, 'cbc:IssueTime')[0].text}".encode()
+    assert fields[6] == result.invoice_hash.encode()                       # base64 text, as in the SDK
+    assert fields[7] == ds(result.root, "//ds:SignatureValue")[0].text.encode()
     cert = x509.load_pem_x509_certificate(keys[1].encode())
     assert fields[8] == cert.public_key().public_bytes(serialization.Encoding.DER,
                                                         serialization.PublicFormat.SubjectPublicKeyInfo)
@@ -170,3 +183,26 @@ def test_verify_detects_changed_signed_properties(keys):
     stamp = ds(result.root, "//xades:SigningTime")[0].text.encode()
     tampered = result.xml.replace(stamp, b"2000-01-01T00:00:00")
     assert signing.verify(tampered, keys[1]) == ["Signed properties digest does not match."]
+
+
+def test_verify_detects_a_changed_certificate_digest(keys):
+    result = signed(issued_invoice(customer=BusinessCustomerFactory()), keys)
+    digest = ds(result.root, "//xades:CertDigest/ds:DigestValue")[0].text.encode()
+    tampered = result.xml.replace(digest, base64.b64encode(b"0" * 64))
+    assert signing.verify(tampered, keys[1]) == ["Signed properties digest does not match.",
+                                                 "Certificate digest does not match the certificate."]
+
+
+def test_verify_reports_missing_signed_properties(keys):
+    result = signed(issued_invoice(customer=BusinessCustomerFactory()), keys)
+    stripped = re.sub(rb"<ds:X509SerialNumber>.*?</ds:X509SerialNumber>", b"", result.xml)
+    assert "Signed properties digest does not match." in signing.verify(stripped, keys[1])
+
+
+def test_signed_properties_escape_special_characters():
+    text = signing.signed_properties_xml(signing_time="t", cert_digest="d", issuer="O=A & B <x>", serial="1")
+    assert "<ds:X509IssuerName>O=A &amp; B &lt;x&gt;</ds:X509IssuerName>" in text
+    assert "xmlns" not in text
+    declared = signing.signed_properties_xml(signing_time="t", cert_digest="d", issuer="i", serial="1", declare=True)
+    assert declared.startswith('<xades:SignedProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id=')
+    assert declared.count('xmlns:ds="http://www.w3.org/2000/09/xmldsig#"') == 4

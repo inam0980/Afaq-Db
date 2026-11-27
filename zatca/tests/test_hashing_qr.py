@@ -68,17 +68,18 @@ def test_tlv_encodes_tag_length_value():
         tlv(1, "x" * 256)
 
 
+HASH = base64.b64encode(b"h" * 32).decode()
 FIELDS = dict(seller_name="AFAQ", vat_number="300000000000003", timestamp="2026-11-25T10:00:00",
-              total="1150.00", vat_total="150.00", invoice_hash=base64.b64encode(b"h" * 32).decode(),
-              signature=b"sig-bytes", public_key=b"pub-key")
+              total="1150.00", vat_total="150.00", invoice_hash=HASH, signature="c2lnLWJ5dGVz",
+              public_key=b"pub-key")
 
 
 def test_phase2_qr_standard_has_tags_1_to_8():
     fields = decode_tlv(phase2_qr(**FIELDS))
     assert sorted(fields) == [1, 2, 3, 4, 5, 6, 7, 8]
     assert fields[1] == b"AFAQ" and fields[4] == b"1150.00" and fields[5] == b"150.00"
-    assert fields[6] == b"h" * 32                          # raw SHA-256 bytes (32), per §4.1
-    assert (fields[7], fields[8]) == (b"sig-bytes", b"pub-key")
+    assert fields[6] == HASH.encode()                      # base64 text of the hash (44), as in the SDK
+    assert (fields[7], fields[8]) == (b"c2lnLWJ5dGVz", b"pub-key")
 
 
 def test_phase2_qr_simplified_adds_tag_9():

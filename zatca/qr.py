@@ -1,9 +1,11 @@
 """Phase 2 QR code (Security Features Implementation Standards §4.1).
 
 TLV: one byte tag, one byte length, then the value. Tags 1-5 are UTF-8 text;
-tag 6 is the invoice hash as raw SHA-256 bytes (32); tags 7-9 are the raw
-bytes of the ECDSA signature, the public key and — for simplified invoices —
-the signature of the certificate issued by ZATCA's CA. Base64 of the whole.
+tags 6 and 7 are the invoice hash and the ECDSA signature as their base64 TEXT
+(exactly as in the XML: DigestValue and SignatureValue); tags 8 and 9 are the
+raw DER bytes of the public key and — for simplified invoices — the signature
+of the certificate issued by ZATCA's CA. Base64 of the whole. Encoding checked
+byte-for-byte against the official SDK sample (tests/test_sdk_compat.py).
 """
 
 import base64
@@ -24,7 +26,7 @@ def phase2_qr(*, seller_name, vat_number, timestamp, total, vat_total, invoice_h
         tlv(3, timestamp),
         tlv(4, total),
         tlv(5, vat_total),
-        tlv(6, base64.b64decode(invoice_hash)),
+        tlv(6, invoice_hash),
         tlv(7, signature),
         tlv(8, public_key),
     ]

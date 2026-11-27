@@ -1,17 +1,21 @@
 """Cryptographic stamp (XAdES B-B, enveloped) and Phase 2 QR — Security Features
 Implementation Standards v1.2 §2.3.3 and §4.
 
-Still to confirm against ZATCA's SDK / sandbox (developer portal not reachable
-when this was written — see the overnight notes): the curve (ZATCA_CURVE),
-whether SignatureValue is computed over the invoice hash (done here, as the
-standard defines the stamp as "the technical digital signature of the hash of
-the document") and SigningCertificate (v1) vs SigningCertificateV2.
+Formats the standard leaves open are taken from ZATCA's official SDK (Java
+238-R3.4.8) and pinned by tests/test_sdk_compat.py against its signed sample:
+* curve secp256k1; SignatureValue = ECDSA-SHA256 over the raw invoice hash bytes;
+* certificate digest = base64(hex(SHA-256(base64 certificate text)));
+* X509IssuerName = the issuer's RDNs most-specific first, joined by ", ";
+* SignedProperties digest = base64(hex(SHA-256(text))) over the SignedProperties
+  exactly as laid out in the SDK (its indentation, xades declared on the element
+  and ds on every ds element) — not a C14N form.
 """
 
 import base64
 import datetime as dt
 import hashlib
 from dataclasses import dataclass
+from xml.sax.saxutils import escape
 
 from cryptography import x509
 from cryptography.exceptions import InvalidSignature
@@ -95,18 +99,68 @@ class SignResult:
     qr: str
 
 
+def _hex_b64(data: bytes) -> str:
+    return _b64(hashlib.sha256(data).hexdigest().encode("ascii"))
+
+
+def certificate_digest(cert_b64: str) -> str:
+    return _hex_b64(cert_b64.encode("ascii"))
+
+
+def issuer_name(cert) -> str:
+    return ", ".join(rdn.rfc4514_string() for rdn in reversed(cert.issuer.rdns))
+
+
+_PROPS_LINES = (
+    (0, '<xades:SignedProperties{xades} Id="xadesSignedProperties">'),
+    (36, "<xades:SignedSignatureProperties>"),
+    (40, "<xades:SigningTime>{signing_time}</xades:SigningTime>"),
+    (40, "<xades:SigningCertificate>"),
+    (44, "<xades:Cert>"),
+    (48, "<xades:CertDigest>"),
+    (52, '<ds:DigestMethod{ds} Algorithm="' + SHA256 + '"/>'),
+    (52, "<ds:DigestValue{ds}>{cert_digest}</ds:DigestValue>"),
+    (48, "</xades:CertDigest>"),
+    (48, "<xades:IssuerSerial>"),
+    (52, "<ds:X509IssuerName{ds}>{issuer}</ds:X509IssuerName>"),
+    (52, "<ds:X509SerialNumber{ds}>{serial}</ds:X509SerialNumber>"),
+    (48, "</xades:IssuerSerial>"),
+    (44, "</xades:Cert>"),
+    (40, "</xades:SigningCertificate>"),
+    (36, "</xades:SignedSignatureProperties>"),
+    (32, "</xades:SignedProperties>"),
+)
+
+
+def signed_properties_xml(*, signing_time, cert_digest, issuer, serial, declare=False) -> str:
+    """The SignedProperties text in the SDK's layout; `declare` adds the namespace declarations it hashes with."""
+    template = "\n".join(" " * indent + line for indent, line in _PROPS_LINES)
+    return template.format(
+        xades=f' xmlns:xades="{NS["xades"]}"' if declare else "",
+        ds=f' xmlns:ds="{NS["ds"]}"' if declare else "",
+        signing_time=escape(signing_time), cert_digest=escape(cert_digest),
+        issuer=escape(issuer), serial=escape(serial))
+
+
+def signed_properties_digest(**values) -> str:
+    return _hex_b64(signed_properties_xml(declare=True, **values).encode("utf-8"))
+
+
+def _graft(parent, source):
+    """Copy `source` under `parent` keeping its text and whitespace; prefixes come from the parent's scope."""
+    element = etree.SubElement(parent, source.tag, dict(source.attrib))
+    element.text, element.tail = source.text, source.tail
+    for child in source:
+        _graft(element, child)
+    return element
+
+
 def _signed_properties(qualifying, cert, signing_time):
-    props = _el(qualifying, "xades:SignedProperties", Id="xadesSignedProperties")
-    signature_props = _el(props, "xades:SignedSignatureProperties")
-    _el(signature_props, "xades:SigningTime", signing_time)
-    cert_ref = _el(_el(signature_props, "xades:SigningCertificate"), "xades:Cert")
-    digest = _el(cert_ref, "xades:CertDigest")
-    _el(digest, "ds:DigestMethod", Algorithm=SHA256)
-    _el(digest, "ds:DigestValue", _b64(hashlib.sha256(cert.public_bytes(serialization.Encoding.DER)).digest()))
-    serial = _el(cert_ref, "xades:IssuerSerial")
-    _el(serial, "ds:X509IssuerName", cert.issuer.rfc4514_string())
-    _el(serial, "ds:X509SerialNumber", str(cert.serial_number))
-    return props
+    values = dict(signing_time=signing_time,
+                  cert_digest=certificate_digest(_b64(cert.public_bytes(serialization.Encoding.DER))),
+                  issuer=issuer_name(cert), serial=str(cert.serial_number))
+    props = _graft(qualifying, etree.fromstring(signed_properties_xml(declare=True, **values)))
+    return props, signed_properties_digest(**values)
 
 
 def _signature_block(root, digest_value, signature_value, cert, signing_time):
@@ -134,21 +188,19 @@ def _signature_block(root, digest_value, signature_value, cert, signing_time):
     _el(invoice_ref, "ds:DigestValue", digest_value)
     props_ref = _el(signed_info, "ds:Reference", Type=SIGNED_PROPERTIES_TYPE, URI="#xadesSignedProperties")
     _el(props_ref, "ds:DigestMethod", Algorithm=SHA256)
-    props_digest = _el(props_ref, "ds:DigestValue", "")
+    props_digest = _el(props_ref, "ds:DigestValue")
 
     _el(signature, "ds:SignatureValue", signature_value)
     _el(_el(_el(signature, "ds:KeyInfo"), "ds:X509Data"), "ds:X509Certificate",
         _b64(cert.public_bytes(serialization.Encoding.DER)))
     qualifying = _el(_el(signature, "ds:Object"), "xades:QualifyingProperties", Target="signature")
-    props = _signed_properties(qualifying, cert, signing_time)
-    return extensions, props, props_digest
+    _props, props_digest.text = _signed_properties(qualifying, cert, signing_time)
+    return extensions
 
 
 def _qr_timestamp(root) -> str:
-    issue_date = root.findtext(_q("cbc:IssueDate"))
-    issue_time = root.findtext(_q("cbc:IssueTime"))
-    local = timezone.make_aware(dt.datetime.fromisoformat(f"{issue_date}T{issue_time}"))
-    return local.astimezone(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    """Tag 3: the invoice's own IssueDate and IssueTime (as in the SDK sample)."""
+    return f"{root.findtext(_q('cbc:IssueDate'))}T{root.findtext(_q('cbc:IssueTime'))}"
 
 
 def _insert_qr(root, payload):
@@ -166,9 +218,8 @@ def sign_invoice(root, key_pem: str, cert_pem: str, *, simplified: bool, signing
     signature = key.sign(digest, ec.ECDSA(hashes.SHA256()))
     stamp = timezone.localtime(signing_time or timezone.now()).strftime("%Y-%m-%dT%H:%M:%S")
 
-    _extensions, props, props_digest = _signature_block(root, digest_b64, _b64(signature), cert, stamp)
-    # Digest of the SignedProperties in their final place (inherited namespaces included).
-    props_digest.text = _b64(hashlib.sha256(etree.tostring(props, method="c14n")).digest())
+    signature_b64 = _b64(signature)
+    _signature_block(root, digest_b64, signature_b64, cert, stamp)
 
     payload = phase2_qr(
         seller_name=root.findtext("cac:AccountingSupplierParty/cac:Party/cac:PartyLegalEntity/cbc:RegistrationName",
@@ -179,7 +230,7 @@ def sign_invoice(root, key_pem: str, cert_pem: str, *, simplified: bool, signing
         total=root.findtext("cac:LegalMonetaryTotal/cbc:TaxInclusiveAmount", namespaces=NS),
         vat_total=root.findtext("cac:TaxTotal/cbc:TaxAmount", namespaces=NS),
         invoice_hash=digest_b64,
-        signature=signature,
+        signature=signature_b64,
         public_key=cert.public_key().public_bytes(serialization.Encoding.DER,
                                                   serialization.PublicFormat.SubjectPublicKeyInfo),
         certificate_signature=cert.signature if simplified else None,
@@ -206,13 +257,16 @@ def verify(xml: bytes, cert_pem: str) -> list[str]:
                                  base64.b64decode(signed[0].text if signed else ""), ec.ECDSA(hashes.SHA256()))
     except (InvalidSignature, ValueError):
         problems.append("ECDSA signature is not valid for this certificate.")
-    props = root.xpath("//xades:SignedProperties", namespaces=NS)
+    found = {name: root.findtext(f".//{_q(tag)}") for name, tag in (
+        ("signing_time", "xades:SigningTime"), ("issuer", "ds:X509IssuerName"), ("serial", "ds:X509SerialNumber"))}
+    found["cert_digest"] = root.findtext(f".//{_q('xades:CertDigest')}/{_q('ds:DigestValue')}")
     props_ref = root.xpath("//ds:Reference[@URI='#xadesSignedProperties']/ds:DigestValue", namespaces=NS)
-    if not props or not props_ref or props_ref[0].text != _b64(
-            hashlib.sha256(etree.tostring(props[0], method="c14n")).digest()):
+    if None in found.values() or not props_ref or props_ref[0].text != signed_properties_digest(**found):
         problems.append("Signed properties digest does not match.")
+    if found["cert_digest"] != certificate_digest(_b64(cert.public_bytes(serialization.Encoding.DER))):
+        problems.append("Certificate digest does not match the certificate.")
     qr = root.xpath("cac:AdditionalDocumentReference[cbc:ID='QR']/cac:Attachment/cbc:EmbeddedDocumentBinaryObject",
                     namespaces=NS)
-    if not qr or decode_tlv(qr[0].text).get(6) != base64.b64decode(actual):
+    if not qr or decode_tlv(qr[0].text).get(6) != actual.encode("ascii"):
         problems.append("QR code does not carry the invoice hash.")
     return problems
